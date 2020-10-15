@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30114.105
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "1. WarriorsQuest", "1. WarriorsQuest\1. WarriorsQuest.csproj", "{B4D7C1B9-82DD-4B48-A0BE-AC322126CC81}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B4D7C1B9-82DD-4B48-A0BE-AC322126CC81}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B4D7C1B9-82DD-4B48-A0BE-AC322126CC81}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B4D7C1B9-82DD-4B48-A0BE-AC322126CC81}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B4D7C1B9-82DD-4B48-A0BE-AC322126CC81}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {AE9BFFF6-69EF-4153-9340-D8F4C1CF1DBE}
+	EndGlobalSection
+EndGlobal
