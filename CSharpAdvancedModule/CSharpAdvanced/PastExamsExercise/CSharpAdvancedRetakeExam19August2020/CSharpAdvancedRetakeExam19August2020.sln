@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30114.105
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FlowerWreaths", "FlowerWreaths\FlowerWreaths.csproj", "{8FB80319-C1A9-4DED-AD0C-1666B2A25778}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bee", "Bee\Bee.csproj", "{F268A86D-EA5A-4110-950A-0DFF840F12BD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VetClinic", "VetClinic\VetClinic.csproj", "{0A50C993-1B73-43B0-B658-8A113D2661D4}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8FB80319-C1A9-4DED-AD0C-1666B2A25778}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8FB80319-C1A9-4DED-AD0C-1666B2A25778}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8FB80319-C1A9-4DED-AD0C-1666B2A25778}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8FB80319-C1A9-4DED-AD0C-1666B2A25778}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F268A86D-EA5A-4110-950A-0DFF840F12BD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F268A86D-EA5A-4110-950A-0DFF840F12BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F268A86D-EA5A-4110-950A-0DFF840F12BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F268A86D-EA5A-4110-950A-0DFF840F12BD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0A50C993-1B73-43B0-B658-8A113D2661D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0A50C993-1B73-43B0-B658-8A113D2661D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0A50C993-1B73-43B0-B658-8A113D2661D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0A50C993-1B73-43B0-B658-8A113D2661D4}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {514359CB-25AE-41CB-A217-69042AED578F}
+	EndGlobalSection
+EndGlobal
