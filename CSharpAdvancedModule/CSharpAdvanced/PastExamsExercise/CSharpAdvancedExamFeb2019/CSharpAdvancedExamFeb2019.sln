@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30114.105
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClubParty", "ClubParty\ClubParty.csproj", "{0B8CC44F-962E-4871-B9F5-5AA239D5BDB0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TronRacers", "TronRacers\TronRacers.csproj", "{7872E2BC-CFA1-48AD-B588-C24A4BBE6D09}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Heroes", "Heroes\Heroes.csproj", "{95F575F9-9004-4976-8A83-4224FEB85B66}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0B8CC44F-962E-4871-B9F5-5AA239D5BDB0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0B8CC44F-962E-4871-B9F5-5AA239D5BDB0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0B8CC44F-962E-4871-B9F5-5AA239D5BDB0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0B8CC44F-962E-4871-B9F5-5AA239D5BDB0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7872E2BC-CFA1-48AD-B588-C24A4BBE6D09}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7872E2BC-CFA1-48AD-B588-C24A4BBE6D09}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7872E2BC-CFA1-48AD-B588-C24A4BBE6D09}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7872E2BC-CFA1-48AD-B588-C24A4BBE6D09}.Release|Any CPU.Build.0 = Release|Any CPU
+		{95F575F9-9004-4976-8A83-4224FEB85B66}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{95F575F9-9004-4976-8A83-4224FEB85B66}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{95F575F9-9004-4976-8A83-4224FEB85B66}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{95F575F9-9004-4976-8A83-4224FEB85B66}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0F8FA36E-58F2-4145-ADA3-BA37A5C9C403}
+	EndGlobalSection
+EndGlobal
