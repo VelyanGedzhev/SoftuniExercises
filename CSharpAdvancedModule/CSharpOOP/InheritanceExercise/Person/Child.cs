@@ -12,5 +12,22 @@ namespace Person
         {
 
         }
+        public override int Age
+        {
+            get
+            {
+                return base.Age;
+            }
+            set
+            {
+                if (value > CHILD_MAX_AGE)
+                {
+                    throw new ArgumentException("Child age must be less than 15");
+                }
+                base.Age = value;
+
+            }
+        }
+
     }
 }

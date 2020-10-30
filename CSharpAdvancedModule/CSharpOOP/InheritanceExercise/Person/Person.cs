@@ -17,18 +17,19 @@ namespace Person
         }
 
         public string Name { get; set; }
-        public int Age
+        public virtual int Age
         {
             get
             {
                 return age;
             }
-            protected set
+            set
             {
-                if (value >= PERSON_MIN_AGE)
+                if (value < PERSON_MIN_AGE)
                 {
-                    age = value;
+                    throw new ArgumentException("Person age cannot be negative");
                 }
+                age = value;
             }
         }
         public override string ToString()
