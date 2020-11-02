@@ -23,10 +23,7 @@ namespace ClassBoxData
 
             private set
             {
-                if (value <= 0)
-                {
-                    throw new ArgumentException("Length cannot be zero or negative.");
-                }
+                ValidateSide(value, nameof(Length));
                 length = value;
             }
         }
@@ -36,10 +33,7 @@ namespace ClassBoxData
 
             private set
             {
-                if (value <= 0)
-                {
-                    throw new ArgumentException("Width cannot be zero or negative.");
-                }
+                ValidateSide(value, nameof(Width));
                 width = value;
             }
         }
@@ -49,10 +43,7 @@ namespace ClassBoxData
 
             private set
             {
-                if (value <= 0)
-                {
-                    throw new ArgumentException("Height cannot be zero or negative.");
-                }
+                ValidateSide(value, nameof(Height));
                 height = value;
             }
         }
@@ -71,6 +62,13 @@ namespace ClassBoxData
         {
             double volume = Length * Height * Width;
             Console.WriteLine($"Volume - {volume:f2}");
+        }
+        private void ValidateSide(double side, string paramName)
+        {
+            if (side <= 0)
+            {
+                throw new ArgumentException($"{paramName} cannot be zero or negative.");
+            }
         }
     }
 }
