@@ -8,7 +8,6 @@ namespace PizzaCalories
     public class Pizza
     {
         private string name;
-        private Dough dough;
         private List<Topping> toppings;
 
         public Pizza()

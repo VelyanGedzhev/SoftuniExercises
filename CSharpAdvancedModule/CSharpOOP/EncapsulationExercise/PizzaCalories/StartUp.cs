@@ -12,10 +12,10 @@ namespace PizzaCalories
 
             try
             {
-                string[] pizzaArgs = Console.ReadLine().Split(" ", StringSplitOptions.RemoveEmptyEntries);
+                string[] pizzaArgs = Console.ReadLine().Split();
                 string name = pizzaArgs[1];
 
-                string[] doughtArgs = Console.ReadLine().Split(" ", StringSplitOptions.RemoveEmptyEntries);
+                string[] doughtArgs = Console.ReadLine().Split();
                 string flour = doughtArgs[1];
                 string technique = doughtArgs[2];
                 double weight = double.Parse(doughtArgs[3]);
@@ -27,7 +27,7 @@ namespace PizzaCalories
 
                 while ((input = Console.ReadLine()) != "END")
                 {
-                    string[] toppingArgs = input.Split(" ", StringSplitOptions.RemoveEmptyEntries);
+                    string[] toppingArgs = input.Split();
                     string toppingName = toppingArgs[1];
                     double toppingWeight = double.Parse(toppingArgs[2]);
 
