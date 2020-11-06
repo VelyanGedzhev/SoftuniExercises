@@ -2,19 +2,19 @@
 
 namespace BorderControl.Models
 {
-    public class Citizen : IAddable
+    public class Citizen : ICheck, IBirthday
     {
-        public Citizen(string name, int age, string id)
+        public Citizen(string name, int age, string id, string birthday)
         {
             Name = name;
             Age = age;
             Id = id;
+            Birthday = birthday;
         }
 
         public string Name { get; set; }
         public int Age { get; set; }
         public string Id { get; private set; }
-
-        
+        public string Birthday { get; private set; }
     }
 }

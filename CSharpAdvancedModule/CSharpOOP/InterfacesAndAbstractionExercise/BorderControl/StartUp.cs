@@ -12,40 +12,53 @@ namespace BorderControl
         static void Main(string[] args)
         {
             string input = string.Empty;
-            List<IAddable> checkList = new List<IAddable>();
+            List<ICheck> checkList = new List<ICheck>();
+            List<IBirthday> birthdayList = new List<IBirthday>();
 
             while ((input = Console.ReadLine()) != "End")
             {
                 string[] inputData = input
                     .Split(" ", StringSplitOptions.RemoveEmptyEntries);
 
-                if (inputData.Length == 2)
+                string name = inputData[1];
+                string id = string.Empty;
+                string birthday = string.Empty;
+
+                if (inputData[0] == "Robot")
                 {
-                    string modelName = inputData[0];
-                    string id = inputData[1];
-                    Robot robot = new Robot(modelName, id);
+                    id = inputData[2];
+                    
+                    Robot robot = new Robot(name, id);
                     checkList.Add(robot);
                 }
-                else
+                else if(inputData[0] == "Citizen")
                 {
-                    string name = inputData[0];
-                    int age = int.Parse(inputData[1]);
-                    string id = inputData[2];
-                    Citizen citizen = new Citizen(name, age, id);
-                    checkList.Add(citizen);
+                    int age = int.Parse(inputData[2]);
+                    id = inputData[3];
+                    birthday = inputData[4];
+                    
+                    Citizen citizen = new Citizen(name, age, id, birthday);
+                    birthdayList.Add(citizen);
+                }
+                else if (inputData[0] == "Pet")
+                {
+                    birthday = inputData[2];
+                    Pet pet = new Pet(name, birthday);
+                    birthdayList.Add(pet);
                 }
             }
-            string fakeId = Console.ReadLine();
+            string yearOfBirth = Console.ReadLine();
 
 
-            foreach (var item in checkList)
+            foreach (var item in birthdayList)
             {
-                if (item.Id.EndsWith(fakeId))
+                if (item.Birthday.EndsWith(yearOfBirth))
                 {
-                    Console.WriteLine(item.Id);
+                    Console.WriteLine(item.Birthday);
                 }
             }
 
         }
     }
-}
+ }
+

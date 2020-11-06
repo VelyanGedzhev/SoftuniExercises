@@ -2,15 +2,15 @@
 
 namespace BorderControl.Models
 {
-    public class Robot : IAddable
+    public class Robot : ICheck
     {
         public Robot(string modelName, string id)
         {
-            ModelName = modelName;
+            Name = modelName;
             Id = id;
         }
 
-        public string ModelName { get; set; }
+        public string Name { get;  private set; }
         public string Id { get; private set; }
 
 

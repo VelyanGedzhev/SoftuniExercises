@@ -1,8 +1,9 @@
 ﻿namespace BorderControl.Interfaces
 {
-    public interface IAddable
+    public interface ICheck
     {
         public string Id { get; }
-        
+        public string Name { get; }
+
     }
 }
