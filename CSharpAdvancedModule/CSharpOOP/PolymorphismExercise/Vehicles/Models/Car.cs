@@ -7,7 +7,8 @@ namespace Vehicles.Models
     public class Car : Vehicle
     {
         private const double SUMMER_CONSUMPTION_MODIFIER = 0.9;
-        public Car(double fuel, double fuelConsumption) : base(fuel, fuelConsumption)
+
+        public Car(double fuel, double fuelConsumption, double tankCapacity) : base(fuel, fuelConsumption, tankCapacity)
         {
         }
 

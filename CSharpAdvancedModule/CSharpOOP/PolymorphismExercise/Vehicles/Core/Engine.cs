@@ -19,6 +19,7 @@ namespace Vehicles.Core
         {
             Vehicle car = GetVehicleInfo();
             Vehicle truck = GetVehicleInfo();
+            Vehicle bus = GetVehicleInfo();
 
             int n = int.Parse(Console.ReadLine());
 
@@ -42,6 +43,15 @@ namespace Vehicles.Core
                         {
                             Drive(truck, amount);
                         }
+                        else if (vehicleType == "Bus")
+                        {
+                            Drive(bus, amount);
+                        }
+                       
+                    }
+                    else if (commandType == "DriveEmpty")
+                    {
+                        DriveEmpty(bus, amount);
                     }
                     else if (commandType == "Refuel")
                     {
@@ -53,6 +63,10 @@ namespace Vehicles.Core
                         {
                             Refuel(truck, amount);
                         }
+                        else if (vehicleType == "Bus")
+                        {
+                            Refuel(bus, amount);
+                        }
                     }
                 }
                 catch (InvalidOperationException ex)
@@ -63,6 +77,7 @@ namespace Vehicles.Core
             }
             Console.WriteLine(car);
             Console.WriteLine(truck);
+            Console.WriteLine(bus);
         }
         
         private Vehicle GetVehicleInfo()
@@ -74,12 +89,17 @@ namespace Vehicles.Core
             string vehicleType = vehicleArgs[0];
             double fuel = double.Parse(vehicleArgs[1]);
             double fuelConsumption = double.Parse(vehicleArgs[2]);
+            double tankCapacity = double.Parse(vehicleArgs[3]);
 
-            return vehicleFactory.CreateVehicle(vehicleType, fuel, fuelConsumption);
+            return vehicleFactory.CreateVehicle(vehicleType, fuel, fuelConsumption, tankCapacity);
         }
         private void Drive(Vehicle vehicle, double amount)
         {
             Console.WriteLine(vehicle.Drive(amount));
+        }
+        private void DriveEmpty(Vehicle vehicle, double amount)
+        {
+            Console.WriteLine(vehicle.DriveEmpty(amount));
         }
         private void Refuel(Vehicle vehicle, double amount)
         {
