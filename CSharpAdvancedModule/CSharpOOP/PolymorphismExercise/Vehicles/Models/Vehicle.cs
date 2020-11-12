@@ -13,25 +13,29 @@ namespace Vehicles.Models
         {
             FuelConsumption = fuelConsumption;
             TankCapacity = tankCapacity;
+            if (fuel >= TankCapacity)
+            {
+                fuel = 0;
+            }
             Fuel = fuel;
 
         }
 
-        public double Fuel
-        {
-            get => fuel;
-            protected set
-            {
-                if (value > TankCapacity)
-                {
-                    fuel = 0;
-                }
-                else
-                {
-                    fuel = value;
-                }
-            }
-        }
+        public double Fuel { get; protected set; }
+        //{
+        //    get => fuel;
+        //    protected set
+        //    {
+        //        if (value > TankCapacity)
+        //        {
+        //            fuel = 0;
+        //        }
+        //        else
+        //        {
+        //            fuel = value;
+        //        }
+        //    }
+        //}
         public virtual double FuelConsumption { get; protected set; }
   
 
@@ -53,7 +57,7 @@ namespace Vehicles.Models
         }
         public string DriveEmpty(double Kilometers)
         {
-            double fuelNeeded = Kilometers * FuelConsumption;
+            double fuelNeeded = Kilometers * (FuelConsumption- 1.4);
 
             if (fuelNeeded <= Fuel)
             {

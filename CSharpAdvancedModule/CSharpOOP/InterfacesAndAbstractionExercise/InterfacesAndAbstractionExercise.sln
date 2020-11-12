@@ -7,7 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PersonInfo", "PersonInfo\Pe
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Telephony", "Telephony\Telephony.csproj", "{4A9FFDBF-6156-4C8E-9C46-3041ECDE5B29}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BorderControl", "BorderControl\BorderControl.csproj", "{91D3D018-3011-49B8-A780-74FA2E52AA69}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BorderControl", "BorderControl\BorderControl.csproj", "{91D3D018-3011-49B8-A780-74FA2E52AA69}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MilitaryElite", "MilitaryElite\MilitaryElite.csproj", "{75035AA3-ADA1-4644-BF60-0C95AD699AE7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{91D3D018-3011-49B8-A780-74FA2E52AA69}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{91D3D018-3011-49B8-A780-74FA2E52AA69}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{91D3D018-3011-49B8-A780-74FA2E52AA69}.Release|Any CPU.Build.0 = Release|Any CPU
+		{75035AA3-ADA1-4644-BF60-0C95AD699AE7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{75035AA3-ADA1-4644-BF60-0C95AD699AE7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{75035AA3-ADA1-4644-BF60-0C95AD699AE7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{75035AA3-ADA1-4644-BF60-0C95AD699AE7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
