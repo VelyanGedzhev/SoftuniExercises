@@ -24,10 +24,6 @@ namespace Vehicles.Factories
             }
             else if (type == "Bus")
             {
-                //if (fuel > tankCapacity)
-                //{
-                //    fuel = 0;
-                //}
                 vehicle = new Bus(fuel, fuelConsumption, tankCapacity);
             }
             else if(vehicle == null)

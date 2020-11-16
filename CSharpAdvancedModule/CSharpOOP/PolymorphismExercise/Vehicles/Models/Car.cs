@@ -8,10 +8,15 @@ namespace Vehicles.Models
     {
         private const double SUMMER_CONSUMPTION_MODIFIER = 0.9;
 
-        public Car(double fuel, double fuelConsumption, double tankCapacity) : base(fuel, fuelConsumption, tankCapacity)
+        public Car(double fuel, double fuelConsumption, double tankCapacity) 
+            : base(fuel, fuelConsumption, tankCapacity)
         {
         }
 
-        public override double FuelConsumption => base.FuelConsumption + SUMMER_CONSUMPTION_MODIFIER;
+        public override double FuelConsumption 
+        { 
+            get => base.FuelConsumption; 
+            protected set => base.FuelConsumption = value + SUMMER_CONSUMPTION_MODIFIER; 
+        }
     }
 }
