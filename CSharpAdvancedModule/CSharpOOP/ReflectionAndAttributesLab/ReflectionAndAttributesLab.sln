@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30114.105
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stealer", "Stealer\Stealer.csproj", "{BA14E437-1CA3-40F5-BA6E-0ADB17169EC2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Stealer", "Stealer\Stealer.csproj", "{BA14E437-1CA3-40F5-BA6E-0ADB17169EC2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthorProblem", "AuthorProblem\AuthorProblem.csproj", "{ABCC4098-FBA4-4C09-ACD3-E4349AB792CD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{BA14E437-1CA3-40F5-BA6E-0ADB17169EC2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BA14E437-1CA3-40F5-BA6E-0ADB17169EC2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BA14E437-1CA3-40F5-BA6E-0ADB17169EC2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ABCC4098-FBA4-4C09-ACD3-E4349AB792CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ABCC4098-FBA4-4C09-ACD3-E4349AB792CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ABCC4098-FBA4-4C09-ACD3-E4349AB792CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ABCC4098-FBA4-4C09-ACD3-E4349AB792CD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
