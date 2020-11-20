@@ -8,7 +8,7 @@ namespace Stealer
         {
             Spy spy = new Spy();
             //string result = spy.StealFieldInfo("Hacker", "username", "password");
-            string result = spy.AnalyzeAcessModifiers("Hacker");
+            string result = spy.RevealPrivateMethods("Stealer.Hacker");
             Console.WriteLine(result);
         }
     }
