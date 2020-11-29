@@ -32,7 +32,17 @@ namespace Chainblock.Models
 
         public bool Contains(ITransaction tx)
         {
-            throw new NotImplementedException();
+            if (tx == null)
+            {
+                throw new ArgumentException("Transaction cannot be null.");
+            }
+
+            if (!transactions.ContainsValue(tx))
+            {
+                return false;
+            }
+
+            return true;
         }
 
         public bool Contains(int id)
