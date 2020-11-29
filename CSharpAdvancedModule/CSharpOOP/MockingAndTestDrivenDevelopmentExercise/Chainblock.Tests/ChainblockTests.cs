@@ -124,16 +124,49 @@ namespace Chainblock.Tests
 
         [Test]
         [Category("ChangeTransactionStatus method")]
-        public void GivenStatusWhenChangeTransactionStatusIsCalledThenTransactionStatusGangesCorrectly()
+        public void GivenValidIdAndStatusWhenChangeTransactionStatusIsCalledThenTransactionStatusGangesCorrectly()
         {
+            //Act
+            chainblock.Add(transaction);
 
+            chainblock.ChangeTransactionStatus(transaction.Id, TransactionStatus.Unauthorized);
+
+            //Assert
+            var expectedStatus = (int)TransactionStatus.Unauthorized;
+
+            Assert.AreEqual(expectedStatus, (int)transaction.Status);
         }
 
         [Test]
         [Category("ChangeTransactionStatus method")]
-        public void GivenStatusWhenChangeTransactionStatusIsCalledThenExceptionIsTrown()
+        public void GivenValidIdAndInvalidStatusWhenChangeTransactionStatusIsCalledThenExceptionIsTrown()
         {
+            //Act
+            chainblock.Add(transaction);
 
+            Assert.Throws<ArgumentException>(() =>
+            chainblock.ChangeTransactionStatus(transaction.Id, (TransactionStatus) 15));
+        }
+        [Test]
+        [Category("ChangeTransactionStatus method")]
+        public void GivenValidIdAndSameStatusWhenChangeTransactionStatusIsCalledThenExceptionIsTrown()
+        {
+            //Act
+            chainblock.Add(transaction);
+
+            Assert.Throws<ArgumentException>(() =>
+            chainblock.ChangeTransactionStatus(transaction.Id, transaction.Status));
+        }
+        [Test]
+        [Category("ChangeTransactionStatus method")]
+        public void GivenInvalidIdAndValidStatusWhenChangeTransactionStatusIsCalledThenExceptionIsTrown()
+        {
+            //Act
+            chainblock.Add(transaction);
+
+            //Assert
+            Assert.Throws<ArgumentException>(()=>
+            chainblock.ChangeTransactionStatus(-1, TransactionStatus.Failed));
         }
     }
 }
