@@ -2,6 +2,7 @@
 
 using Chainblock.Contracts;
 using Chainblock.Models;
+using Moq;
 using NUnit.Framework;
 using System;
 
@@ -11,6 +12,7 @@ namespace Chainblock.Tests
     public class ChainblockTests
     {
         private ITransaction transaction;
+        private ITransaction otherTransaction;
         private IChainblock chainblock;
 
         [SetUp]
@@ -23,6 +25,14 @@ namespace Chainblock.Tests
                 To = "Firmino",
                 Status = TransactionStatus.Successfull,
                 Amount = 60000
+            };
+            otherTransaction = new Transaction()
+            {
+                Id = 2,
+                From = "Klopp",
+                To = "Mane",
+                Status = TransactionStatus.Successfull,
+                Amount = 62000
             };
             chainblock = new ChainBlock(); ;
         }
@@ -48,6 +58,54 @@ namespace Chainblock.Tests
             //Assert
             Assert.Throws<InvalidOperationException>(() =>
             chainblock.Add(transaction));
+        }
+
+        [Test]
+        [Category("Contains(id) method")]
+        public void GivenIdWhenContainsByIdIsCalledThenReturnsTrueIfTransactionIsFound()
+        {
+            //Act
+            chainblock.Add(transaction);
+
+            //Assert
+            Assert.That(chainblock.Contains(transaction.Id), Is.True);
+        }
+
+        [Test]
+        [Category("Contains(id) method")]
+        public void GivenIdWhenContainsByIdIsCalledThenReturnsFalseIfTransactionIsntFound()
+        {
+            //Act
+            chainblock.Add(otherTransaction);
+
+            //Assert
+            Assert.That(chainblock.Contains(transaction.Id), Is.False);
+        }
+
+        [Test]
+        [Category("Contains(id) method")]
+        public void GivenNegativeIdWhenContainsByIdIsCalledThenExceptionIsThrown()
+        {
+            //Act
+            chainblock.Add(transaction);
+
+            //Assert
+            Assert.Throws<ArgumentException>(() =>
+            chainblock.Contains(-1));
+        }
+
+        [Test]
+        [Category("ChangeTransactionStatus method")]
+        public void GivenStatusWhenChangeTransactionStatusIsCalledThenTransactionStatusGangesCorrectly()
+        {
+
+        }
+
+        [Test]
+        [Category("ChangeTransactionStatus method")]
+        public void GivenStatusWhenChangeTransactionStatusIsCalledThenExceptionIsTrown()
+        {
+
         }
     }
 }

@@ -37,6 +37,7 @@ namespace Chainblock.Models
 
         public bool Contains(int id)
         {
+            
             throw new NotImplementedException();
         }
 
