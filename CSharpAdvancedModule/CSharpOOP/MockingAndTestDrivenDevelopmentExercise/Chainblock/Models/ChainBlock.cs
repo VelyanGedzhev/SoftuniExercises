@@ -27,7 +27,24 @@ namespace Chainblock.Models
 
         public void ChangeTransactionStatus(int id, TransactionStatus newStatus)
         {
-            throw new NotImplementedException();
+            if (!transactions.ContainsKey(id))
+            {
+                throw new ArgumentException($"Id {id} doesn't exists!");
+            }
+
+            if (!Enum.IsDefined(typeof(TransactionStatus), newStatus))
+            {
+                throw new ArgumentException("Invalid transaction status.");
+            }
+
+            var transaction = transactions[id];
+
+            if (transaction.Status == newStatus)
+            {
+                throw new InvalidOperationException($"Cannot change {transaction.Status} to {newStatus}");
+            }
+
+            transactions[id].Status = newStatus;
         }
 
         public bool Contains(ITransaction tx)

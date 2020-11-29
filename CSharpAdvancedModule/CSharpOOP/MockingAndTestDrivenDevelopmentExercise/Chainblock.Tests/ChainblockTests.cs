@@ -154,7 +154,7 @@ namespace Chainblock.Tests
             //Act
             chainblock.Add(transaction);
 
-            Assert.Throws<ArgumentException>(() =>
+            Assert.Throws<InvalidOperationException>(() =>
             chainblock.ChangeTransactionStatus(transaction.Id, transaction.Status));
         }
         [Test]
