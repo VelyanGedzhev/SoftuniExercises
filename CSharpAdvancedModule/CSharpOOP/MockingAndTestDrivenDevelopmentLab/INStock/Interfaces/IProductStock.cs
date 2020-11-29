@@ -15,7 +15,7 @@ namespace INStock.Interfaces
         IProduct FindByLabel(string label);
         IEnumerable<IProduct> FindAllInPriceRange(decimal bottomPrice, int topPrice);
         IEnumerable<IProduct> FindAllByPrice(decimal price);
-        IProduct FindMostExpensiveProducts(int price);
+        IProduct FindMostExpensiveProduct();
         IEnumerable<IProduct> FindAllByQuantity(int quantity);
         public IEnumerator<IProduct> GetEnumerator();
 
