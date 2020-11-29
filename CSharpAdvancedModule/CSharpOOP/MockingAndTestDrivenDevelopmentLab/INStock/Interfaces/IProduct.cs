@@ -9,5 +9,7 @@ namespace INStock.Interfaces
         public string Label { get; }
         public decimal Price { get; }
         public int Quantity { get; }
+
+        int CompareTo(IProduct secondProduct);
     }
 }

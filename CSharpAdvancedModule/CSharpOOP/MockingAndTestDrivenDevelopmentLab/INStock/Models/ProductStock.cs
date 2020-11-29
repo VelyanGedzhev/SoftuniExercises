@@ -5,52 +5,60 @@ using System.Linq;
 
 namespace INStock.Models
 {
-    public class ProductStock
+    public class ProductStock : IProductStock
     {
-        private readonly IList<IProduct> products;
-        public ProductStock(IList<IProduct> repo)
-        {
-            products = repo;
-        }
-        public int Count
-        {
-            get => products.Count;
+        public IProduct this[int index] { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
-        }
-        public IProduct this[int index]
-        {
-            get => products[index];
+        public int Count { get; }
 
-            private set
-            {
-                products[index] = value;
-            }
-        }
         public void Add(IProduct product)
         {
-            if (product == null)
-            {
-                throw new ArgumentException("Product cannot be null.");
-            }
-            if (products.Contains(product))
-            {
-                throw new ArgumentException("Product label must be unique.");
-            }
-            products.Add(product);
+            throw new NotImplementedException();
         }
+
         public bool Contains(IProduct product)
         {
-            return products.Any(p => p.Label == product.Label);
+            throw new NotImplementedException();
         }
 
         public IProduct Find(int index)
         {
-            if (index < 0 || index > products.Count)
-            {
-                throw new InvalidOperationException("Invalid index.");
-            }
-            return products[index];
+            throw new NotImplementedException();
         }
 
+        public IEnumerable<IProduct> FindAllByPrice(decimal price)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<IProduct> FindAllByQuantity(int quantity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<IProduct> FindAllInPriceRange(decimal bottomPrice, int topPrice)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IProduct FindByLabel(string label)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IProduct FindMostExpensiveProducts(int price)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerator<IProduct> GetEnumerator()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Remove(IProduct product)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

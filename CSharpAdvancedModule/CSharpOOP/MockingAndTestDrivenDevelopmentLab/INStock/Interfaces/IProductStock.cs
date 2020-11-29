@@ -17,6 +17,8 @@ namespace INStock.Interfaces
         IEnumerable<IProduct> FindAllByPrice(decimal price);
         IProduct FindMostExpensiveProducts(int price);
         IEnumerable<IProduct> FindAllByQuantity(int quantity);
+        public IEnumerator<IProduct> GetEnumerator();
+
 
     }
 }
