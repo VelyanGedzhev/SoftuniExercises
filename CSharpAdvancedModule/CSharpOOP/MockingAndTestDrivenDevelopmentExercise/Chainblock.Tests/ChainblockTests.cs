@@ -95,6 +95,34 @@ namespace Chainblock.Tests
         }
 
         [Test]
+        [Category("Contains(ITransaction transaction) method")]
+        public void GivenTransactionWhenContainsIsCalledThenReturnsTrueIfTransactionIsFound()
+        {
+            //Act
+            chainblock.Add(transaction);
+
+            //Assert
+            Assert.That(chainblock.Contains(transaction), Is.True);
+        }
+        [Test]
+        [Category("Contains(ITransaction transaction) method")]
+        public void GivenTransactionWhenContainsIsCalledThenReturnsFalseIfTransactionIsntFound()
+        {
+            //Act
+            chainblock.Add(otherTransaction);
+
+            //Assert
+            Assert.That(chainblock.Contains(transaction), Is.False);
+        }
+            [Test]
+        [Category("Contains(ITransaction transaction) method")]
+        public void GivenInvalidTransactionWhenContainsIsCalledThenExceptionIsThrown()
+        {
+            Assert.Throws<ArgumentException>(() =>
+            chainblock.Contains(null));
+        }
+
+        [Test]
         [Category("ChangeTransactionStatus method")]
         public void GivenStatusWhenChangeTransactionStatusIsCalledThenTransactionStatusGangesCorrectly()
         {
