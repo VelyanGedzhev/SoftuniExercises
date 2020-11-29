@@ -37,8 +37,16 @@ namespace Chainblock.Models
 
         public bool Contains(int id)
         {
-            
-            throw new NotImplementedException();
+            if (id < 0)
+            {
+                throw new ArgumentException("Id cannot be negative.");
+            }
+            if (!transactions.ContainsKey(id))
+            {
+                return false;
+            }
+
+            return true;
         }
 
         public IEnumerable<ITransaction> GetAllInAmountRange(double lo, double hi)
