@@ -226,5 +226,35 @@ namespace Chainblock.Tests
             Assert.AreEqual(expectedTransaction, actualTransaction);
             
         }
+
+        [Test]
+        [Category("GetByTransactionStatus")]
+        public void GivenStatusWhenGetByTransactionStatusIsCalledThenExceptionIsThrownIfTransactionDoesntExists()
+        {
+            //Arrange 
+            chainblock.Add(transaction);
+
+            //Act - Assert
+            Assert.Throws<InvalidOperationException>(() =>
+            chainblock.GetByTransactionStatus(otherTransaction.Status));
+            
+        }
+
+        [Test]
+        [Category("GetByTransactionStatus")]
+        public void GivenStatusWhenGetByTransactionStatusIsCalledThenTransactionIsReturnedIfExists()
+        {
+            //Arrange
+            chainblock.Add(transaction);
+            chainblock.Add(otherTransaction);
+
+            //Act
+            var exptectedTransaction = otherTransaction;
+            var actualTransaction = chainblock.GetByTransactionStatus(otherTransaction.Status);
+
+            //Assrt
+            Assert.AreEqual(exptectedTransaction, actualTransaction);
+        }
     }
 }
+
