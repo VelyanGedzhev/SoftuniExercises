@@ -242,7 +242,7 @@ namespace Chainblock.Tests
 
         [Test]
         [Category("GetByTransactionStatus")]
-        public void GivenStatusWhenGetByTransactionStatusIsCalledThenTransactionIsReturnedIfExists()
+        public void GivenStatusWhenGetByTransactionStatusIsCalledThenReturnsFirstTransactionOrderedByAmountDescending()
         {
             //Arrange
             chainblock.Add(transaction);
