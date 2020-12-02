@@ -198,5 +198,33 @@ namespace Chainblock.Tests
             Assert.AreEqual(expectedCount, chainblock.Count);
             Assert.That(chainblock.Contains(transaction.Id), Is.False);
         }
+
+        [Test]
+        [Category("GetById method")]
+        public void GivenTransactionIdWhenGetByIdIsCalledThenExceptionIsThrownIfTransactionDoesntExists()
+        {
+            //Arrange
+            chainblock.Add(otherTransaction);
+
+            //Act - Assert
+            Assert.Throws<InvalidOperationException>(() =>
+            chainblock.GetById(transaction.Id));
+        }
+
+        [Test]
+        [Category("GetById method")]
+        public void GivenTransactionIdWhenGetByIdIsCalledThenTranscationIsReturnedIfExists()
+        {
+            //Arrange
+            chainblock.Add(transaction);
+
+            //Act
+            var expectedTransaction = transaction;
+            var actualTransaction = chainblock.GetById(transaction.Id);
+
+            //Assert
+            Assert.AreEqual(expectedTransaction, actualTransaction);
+            
+        }
     }
 }
