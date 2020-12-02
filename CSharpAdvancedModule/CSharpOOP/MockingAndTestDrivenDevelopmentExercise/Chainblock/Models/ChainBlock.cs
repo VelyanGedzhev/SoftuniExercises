@@ -138,7 +138,12 @@ namespace Chainblock.Models
 
         public void RemoveTransactionById(int id)
         {
-            throw new NotImplementedException();
+            if (!transactions.ContainsKey(id))
+            {
+                throw new InvalidOperationException($"A transaction with ID: {id} doesn't exist.");
+            }
+
+            transactions.Remove(id);
         }
 
         IEnumerator IEnumerable.GetEnumerator()
