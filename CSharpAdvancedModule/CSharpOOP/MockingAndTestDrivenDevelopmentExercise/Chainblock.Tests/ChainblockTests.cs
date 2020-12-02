@@ -168,5 +168,35 @@ namespace Chainblock.Tests
             Assert.Throws<ArgumentException>(()=>
             chainblock.ChangeTransactionStatus(-1, TransactionStatus.Failed));
         }
+
+        [Test]
+        [Category("RemoveTransactionById method")]
+        public void GivenTransactionIdWhenRemoveByIdIsCalledThenExceptionIsThrownIfTransactionDoesntExists()
+        {
+            //Arrange
+            chainblock.Add(transaction);
+
+            //Act - Assert
+            Assert.Throws<InvalidOperationException>(() =>
+            chainblock.RemoveTransactionById(otherTransaction.Id));
+        }
+
+        [Test]
+        [Category("RemoveTransactionById method")]
+        public void GivenTransactionIdWhenRemoveByIdIsCalledThenTransactionIsRemovedCorrectlyIfExists()
+        {
+            //Assert
+            chainblock.Add(transaction);
+            chainblock.Add(otherTransaction);
+
+            //Act
+            var expectedCount = 1;
+            var exptectedIsFound = false;
+            chainblock.RemoveTransactionById(transaction.Id);
+
+            //Assert
+            Assert.AreEqual(expectedCount, chainblock.Count);
+            Assert.That(chainblock.Contains(transaction.Id), Is.False);
+        }
     }
 }
