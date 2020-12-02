@@ -2,11 +2,14 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Chainblock.Models
 {
     public class ChainBlock : IChainblock
     {
+        private const string NON_EXISTENT_TRANSACTION = "A transaction with ID: {0} doesn't exist.";
+
         private readonly Dictionary<int, ITransaction> transactions;
 
         public ChainBlock()
@@ -98,7 +101,13 @@ namespace Chainblock.Models
 
         public ITransaction GetById(int id)
         {
-            throw new NotImplementedException();
+            if (!transactions.ContainsKey(id))
+            {
+                throw new InvalidOperationException(string.Format(NON_EXISTENT_TRANSACTION, id));
+            }
+
+            return transactions.FirstOrDefault(t => t.Key == id).Value;
+
         }
 
         public IEnumerable<ITransaction> GetByReceiverAndAmountRange(string receiver, double lo, double hi)
@@ -140,7 +149,7 @@ namespace Chainblock.Models
         {
             if (!transactions.ContainsKey(id))
             {
-                throw new InvalidOperationException($"A transaction with ID: {id} doesn't exist.");
+                throw new InvalidOperationException(string.Format(NON_EXISTENT_TRANSACTION, id));
             }
 
             transactions.Remove(id);
