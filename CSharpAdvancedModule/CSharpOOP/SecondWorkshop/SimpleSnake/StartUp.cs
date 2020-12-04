@@ -1,6 +1,7 @@
 ﻿namespace SimpleSnake
 {
     using SimpleSnake.GameObjects;
+    using SimpleSnake.GameObjects.FoodTypes;
     using System.Collections.Generic;
     using Utilities;
 
@@ -10,7 +11,7 @@
         {
             Wall wall = new Wall(70, 20);
 
-            Food food = new Food(wall, 1, 12);
+            Food food = new FoodDollar(wall);
             food.SetRandomPosition(new Queue<Point>());
         }
     }

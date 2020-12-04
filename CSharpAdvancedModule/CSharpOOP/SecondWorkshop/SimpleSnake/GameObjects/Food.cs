@@ -4,13 +4,13 @@ using System.Linq;
 
 namespace SimpleSnake.GameObjects
 {
-    public class Food : Point
+    public abstract class Food : Point
     {
         private readonly Random rand;
         private readonly Wall wall;
         private char foodSymbol;
 
-        public Food(Wall wall, char symbol, int foodPoints) 
+        protected Food(Wall wall, char symbol, int foodPoints) 
             : base(wall.LeftX, wall.TopY)
         {
             foodSymbol = symbol;
