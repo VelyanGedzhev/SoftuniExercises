@@ -13,6 +13,16 @@
 
             Food food = new FoodDollar(wall);
             food.SetRandomPosition(new Queue<Point>());
+
+            Snake snake = new Snake(1, 1);
+            snake.IsMoving(new Point(1, 0));
+            snake.IsMoving(new Point(1, 0));
+            snake.IsMoving(new Point(1, 0));
+            snake.IsMoving(new Point(1, 0));
+            snake.IsMoving(new Point(0, 1));
+            snake.IsMoving(new Point(0, 1));
+            snake.IsMoving(new Point(0, 1));
+            
         }
     }
 }
