@@ -34,7 +34,7 @@ namespace Chainblock.Tests
                 Status = TransactionStatus.Successfull,
                 Amount = 62000
             };
-            chainblock = new ChainBlock(); ;
+            chainblock = new ChainBlock();
         }
        
         [Test]
@@ -231,21 +231,19 @@ namespace Chainblock.Tests
         [Category("GetByTransactionStatus")]
         public void GivenStatusWhenGetByTransactionStatusIsCalledThenExceptionIsThrownIfTransactionDoesntExists()
         {
-            //Arrange 
-            chainblock.Add(transaction);
 
             //Act - Assert
             Assert.Throws<InvalidOperationException>(() =>
             chainblock.GetByTransactionStatus(otherTransaction.Status));
-            
+
         }
 
         [Test]
         [Category("GetByTransactionStatus")]
-        public void GivenStatusWhenGetByTransactionStatusIsCalledThenReturnsFirstTransactionOrderedByAmountDescending()
+        public void GivenStatusWhenGetByTransactionStatusIsCalledThenReturnsTransactionsOrderedByAmountDescending()
         {
             //Arrange
-            chainblock.Add(transaction);
+            //chainblock.Add(transaction);
             chainblock.Add(otherTransaction);
 
             //Act
