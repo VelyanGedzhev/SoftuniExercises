@@ -43,7 +43,7 @@ namespace CounterStrike.Models.Players
 
             private set
             {
-                if (value < 0)
+                if (value <= 0)
                 {
                     throw new ArgumentException(ExceptionMessages.InvalidPlayerHealth);
                 }
@@ -98,6 +98,11 @@ namespace CounterStrike.Models.Players
             }
 
             health -= points;
+
+            if (health < 0)
+            {
+                health = 0;
+            }
         }
 
         public override string ToString()
