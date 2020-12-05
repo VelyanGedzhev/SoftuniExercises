@@ -99,5 +99,17 @@ namespace CounterStrike.Models.Players
 
             health -= points;
         }
+
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+
+            sb.AppendLine($"{GetType().Name}: {Username}")
+                .AppendLine($"--Health: {Health}")
+                .AppendLine($"--Armor: {Armor}")
+                .AppendLine($"--Gun: {Gun.Name}");
+
+            return sb.ToString().Trim();
+        }
     }
 }
