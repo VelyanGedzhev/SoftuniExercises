@@ -23,20 +23,19 @@ namespace CounterStrike.Models.Maps
         {
             SeparatePlayersIntoTeams(players);
 
-            while (IsTeamAlive(terrorists) && IsTeamAlive(counterTerrorists))
+            while (true)
             {
                 AttackTeam(terrorists, counterTerrorists);
                 AttackTeam(counterTerrorists, terrorists);
-            }
-
-            if (!IsTeamAlive(counterTerrorists))
-            {
-                return "Terrorist wins!";
-            }
-            else
-            {
-                return "Counter Terrorist wins!";
-            }
+                if (!IsTeamAlive(counterTerrorists))
+                {
+                    return "Terrorist wins!";
+                }
+                if (!IsTeamAlive(terrorists))
+                {
+                    return "Terrorist wins!";
+                }
+            }    
         }
 
         private bool IsTeamAlive(List<IPlayer> players)
