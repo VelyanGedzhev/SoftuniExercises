@@ -33,7 +33,7 @@ namespace CounterStrike.Models.Maps
                 }
                 if (!IsTeamAlive(terrorists))
                 {
-                    return "Terrorist wins!";
+                    return "CounterTerrorist wins!";
                 }
             }    
         }
