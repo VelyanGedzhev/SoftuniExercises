@@ -41,7 +41,7 @@ namespace CounterStrike.Models.Players
         {
             get => health;
 
-            protected set
+            private set
             {
                 if (value < 0)
                 {
@@ -56,7 +56,7 @@ namespace CounterStrike.Models.Players
         {
             get => armor;
 
-            protected set
+            private set
             {
                 if (value < 0)
                 {
@@ -71,7 +71,7 @@ namespace CounterStrike.Models.Players
         {
             get => gun;
 
-            protected set
+            private set
             {
                 if (value == null)
                 {

@@ -33,12 +33,10 @@ namespace CounterStrike.Models.Maps
             {
                 return "Terrorist wins!";
             }
-            else if(!IsTeamAlive(terrorists))
+            else
             {
                 return "Counter Terrorist wins!";
             }
-
-            return "Unexpected draw that should not happened!";
         }
 
         private bool IsTeamAlive(List<IPlayer> players)
