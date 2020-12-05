@@ -27,8 +27,12 @@ namespace SimpleSnake.GameObjects
                 new FoodHash(wall)
             };
 
+            
             CreateSnake();
+            food[foodIndex].SetRandomPosition(snakeElements);
         }
+
+        public int Lenght => snakeElements.Count;
 
         public bool IsMoving(Point direction)
         {
@@ -36,34 +40,76 @@ namespace SimpleSnake.GameObjects
 
             GetNextDirection(direction, snakeHead);
 
-            if (LeftX == 0 || TopY == 0 || LeftX == wall.LeftX || TopY == wall.TopY)
+            if (IsWallPoint())
             {
                 return false;
             }
 
-            if (snakeElements.Any(x => x.LeftX == LeftX && x.TopY == TopY))
+            if (IsPartOfSnake())
             {
                 return false;
             }
 
+            Point newSnakeHead = CreateNewHead();
+
+            if (food[foodIndex].IsFoodPoint(newSnakeHead))
+            {
+                Eat(direction, newSnakeHead);
+
+                food[foodIndex].SetRandomPosition(snakeElements);
+            }
+
+            RemoveSnakeTail();
+
+            return true;
+        }
+
+        private void RemoveSnakeTail()
+        {
+            var tail = snakeElements.Dequeue();
+            tail.Draw(' ');
+        }
+
+        private Point CreateNewHead()
+        {
             var newSnakeHead = new Point(LeftX, TopY);
             newSnakeHead.Draw(SNAKE_SYMBOL);
             snakeElements.Enqueue(newSnakeHead);
+            return newSnakeHead;
+        }
 
-            if (food[foodIndex].IsFoodPoint(newSnakeHead))
+        private void Eat(Point direction, Point newSnakeHead)
+        {
+            for (int i = 0; i < food[foodIndex].FoodPoints; i++)
             {
                 GetNextDirection(newSnakeHead, direction);
                 newSnakeHead = new Point(LeftX, TopY);
                 newSnakeHead.Draw(SNAKE_SYMBOL);
                 snakeElements.Enqueue(newSnakeHead);
+            }
+        }
 
+        private Point NewMethod(Point direction, Point newSnakeHead)
+        {
+            for (int i = 0; i < food[foodIndex].FoodPoints; i++)
+            {
+                GetNextDirection(newSnakeHead, direction);
+                newSnakeHead = new Point(LeftX, TopY);
+                newSnakeHead.Draw(SNAKE_SYMBOL);
+                snakeElements.Enqueue(newSnakeHead);
             }
 
-            var tail = snakeElements.Dequeue();
-            tail.Draw(' ');
-              
+            return newSnakeHead;
+        }
 
-            return true;
+        private bool IsPartOfSnake()
+        {
+            return snakeElements.Any(x => x.LeftX == LeftX && x.TopY == TopY);
+        }
+
+        private bool IsWallPoint()
+        {
+            return LeftX == 0 || TopY == 0 || LeftX == wall.LeftX - 1 || TopY == wall.TopY - 1;
         }
 
         private void GetNextDirection(Point direction, Point head)
