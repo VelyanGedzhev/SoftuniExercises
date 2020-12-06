@@ -10,7 +10,7 @@ namespace RobotService.Models.Robots
     {
         private int happiness;
         private int energy;
-        protected Robot(string name, int happiness, int energy, int procedureTime)
+        protected Robot(string name, int energy, int happiness, int procedureTime)
         {
             Name = name;
             Happiness = happiness;

@@ -6,8 +6,8 @@ namespace RobotService.Models.Robots
 {
     public class HouseholdRobot : Robot
     {
-        public HouseholdRobot(string name, int happiness, int energy, int procedureTime) 
-            : base(name, happiness, energy, procedureTime)
+        public HouseholdRobot(string name, int energy, int happiness, int procedureTime) 
+            : base(name, energy, happiness, procedureTime)
         {
         }
     }
