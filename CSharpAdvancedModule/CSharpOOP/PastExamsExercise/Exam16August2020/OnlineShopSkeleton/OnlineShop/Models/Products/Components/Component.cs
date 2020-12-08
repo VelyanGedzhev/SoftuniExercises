@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using OnlineShop.Common.Constants;
 
 namespace OnlineShop.Models.Products.Components
 {
@@ -11,11 +9,11 @@ namespace OnlineShop.Models.Products.Components
         {
             Generation = generation;
         }
-        public int Generation { get; private set; }
+        public int Generation { get; }
 
         public override string ToString()
         {
-            return $"Overall Performance: {OverallPerformance}. Price: {Price} - {GetType().Name}: {Manufacturer} {Model} (Id: {Id}) Generation: {Generation}";
+            return base.ToString() + " " + string.Format(SuccessMessages.ComponentToString, Generation);
         }
     }
 }

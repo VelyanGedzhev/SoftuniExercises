@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OnlineShop.Models.Products.Components
+﻿namespace OnlineShop.Models.Products.Components
 {
     public class PowerSupply : Product
     {

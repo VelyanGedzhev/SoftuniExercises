@@ -1,4 +1,5 @@
-﻿using OnlineShop.Models.Products.Components;
+﻿using OnlineShop.Common.Constants;
+using OnlineShop.Models.Products.Components;
 using OnlineShop.Models.Products.Peripherals;
 using System;
 using System.Collections.Generic;
@@ -9,8 +10,8 @@ namespace OnlineShop.Models.Products.Computers
 {
     public abstract class Computer : Product, IComputer
     {
-        private ICollection<IComponent> components;
-        private ICollection<IPeripheral> peripherals;
+        private readonly ICollection<IComponent> components;
+        private readonly ICollection<IPeripheral> peripherals;
 
         protected Computer(int id, string manufacturer, string model, decimal price, double overallPerformance) : base(id, manufacturer, model, price, overallPerformance)
         {
@@ -22,32 +23,15 @@ namespace OnlineShop.Models.Products.Computers
 
         public IReadOnlyCollection<IPeripheral> Peripherals => peripherals.ToList().AsReadOnly();
 
-        public override decimal Price
-        {
-            get => GetComponenetsSum() + GetPeripheralsSum();
-        }
+        public override decimal Price => Peripherals.Sum(x => x.Price) + Components.Sum(x => x.Price);
 
-        public override double OverallPerformance
-        {
-            get
-            {
-                if (Components.Count == 0)
-                {
-                    return base.OverallPerformance;
-                }
-                else
-                {
-                    return base.OverallPerformance + Components.Average(c => c.OverallPerformance);
-                }
-            }
- 
-        }
+        public override double OverallPerformance => CalculateOverallPerformance();
 
         public void AddComponent(IComponent component)
         {
             if (components.Any(t => t.GetType().Name == component.GetType().Name))
             {
-                throw new ArgumentException($"Component {component.GetType().Name} already exists in {GetType().Name} with Id {Id}.");
+                throw new ArgumentException(string.Format(ExceptionMessages.ExistingComponent, component.GetType().Name, GetType().Name, Id));
             }
 
             components.Add(component);
@@ -57,7 +41,7 @@ namespace OnlineShop.Models.Products.Computers
         {
             if (peripherals.Any(t => t.GetType().Name == peripheral.GetType().Name))
             {
-                throw new ArgumentException($"Peripeheral {peripheral.GetType().Name} already exists in {GetType().Name} with Id {Id}.");
+                throw new ArgumentException(string.Format(ExceptionMessages.ExistingPeripheral, peripheral.GetType().Name, GetType().Name, Id));
             }
 
             peripherals.Add(peripheral);
@@ -67,7 +51,7 @@ namespace OnlineShop.Models.Products.Computers
         {
             if (components.Count == 0 || !components.Any(t => t.GetType().Name == componentType))
             {
-                throw new ArgumentException($"Component {componentType} does not exist in {GetType().Name} with Id {Id}.");
+                throw new ArgumentException(string.Format(ExceptionMessages.NotExistingComponent, componentType, GetType().Name, Id));
             }
 
             IComponent componentToRemove = components.FirstOrDefault(t => t.GetType().Name == componentType);
@@ -81,7 +65,7 @@ namespace OnlineShop.Models.Products.Computers
         {
             if (peripherals.Count == 0 || !peripherals.Any(t => t.GetType().Name == peripheralType))
             {
-                throw new ArgumentException($"Peripheral {peripheralType} does not exist in {GetType().Name} with Id {Id}.");
+                throw new ArgumentException(string.Format(ExceptionMessages.NotExistingPeripheral, peripheralType, GetType().Name, Id));
             }
 
             IPeripheral peripheralToRemove = peripherals.FirstOrDefault(t => t.GetType().Name == peripheralType);
@@ -91,40 +75,20 @@ namespace OnlineShop.Models.Products.Computers
             return peripheralToRemove;
         }
 
-        private decimal GetComponenetsSum()
-        {
-            decimal sum = 0;
-
-            foreach (var component in components)
-            {
-                sum += component.Price;
-            }
-            return sum;
-        }
-
-        private decimal GetPeripheralsSum()
-        {
-            decimal sum = 0;
-
-            foreach (var peripheral in peripherals)
-            {
-                sum += peripheral.Price;
-            }
-            return sum;
-        }
-
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();
+            sb.AppendLine(base.ToString());
 
-            sb.AppendLine($" Components ({Components.Count}):");
+            sb.AppendLine(string.Format(SuccessMessages.ComputerComponentsToString, Components.Count));
 
             foreach (var component in Components)
             {
                 sb.AppendLine(component.ToString());
             }
 
-            sb.AppendLine($" Peripherals ({Peripherals.Count}); Average Overall Performance ({Peripherals.Average(p => p.OverallPerformance)}):");
+            sb.AppendLine(string.Format(SuccessMessages.ComputerPeripheralsToString,  Peripherals.Count, 
+              Peripherals.Average(p => p.OverallPerformance)));
 
             foreach (var peripheral in Peripherals)
             {
@@ -132,6 +96,18 @@ namespace OnlineShop.Models.Products.Computers
             }
 
             return base.ToString() + Environment.NewLine + sb.ToString().TrimEnd();
+        }
+
+        private double CalculateOverallPerformance()
+        {
+            if (Components.Count == 0)
+            {
+                return base.OverallPerformance;
+            }
+            else
+            {
+                return base.OverallPerformance + Components.Average(c => c.OverallPerformance);
+            }
         }
     }
 }

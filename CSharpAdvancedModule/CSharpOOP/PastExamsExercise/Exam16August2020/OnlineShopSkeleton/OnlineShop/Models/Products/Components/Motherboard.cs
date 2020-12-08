@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OnlineShop.Models.Products.Components
+﻿namespace OnlineShop.Models.Products.Components
 {
     public class Motherboard : Product
     {
@@ -10,6 +6,7 @@ namespace OnlineShop.Models.Products.Components
 
         public Motherboard(int id, string manufacturer, string model, decimal price, double overallPerformance) : base(id, manufacturer, model, price, overallPerformance)
         {
+            
         }
 
         public override double OverallPerformance => base.OverallPerformance * multiplier;

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using OnlineShop.Common.Constants;
 
 namespace OnlineShop.Models.Products.Peripherals
 {
@@ -13,11 +11,11 @@ namespace OnlineShop.Models.Products.Peripherals
             ConnectionType = connectionType;
         }
 
-        public string ConnectionType { get; private set; }
+        public string ConnectionType { get; }
 
         public override string ToString()
         {
-            return $"Overall Performance: {OverallPerformance}. Price: {Price} - {GetType().Name}: {Manufacturer} {Model} (Id: {Id}) Connection Type: {ConnectionType}";
+            return base.ToString() + " " +  string.Format(SuccessMessages.PeripheralToString, ConnectionType);
         }
     }
 }
