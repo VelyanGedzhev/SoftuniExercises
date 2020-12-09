@@ -100,8 +100,8 @@ namespace OnlineShop.Models.Products
         public override string ToString()
         {
             return string.Format(SuccessMessages.ProductToString,
-                OverallPerformance, 
-                Price, 
+                OverallPerformance.ToString("F2"), 
+                Price.ToString("F2"), 
                 GetType().Name, 
                 Manufacturer, 
                 Model, 

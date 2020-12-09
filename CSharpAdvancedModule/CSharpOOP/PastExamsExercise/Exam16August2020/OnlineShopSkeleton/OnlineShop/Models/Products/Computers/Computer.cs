@@ -23,7 +23,7 @@ namespace OnlineShop.Models.Products.Computers
 
         public IReadOnlyCollection<IPeripheral> Peripherals => peripherals.ToList().AsReadOnly();
 
-        public override decimal Price => Peripherals.Sum(x => x.Price) + Components.Sum(x => x.Price);
+        public override decimal Price => base.Price +  Peripherals.Sum(x => x.Price) + Components.Sum(x => x.Price);
 
         public override double OverallPerformance => CalculateOverallPerformance();
 
@@ -78,7 +78,7 @@ namespace OnlineShop.Models.Products.Computers
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();
-            sb.AppendLine(base.ToString());
+            //sb.AppendLine(base.ToString());
 
             sb.AppendLine(string.Format(SuccessMessages.ComputerComponentsToString, Components.Count));
 
@@ -87,7 +87,8 @@ namespace OnlineShop.Models.Products.Computers
                 sb.AppendLine(component.ToString());
             }
 
-            sb.AppendLine(string.Format(SuccessMessages.ComputerPeripheralsToString,  Peripherals.Count, 
+            sb.AppendLine(string.Format(SuccessMessages.ComputerPeripheralsToString, Peripherals.Count,
+              Peripherals.Count == 0 ? 0 :
               Peripherals.Average(p => p.OverallPerformance)));
 
             foreach (var peripheral in Peripherals)
@@ -96,6 +97,7 @@ namespace OnlineShop.Models.Products.Computers
             }
 
             return base.ToString() + Environment.NewLine + sb.ToString().TrimEnd();
+
         }
 
         private double CalculateOverallPerformance()

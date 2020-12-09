@@ -4,8 +4,8 @@
     {
         private const double performance = 10;
 
-        public Laptop(int id, string manufacturer, string model, decimal price, double overallPerformance) 
-            : base(id, manufacturer, model, price, overallPerformance)
+        public Laptop(int id, string manufacturer, string model, decimal price) 
+            : base(id, manufacturer, model, price, performance)
         {
         }
     }
