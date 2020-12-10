@@ -28,6 +28,7 @@ namespace EasterRaces.Models.Drivers.Entities
                     throw new ArgumentException(string.Format(ExceptionMessages.InvalidName, value, 5));
                          
                 }
+                name = value;
             }
         }
 

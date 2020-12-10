@@ -31,6 +31,8 @@ namespace EasterRaces.Models.Races.Entities
                     throw new ArgumentException(string.Format(ExceptionMessages.InvalidName, value, 5));
 
                 }
+
+                name = value;
             }
         }
 

@@ -22,8 +22,10 @@ namespace EasterRaces.Models.Cars.Entities
             {
                 if (string.IsNullOrWhiteSpace(value) || value.Length < 4)
                 {
-                    throw new ArgumentException(string.Format(ExceptionMessages.InvalidModel, GetType().Name, 4));
+                    throw new ArgumentException(string.Format(ExceptionMessages.InvalidModel, value, 4));
                 }
+
+                model = value;
             }
         }
 

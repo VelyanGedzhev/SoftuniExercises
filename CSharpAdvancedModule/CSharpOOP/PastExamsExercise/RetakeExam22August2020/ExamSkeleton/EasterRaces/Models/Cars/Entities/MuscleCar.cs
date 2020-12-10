@@ -9,7 +9,7 @@ namespace EasterRaces.Models.Cars.Entities
     {
         private int horsePower;
 
-        public MuscleCar(string model, int horsePower, double cubicCentimeters) 
+        public MuscleCar(string model, int horsePower) 
             : base(model, horsePower, 5000)
         {
         }
@@ -20,7 +20,7 @@ namespace EasterRaces.Models.Cars.Entities
 
             protected set
             {
-                if (value < 250 || value > 350)
+                if (value < 400 || value > 600)
                 {
                     throw new ArgumentException(string.Format(ExceptionMessages.InvalidHorsePower, value));
                 }
