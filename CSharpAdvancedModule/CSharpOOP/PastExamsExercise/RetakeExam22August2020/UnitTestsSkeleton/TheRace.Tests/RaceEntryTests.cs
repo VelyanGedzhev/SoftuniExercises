@@ -45,5 +45,40 @@ namespace TheRace.Tests
         }
 
         //TODO: Unit tests for RaceEntry
+
+        [Test]
+        [Category("RaceEntry")]
+        public void WhenAddIsCalledItShouldThrowExceptionIfDriverIsNull()
+        {
+            Assert.Throws<InvalidOperationException>(() =>
+            race.AddDriver(null));
+        }
+
+        [Test]
+        [Category("RaceEntry")]
+        public void WhenAddIsCalledItShouldThrowExceptionIfDriverExist()
+        {
+            race.AddDriver(driver);
+
+            Assert.Throws<InvalidOperationException>(() =>
+            race.AddDriver(driver));
+        }
+
+        [Test]
+        [Category("RaceEntry")]
+        public void WhenAddIsCalledDriverCountShouldIncrease()
+        {
+            race.AddDriver(driver);
+
+            Assert.AreEqual(1, race.Counter);
+        }
+
+        [Test]
+        [Category("RaceEntry")]
+        public void WhenAddIsCalledItShouldReturnCorrectResult()
+        {
+
+            Assert.AreEqual("Driver Mikka added in race.", race.AddDriver(driver));
+        }
     }
 }
