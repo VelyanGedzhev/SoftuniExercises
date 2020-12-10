@@ -135,7 +135,9 @@ namespace EasterRaces.Core.Entities
 
             var currentRace = raceRepository.GetByName(raceName);
 
-            var drivers = currentRace.Drivers.OrderByDescending(x => x.Car.CalculateRacePoints(currentRace.Laps)).ToList();
+            var drivers = currentRace.Drivers
+                .OrderByDescending(x => x.Car.CalculateRacePoints(currentRace.Laps))
+                .ToList();
 
             var winner = drivers.FirstOrDefault();
             var second = drivers.Skip(1).FirstOrDefault();
@@ -147,7 +149,11 @@ namespace EasterRaces.Core.Entities
                 .AppendLine(string.Format(OutputMessages.DriverSecondPosition, second.Name, currentRace.Name))
                 .AppendLine(string.Format(OutputMessages.DriverThirdPosition, third.Name, currentRace.Name));
 
+            raceRepository.Remove(currentRace);
+
             return sb.ToString().TrimEnd();
+
+            
         }
     }
 }
