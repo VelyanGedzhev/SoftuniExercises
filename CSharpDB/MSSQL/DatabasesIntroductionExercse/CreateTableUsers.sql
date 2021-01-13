@@ -19,3 +19,6 @@ INSERT INTO Users (Username, [Password], ProfilePicture,LastLoginTime, IsDeleted
 
 ALTER TABLE Users
 DROP CONSTRAINT PK__Users__3214EC07CFC9AFC6
+
+ALTER TABLE Users
+ADD CONSTRAINT PK_IdUsername PRIMARY KEY (Id, Username)
