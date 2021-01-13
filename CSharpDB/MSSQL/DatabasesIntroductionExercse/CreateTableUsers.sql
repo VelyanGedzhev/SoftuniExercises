@@ -25,3 +25,6 @@ ADD CONSTRAINT PK_IdUsername PRIMARY KEY (Id, Username)
 
 ALTER TABLE Users
 ADD CONSTRAINT CH_PasswordIsAtLeast5Symbols Check (LEN(Password) > 5)
+
+ALTER TABLE Users
+ADD CONSTRAINT DF_LastLoginTime DEFAULT GETDATE() FOR LastLoginTime
