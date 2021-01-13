@@ -16,3 +16,6 @@ INSERT INTO Users (Username, [Password], ProfilePicture,LastLoginTime, IsDeleted
 ('Handsome Bob', 'TomHardy', NULL,NULL, 0),
 ('Johhny Quid', 'TobyKebbel', NULL,NULL, 0),
 ('Lenny Cole', 'TomWilkinson', NULL,NULL, 1)
+
+ALTER TABLE Users
+DROP CONSTRAINT PK__Users__3214EC07CFC9AFC6
