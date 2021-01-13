@@ -1,0 +1,22 @@
+CREATE DATABASE Minions
+USE Minions
+
+CREATE TABLE Minions
+(
+	Id INT PRIMARY KEY,
+	Name NVARCHAR(40),
+	Age int
+)
+
+CREATE TABLE Towns
+(
+	Id INT PRIMARY KEY,
+	Name NVARCHAR(86),
+)
+
+ALTER TABLE Minions
+ADD TownId INT
+
+ALTER TABLE Minions
+ADD FOREIGN KEY (TownId) REFERENCES Towns(Id)
+
