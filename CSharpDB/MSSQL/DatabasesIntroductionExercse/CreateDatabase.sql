@@ -32,3 +32,5 @@ INSERT INTO Minions(Id, Name, Age, TownId) VALUES
 
 DELETE FROM Minions
 
+DROP TABLE Minions
+DROP TABLE Towns
