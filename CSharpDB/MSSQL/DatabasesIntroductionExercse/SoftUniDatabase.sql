@@ -74,3 +74,12 @@ INSERT INTO Employees VALUES
 ('Maria', 'Petrova', 'Ivanova', 'Intern', 5, '2016/08/26', 525.25, NULL),
 ('Georgi', 'Teziev', 'Ivanov', 'CEO', 2, '2007/12/09', 3000.00, NULL),
 ('Peter', 'Pan', 'Pan', 'Intern', 3, '2016/08/28', 3599.88, NULL)
+
+SELECT * FROM Towns
+ORDER BY [Name] ASC
+
+SELECT * FROM Departments
+ORDER BY [Name] ASC
+
+SELECT * FROM Employees
+ORDER BY Salary DESC
