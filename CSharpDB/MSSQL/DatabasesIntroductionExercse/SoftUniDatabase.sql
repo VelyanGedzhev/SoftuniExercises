@@ -75,11 +75,12 @@ INSERT INTO Employees VALUES
 ('Georgi', 'Teziev', 'Ivanov', 'CEO', 2, '2007/12/09', 3000.00, NULL),
 ('Peter', 'Pan', 'Pan', 'Intern', 3, '2016/08/28', 3599.88, NULL)
 
-SELECT * FROM Towns
+SELECT [Name] FROM Towns
 ORDER BY [Name] ASC
 
-SELECT * FROM Departments
+SELECT [Name] FROM Departments
 ORDER BY [Name] ASC
 
-SELECT * FROM Employees
+SELECT FirstName, LastName, JobTitle, Salary FROM Employees
 ORDER BY Salary DESC
+
