@@ -43,3 +43,7 @@ FOREIGN KEY (DepartmentId) REFERENCES Departments(Id);
 ALTER TABLE Employees
 ADD CONSTRAINT FK_AdressId
 FOREIGN KEY (AdressId) REFERENCES Addresses(Id);
+
+
+BACKUP DATABASE SoftUni
+TO DISK = 'E:\Programs and drivers\softuni\SoftUni.bak'
