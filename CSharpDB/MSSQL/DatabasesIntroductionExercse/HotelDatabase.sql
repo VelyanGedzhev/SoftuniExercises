@@ -119,3 +119,9 @@ INSERT INTO Payments VALUES
 (2, 52, '2021-01-13', 151521, '2021-01-13', '2021-01-15', 2, 171.99, 5.01, 5.01, 177, NULL),
 (3, 53, '2021-01-13', 151522, '2021-01-13', '2021-01-15', 2, 171.99, 5.01, 5.01, 177, NULL)
 
+USE Hotel
+
+UPDATE Payments
+SET TaxRate -= TaxRate * 0.03
+
+SELECT TaxRate FROM Payments
