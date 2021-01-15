@@ -17,3 +17,6 @@ SELECT FirstName + ' ' + MiddleName + ' ' + LastName AS FullName
 
 SELECT FirstName + '.' + LastName + '@softuni.bg' AS FullEmailAddress
 	FROM Employees 
+
+SELECT DISTINCT Salary
+	FROM Employees
