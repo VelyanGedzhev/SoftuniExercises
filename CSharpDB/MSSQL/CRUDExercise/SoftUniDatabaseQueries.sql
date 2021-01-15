@@ -5,3 +5,6 @@ SELECT *
 
 SELECT [Name]
 	FROM Departments
+
+SELECT FirstName, LastName, Salary
+	FROM Employees
