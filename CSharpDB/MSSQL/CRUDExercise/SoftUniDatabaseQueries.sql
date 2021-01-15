@@ -32,3 +32,7 @@ SELECT FirstName, LastName, JobTitle
 SELECT FirstName + ' ' + MiddleName + ' ' + LastName AS FullName
 	FROM Employees
 	WHERE Salary IN (25000, 14000, 12500, 23600)
+
+SELECT FirstName, LastName
+	FROM Employees
+	WHERE ManagerID IS NULL
