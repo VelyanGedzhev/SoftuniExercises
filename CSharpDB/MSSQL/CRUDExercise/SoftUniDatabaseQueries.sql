@@ -20,3 +20,7 @@ SELECT FirstName + '.' + LastName + '@softuni.bg' AS FullEmailAddress
 
 SELECT DISTINCT Salary
 	FROM Employees
+
+SELECT *
+	FROM Employees
+	WHERE JobTitle LIKE '%Sales Representative%'
