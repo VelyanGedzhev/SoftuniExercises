@@ -75,3 +75,7 @@ SELECT TOP(10) *
 	ORDER BY 
 		StartDate ASC,
 		[Name] ASC
+
+SELECT TOP(7) FirstName, LastName, HireDate
+	FROM Employees
+	ORDER BY HireDate DESC
