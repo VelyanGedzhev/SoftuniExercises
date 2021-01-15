@@ -28,3 +28,7 @@ SELECT *
 SELECT FirstName, LastName, JobTitle
 	FROM Employees
 	WHERE Salary >= 20000 AND Salary <= 30000
+
+SELECT FirstName + ' ' + MiddleName + ' ' + LastName AS FullName
+	FROM Employees
+	WHERE Salary IN (25000, 14000, 12500, 23600)
