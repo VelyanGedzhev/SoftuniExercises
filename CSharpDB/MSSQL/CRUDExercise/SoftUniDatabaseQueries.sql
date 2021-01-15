@@ -79,3 +79,12 @@ SELECT TOP(10) *
 SELECT TOP(7) FirstName, LastName, HireDate
 	FROM Employees
 	ORDER BY HireDate DESC
+
+UPDATE Employees
+SET Salary += Salary * 0.12
+WHERE DepartmentID IN (1,2,4,11)
+
+UPDATE Employees
+SET Salary -= Salary * 0.12
+WHERE DepartmentID IN (1,2,4,11)
+
