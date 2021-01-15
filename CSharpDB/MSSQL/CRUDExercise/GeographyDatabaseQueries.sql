@@ -10,3 +10,11 @@ SELECT TOP(30) CountryName, Population
 	ORDER BY 
 			Population DESC,
 			CountryName ASC
+
+SELECT CountryName,CountryCode,
+       CASE
+       when CurrencyCode='Eur' THEN 'Euro'
+ELSE 'Not Euro'
+         END  AS 'Currency'
+FROM Countries
+ORDER BY CountryName
