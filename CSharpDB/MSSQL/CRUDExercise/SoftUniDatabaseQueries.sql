@@ -14,3 +14,6 @@ SELECT FirstName, MiddleName, LastName
 
 SELECT FirstName + ' ' + MiddleName + ' ' + LastName AS FullName
 	FROM Employees 
+
+SELECT FirstName + '.' + LastName + '@softuni.bg' AS FullEmailAddress
+	FROM Employees 
