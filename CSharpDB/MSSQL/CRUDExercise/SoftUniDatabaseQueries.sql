@@ -24,3 +24,7 @@ SELECT DISTINCT Salary
 SELECT *
 	FROM Employees
 	WHERE JobTitle LIKE '%Sales Representative%'
+
+SELECT FirstName, LastName, JobTitle
+	FROM Employees
+	WHERE Salary >= 20000 AND Salary <= 30000
