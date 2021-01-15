@@ -8,3 +8,9 @@ SELECT [Name]
 
 SELECT FirstName, LastName, Salary
 	FROM Employees
+
+SELECT FirstName, MiddleName, LastName
+	FROM Employees
+
+SELECT FirstName + ' ' + MiddleName + ' ' + LastName AS FullName
+	FROM Employees 
