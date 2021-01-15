@@ -45,4 +45,8 @@ SELECT FirstName, LastName, Salary
 SELECT TOP(5) FirstName, LastName
 	FROM Employees
 	ORDER BY Salary DESC
+
+SELECT FirstName, LastName
+	FROM Employees
+	WHERE DepartmentID != 4
 	
