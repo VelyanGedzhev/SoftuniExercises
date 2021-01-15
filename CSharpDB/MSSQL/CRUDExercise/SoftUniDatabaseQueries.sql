@@ -69,3 +69,9 @@ SELECT FirstName + ' ' + ISNULL (MiddleName,'') + ' ' + LastName AS FullName,
 
 SELECT DISTINCT JobTitle
 	FROM Employees
+
+SELECT TOP(10) *
+	FROM Projects
+	ORDER BY 
+		StartDate ASC,
+		[Name] ASC
