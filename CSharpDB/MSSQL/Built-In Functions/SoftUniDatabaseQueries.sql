@@ -65,3 +65,10 @@ SELECT TownID, [Name]
 		CHARINDEX('D', [Name]) = 1 OR
 		CHARINDEX('B', [Name]) = 1)
 	ORDER BY [Name]
+
+--Problem 8. Create View Employees Hired After 2000 Year
+
+CREATE VIEW v_EmployeesHiredAfter2000 AS
+SELECT FirstName, LastName
+	FROM Employees
+	WHERE DATEPART(YEAR, HireDate) > 2000
