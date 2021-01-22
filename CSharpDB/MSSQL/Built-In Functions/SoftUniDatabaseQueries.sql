@@ -35,3 +35,23 @@ SELECT [Name]
 	FROM Towns
 	WHERE LEN([Name]) = 5 OR LEN([Name]) = 6
 	ORDER BY [Name]
+
+--Problem 6. Find Towns Starting With
+
+SELECT TownID, [Name]
+	FROM Towns
+	WHERE 
+		[Name] LIKE('M%') OR 
+		[Name] LIKE('K%') OR
+		[Name] LIKE('B%') OR
+		[Name] LIKE('E%')
+	ORDER BY [Name]
+
+--SELECT TownID, [Name]
+--	FROM Towns
+--	WHERE 
+--		CHARINDEX('M', [Name]) = 1 OR 
+--		CHARINDEX('K', [Name]) = 1 OR
+--		CHARINDEX('B', [Name]) = 1 OR
+--		CHARINDEX('E', [Name]) = 1
+--	ORDER BY [Name]
