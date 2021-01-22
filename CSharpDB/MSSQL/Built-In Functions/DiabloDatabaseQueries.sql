@@ -11,3 +11,12 @@ SELECT TOP(50) [Name], FORMAT([Start], 'yyyy-MM-dd', 'en-US') AS [Start]
 
 --Problem 15. User Email Providers
 
+SELECT 
+		Username, 
+		RIGHT(Email, (LEN(Email) - CHARINDEX('@', Email))) AS EmailProvider
+	FROM Users
+	ORDER BY 
+		EmailProvider,
+		Username
+
+
