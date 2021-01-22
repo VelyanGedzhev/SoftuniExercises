@@ -55,3 +55,13 @@ SELECT TownID, [Name]
 --		CHARINDEX('B', [Name]) = 1 OR
 --		CHARINDEX('E', [Name]) = 1
 --	ORDER BY [Name]
+
+--Problem 7. Find Towns Not Starting With
+
+SELECT TownID, [Name]
+	FROM Towns
+	WHERE NOT
+		(CHARINDEX('R', [Name]) = 1 OR 
+		CHARINDEX('D', [Name]) = 1 OR
+		CHARINDEX('B', [Name]) = 1)
+	ORDER BY [Name]
