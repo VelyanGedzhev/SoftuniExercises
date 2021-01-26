@@ -94,3 +94,15 @@ SELECT
 	JOIN EmployeesProjects AS ep ON e.EmployeeID = ep.EmployeeID
 	JOIN Projects AS p ON ep.ProjectID = p.ProjectID
 	WHERE e.EmployeeID = 24
+
+--9.Employee Manager
+
+SELECT 
+		e.EmployeeID,
+		e.FirstName,
+		e.ManagerID,
+		m.FirstName AS ManagerName
+	FROM Employees AS e
+	JOIN Employees AS m ON m.EmployeeID = e.ManagerID
+	WHERE e.ManagerID IN (3, 7)
+	ORDER BY e.EmployeeID
