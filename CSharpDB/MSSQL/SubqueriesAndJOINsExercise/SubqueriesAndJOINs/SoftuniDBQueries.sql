@@ -45,3 +45,26 @@ SELECT TOP(5)
 	WHERE Salary > 15000
 	ORDER BY e.DepartmentID
 
+--5.Employees Without Project
+
+--SELECT TOP(3)
+--		e.EmployeeID,
+--		e.FirstName
+--	FROM Employees e
+--	JOIN EmployeesProjects ep ON e.EmployeeID = ep.EmployeeID
+--	JOIN Projects p ON p.ProjectID = ep.ProjectID
+--	ORDER BY e.EmployeeID
+
+--6.Employees Hired After
+
+SELECT	
+		e.FirstName,
+		e.LastName,
+		e.HireDate,
+		d.Name AS DeptName
+	FROM Employees e
+	JOIN Departments d ON e.DepartmentID = d.DepartmentID
+	WHERE 
+		d.Name IN ('Sales', 'Finance') 
+		AND e.HireDate > '1999-1-1'
+	ORDER BY e.HireDate
