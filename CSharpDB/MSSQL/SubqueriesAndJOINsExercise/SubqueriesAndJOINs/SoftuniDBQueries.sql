@@ -3,8 +3,8 @@ USE SoftUni
 --1.Employee Address
 
 SELECT TOP(5)
-	EmployeeID, 
-	JobTitle, 
+	e.EmployeeID, 
+	e.JobTitle, 
 	e.AddressID,
 	a.AddressText
 FROM Employees e
@@ -47,13 +47,13 @@ SELECT TOP(5)
 
 --5.Employees Without Project
 
---SELECT TOP(3)
---		e.EmployeeID,
---		e.FirstName
---	FROM Employees e
---	JOIN EmployeesProjects ep ON e.EmployeeID = ep.EmployeeID
---	JOIN Projects p ON p.ProjectID = ep.ProjectID
---	ORDER BY e.EmployeeID
+SELECT TOP(3)
+		e.EmployeeID,
+		e.FirstName
+	FROM Employees e
+	LEFT JOIN EmployeesProjects ep ON e.EmployeeID = ep.EmployeeID
+	WHERE ep.EmployeeID IS NULL
+	ORDER BY e.EmployeeID
 
 --6.Employees Hired After
 
@@ -68,3 +68,13 @@ SELECT
 		d.Name IN ('Sales', 'Finance') 
 		AND e.HireDate > '1999-1-1'
 	ORDER BY e.HireDate
+
+--7.Employees with Project
+
+--SELECT 
+--		e.EmployeeID,
+--		e.FirstName,
+--		p.Name as ProjectName
+--	FROM Employees e
+--	JOIN EmployeesProjects ep ON e.EmployeeID = ep.EmployeeID
+--	JOIN Projects p ON ep.ProjectID = p.ProjectID
