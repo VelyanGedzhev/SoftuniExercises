@@ -117,3 +117,9 @@ SELECT TOP(50)
 	JOIN Employees AS em ON em.EmployeeID = e.ManagerID
 	JOIN Departments AS d ON e.DepartmentID = d.DepartmentID
 	ORDER BY e.EmployeeID
+
+--11.Min Average Salary
+SELECT TOP(1) AVG(e.Salary) AS MinAverageSalary 
+	FROM Employees AS e
+	GROUP BY e.DepartmentID
+	ORDER BY MinAverageSalary
