@@ -45,3 +45,9 @@ SELECT ContinentCode, CurrencyCode, CurrenyUsage FROM (
  	GROUP BY c.ContinentCode, c.CurrencyCode) AS k
 	WHERE Ranked = 1 AND CurrenyUsage > 1
 	ORDER BY ContinentCode
+
+--16. Countries Without any Mountains
+SELECT COUNT(c.CountryCode) AS [Count]
+	FROM Countries as c
+	LEFT JOIN MountainsCountries AS mr ON c.CountryCode = mr.CountryCode
+	WHERE mr.CountryCode IS NULL
