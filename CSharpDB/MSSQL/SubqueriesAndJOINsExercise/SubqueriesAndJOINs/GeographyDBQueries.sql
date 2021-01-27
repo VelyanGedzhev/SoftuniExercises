@@ -33,3 +33,15 @@ SELECT TOP(5)
 	LEFT JOIN Continents AS co ON co.ContinentCode = c.ContinentCode
 	WHERE c.ContinentCode = 'AF' 
 	ORDER BY c.CountryName
+
+--15. *Continents and Currencies
+SELECT ContinentCode, CurrencyCode, CurrenyUsage FROM (
+ SELECT 
+ 		c.ContinentCode,
+ 		c.CurrencyCode,
+ 		COUNT(c.CurrencyCode) AS CurrenyUsage,
+		DENSE_RANK() OVER (PARTITION BY ContinentCode ORDER BY COUNT(c.CurrencyCode) DESC) AS Ranked
+ 	FROM Countries c
+ 	GROUP BY c.ContinentCode, c.CurrencyCode) AS k
+	WHERE Ranked = 1 AND CurrenyUsage > 1
+	ORDER BY ContinentCode
