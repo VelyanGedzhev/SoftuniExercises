@@ -34,8 +34,9 @@ SELECT TOP(5)
 	WHERE c.ContinentCode = 'AF' 
 	ORDER BY c.CountryName
 
---15. *Continents and Currencies
-SELECT ContinentCode, CurrencyCode, CurrenyUsage FROM (
+--15. *Continents and Currencies(not included in final score)
+
+SELECT k.ContinentCode, k.CurrencyCode, k.CurrenyUsage FROM (
  SELECT 
  		c.ContinentCode,
  		c.CurrencyCode,
@@ -43,8 +44,8 @@ SELECT ContinentCode, CurrencyCode, CurrenyUsage FROM (
 		DENSE_RANK() OVER (PARTITION BY ContinentCode ORDER BY COUNT(c.CurrencyCode) DESC) AS Ranked
  	FROM Countries c
  	GROUP BY c.ContinentCode, c.CurrencyCode) AS k
-	WHERE Ranked = 1 AND CurrenyUsage > 1
-	ORDER BY ContinentCode
+	WHERE k.Ranked = 1 AND k.CurrenyUsage > 1
+	ORDER BY k.ContinentCode
 
 --16. Countries Without any Mountains
 SELECT COUNT(c.CountryCode) AS [Count]
@@ -68,3 +69,24 @@ SELECT TOP(5)
 			HighestPeakElevation DESC, 
 			LongestRiverLength DESC, 
 			c.CountryName
+
+--17. *Highest Peak Name and Elevation by Country(not included in final score)
+SELECT TOP(5) 
+		k.CountryName AS Country,
+		k.[Highest Peak Name],
+		k.[Highest Peak Elevation], Mountain
+	FROM(
+	SELECT  
+		c.CountryName,
+		ISNULL(p.PeakName, '(no highest peak)') AS [Highest Peak Name],
+		ISNULL(MAX(p.Elevation), 0) AS [Highest Peak Elevation],
+		DENSE_RANK() OVER (PARTITION BY CountryName ORDER BY MAX(p.Elevation) DESC) AS Ranked,
+		ISNULL(m.MountainRange, '(no mountain)') AS [Mountain]
+	FROM Countries AS c
+	LEFT JOIN MountainsCountries AS mc ON c.CountryCode = mc.CountryCode
+	LEFT JOIN Mountains AS m ON mc.MountainId = m.Id
+	LEFT JOIN Peaks AS p ON p.MountainId = m.Id
+	GROUP BY c.CountryName, p.PeakName, m.MountainRange
+	) AS k
+	WHERE k.Ranked = 1
+	ORDER BY k.CountryName, k.[Highest Peak Name]
