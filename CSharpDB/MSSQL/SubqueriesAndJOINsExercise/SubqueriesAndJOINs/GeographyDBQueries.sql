@@ -22,3 +22,14 @@ SELECT
 	JOIN Mountains AS m ON m.Id = mc.MountainId
 	WHERE c.CountryCode IN ('BG', 'RU', 'US')
 	GROUP BY c.CountryCode
+
+--14. Countries with Rivers
+SELECT TOP(5) 
+		c.CountryName,
+		r.RiverName
+	FROM Countries AS c
+	LEFT JOIN CountriesRivers AS cr ON cr.CountryCode = c.CountryCode
+	LEFT JOIN Rivers AS r ON r.Id = cr.RiverId
+	LEFT JOIN Continents AS co ON co.ContinentCode = c.ContinentCode
+	WHERE c.ContinentCode = 'AF' 
+	ORDER BY c.CountryName
