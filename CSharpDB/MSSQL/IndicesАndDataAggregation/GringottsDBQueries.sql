@@ -68,4 +68,9 @@ FROM (
          FROM WizzardDeposits) AS a
 GROUP BY a.AgeRanking
 
-
+--10. First Letter
+SELECT LEFT(FirstName, 1) 
+	FROM WizzardDeposits
+	WHERE DepositGroup = 'Troll Chest'
+	GROUP BY LEFT(FirstName, 1)
+	
