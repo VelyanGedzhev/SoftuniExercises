@@ -88,3 +88,9 @@ SELECT
 		DepositGroup DESC,
 		IsDepositExpired
 
+--12. * Rich Wizard, Poor Wizard (not included in final score)
+SELECT 
+		SUM(c.DepositAmount - n.DepositAmount) AS [SumDifference]
+	FROM WizzardDeposits AS c
+	JOIN WizzardDeposits AS n ON   n.Id = c.Id + 1
+
