@@ -74,3 +74,17 @@ SELECT LEFT(FirstName, 1)
 	WHERE DepositGroup = 'Troll Chest'
 	GROUP BY LEFT(FirstName, 1)
 	
+--11. Average Interest 
+SELECT 
+		DepositGroup,
+		IsDepositExpired,
+		AVG(DepositInterest) AS AverageInterest
+	FROM WizzardDeposits
+	WHERE DepositStartDate > '1985/01/01'
+	GROUP BY 
+		DepositGroup,
+		IsDepositExpired
+	ORDER BY 
+		DepositGroup DESC,
+		IsDepositExpired
+
