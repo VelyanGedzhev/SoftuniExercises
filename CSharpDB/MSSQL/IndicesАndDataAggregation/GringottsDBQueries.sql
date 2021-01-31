@@ -93,3 +93,7 @@ SELECT
 		SUM(c.DepositAmount - n.DepositAmount) AS [SumDifference]
 	FROM WizzardDeposits AS c
 	JOIN WizzardDeposits AS n ON   n.Id = c.Id + 1
+
+SELECT SUM(k.Diff)
+	FROM(SELECT DepositAmount - LEAD(DepositAmount, 1 ) OVER (ORDER BY Id) as Diff 
+	FROM WizzardDeposits) AS k
