@@ -43,7 +43,7 @@ SELECT COUNT(*) AS [Count]
 	FROM Employees
 	WHERE ManagerID IS NULL
 
---18. *3rd Highest Salary(not included in final score)
+--18. *3rd Highest Salary (not included in final score)
 SELECT DISTINCT
 		k.DepartmentID,
 		k.Salary
@@ -53,3 +53,13 @@ SELECT DISTINCT
 		DENSE_RANK() OVER(PARTITION BY e.DepartmentID ORDER BY e.Salary DESC) AS [Ranked]
 	FROM Employees AS e) AS k
 	WHERE k.Ranked = 3
+
+--19. **Salary Challenge (not included in final score)
+SELECT TOP(10) FirstName, LastName, DepartmentID
+	FROM Employees AS emp
+	WHERE Salary > (SELECT AVG(Salary)
+						FROM Employees AS e
+						WHERE emp.DepartmentID = e.DepartmentID
+						GROUP BY DepartmentID)
+	ORDER BY emp.DepartmentID
+
