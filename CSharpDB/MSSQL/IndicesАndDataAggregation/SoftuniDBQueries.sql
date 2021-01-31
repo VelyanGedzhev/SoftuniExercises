@@ -42,3 +42,14 @@ SELECT DepartmentID, MAX(Salary)
 SELECT COUNT(*) AS [Count]
 	FROM Employees
 	WHERE ManagerID IS NULL
+
+--18. *3rd Highest Salary(not included in final score)
+SELECT DISTINCT
+		k.DepartmentID,
+		k.Salary
+	FROM(SELECT 
+		DepartmentID,
+		Salary,
+		DENSE_RANK() OVER(PARTITION BY e.DepartmentID ORDER BY e.Salary DESC) AS [Ranked]
+	FROM Employees AS e) AS k
+	WHERE k.Ranked = 3
