@@ -23,3 +23,13 @@ AS
 GO
 
 EXEC usp_GetEmployeesSalaryAboveNumber 48100
+
+--3.Town Names Starting With
+CREATE OR ALTER PROC usp_GetTownsStartingWith @Symbol VARCHAR(5)
+AS
+	SELECT [Name]
+		FROM Towns
+		WHERE [Name] LIKE @Symbol + '%'
+GO
+
+EXEC usp_GetTownsStartingWith 'c'
