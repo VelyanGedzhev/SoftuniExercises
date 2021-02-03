@@ -42,4 +42,3 @@ AS
 		WHERE a.Id = @AccountID
 
 EXEC usp_CalculateFutureValueForAccount 1, 0.1
---13. *Cash in User Games Odd Rows

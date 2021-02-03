@@ -25,6 +25,12 @@
           <AssociatedConnUserName />
           <FullPath>BankDBQueries.sql</FullPath>
         </FileNode>
+        <FileNode Name="DiabloDBQueries.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:(local):True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>(local)</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>DiabloDBQueries.sql</FullPath>
+        </FileNode>
         <FileNode Name="SoftUniDBQueries.sql">
           <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:(local):True</AssociatedConnectionMoniker>
           <AssociatedConnSrvName>(local)</AssociatedConnSrvName>
