@@ -64,3 +64,11 @@ END
 SELECT Salary, dbo.ufn_GetSalaryLevel(Salary)
 	FROM Employees
 
+--6.Employees by Salary Level
+CREATE PROC	usp_EmployeesBySalaryLevel  (@SalaryLevel NVARCHAR(10))
+AS
+	SELECT FirstName, LastName
+		FROM Employees
+		WHERE dbo.ufn_GetSalaryLevel(Salary) = @SalaryLevel
+
+EXEC usp_EmployeesBySalaryLevel 'High'
