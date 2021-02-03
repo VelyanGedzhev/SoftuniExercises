@@ -8,7 +8,7 @@ AS
 			LastName
 		FROM Employees
 		WHERE Salary > 35000
-GO
+
 
 EXEC usp_GetEmployeesSalaryAbove35000
 
@@ -20,7 +20,7 @@ AS
 			LastName
 		FROM Employees
 		WHERE Salary >= @Number
-GO
+
 
 EXEC usp_GetEmployeesSalaryAboveNumber 48100
 
@@ -30,6 +30,17 @@ AS
 	SELECT [Name]
 		FROM Towns
 		WHERE [Name] LIKE @Symbol + '%'
-GO
+
 
 EXEC usp_GetTownsStartingWith 'c'
+
+--4.Employees from Town
+CREATE PROC usp_GetEmployeesFromTown (@TownName NVARCHAR(60))
+AS
+	SELECT FirstName, LastName 
+		FROM Employees AS e
+		JOIN Addresses AS a ON e.AddressID = a.AddressID
+		JOIN Towns as t ON a.TownID = t.TownID
+		WHERE t.Name = @TownName
+
+EXEC usp_GetEmployeesFromTown 'Berlin'
