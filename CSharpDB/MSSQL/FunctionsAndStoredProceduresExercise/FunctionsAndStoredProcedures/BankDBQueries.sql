@@ -19,8 +19,15 @@ AS
 EXEC usp_GetHoldersWithBalanceHigherThan 50000
 
 --11. Future Value Function
+CREATE FUNCTION ufn_CalculateFutureValue(@sum DECIMAL(15,2), @yearlyInterest FLOAT, @years INT)
+RETURNS DECIMAL(15,4)
+BEGIN
+	DECLARE @Result DECIMAL(15,4)
+	SET @Result = @sum * (POWER((1 + @yearlyInterest), @years))
+	RETURN @Result
+END
 
-
+SELECT dbo.ufn_CalculateFutureValue(1000, 0.1, 5)
 --12. Calculating Interest
 
 
