@@ -41,3 +41,31 @@ AS
 	(@AccountId, CONCAT('Balance change for account:', ' ', @AccountId),
 	CONCAT('On', ' ', @EventDate, ' ', 'your balance was changed from', ' ', @OldSum,
 	' ', 'to', ' ', @NewSum))
+GO
+
+--3.Deposit Money
+CREATE PROC usp_DepositMoney (@AccountId INT, @MoneyAmount MONEY)
+AS
+BEGIN TRANSACTION
+
+	DECLARE @Account INT = (SELECT Id FROM Accounts WHERE Id = @AccountId)
+
+	IF(@Account IS NULL)
+		BEGIN
+			ROLLBACK
+			RAISERROR('Invalid account ID!', 16, 1)
+			RETURN
+		END
+
+	IF(@MoneyAmount < 0)
+	BEGIN 
+		ROLLBACK
+		RAISERROR('Money amount cannot be negative!', 16 , 1)
+		RETURN
+	END
+
+UPDATE Accounts
+SET Balance += @MoneyAmount
+WHERE Id = @AccountId
+COMMIT
+
