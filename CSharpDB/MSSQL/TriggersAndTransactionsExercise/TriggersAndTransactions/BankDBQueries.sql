@@ -69,3 +69,36 @@ SET Balance += @MoneyAmount
 WHERE Id = @AccountId
 COMMIT
 
+--4.Withdraw Money
+CREATE PROC usp_WithdrawMoney (@AccountId INT, @MoneyAmount MONEY)
+AS
+BEGIN TRANSACTION
+
+	DECLARE @Account INT = (SELECT Id FROM Accounts WHERE Id = @AccountId)
+	DECLARE @Balance MONEY = (SELECT Balance FROM Accounts WHERE Id = @AccountId)
+
+	IF(@Account IS NULL)
+		BEGIN
+			ROLLBACK
+			RAISERROR('Invalid account ID!', 16, 1)
+			RETURN
+		END
+
+	IF(@MoneyAmount < 0)
+	BEGIN 
+		ROLLBACK
+		RAISERROR('Money amount cannot be negative!', 16 , 1)
+		RETURN
+	END
+
+	IF(@Balance - @MoneyAmount < 0)
+	BEGIN
+		ROLLBACK
+		RAISERROR('Insufficient funds!', 16 , 1)
+		RETURN
+	END
+
+UPDATE Accounts
+SET Balance -= @MoneyAmount
+WHERE Id = @AccountId
+COMMIT
