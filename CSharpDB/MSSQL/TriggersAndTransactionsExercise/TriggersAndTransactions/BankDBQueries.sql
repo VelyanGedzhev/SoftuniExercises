@@ -102,3 +102,39 @@ UPDATE Accounts
 SET Balance -= @MoneyAmount
 WHERE Id = @AccountId
 COMMIT
+
+--5.Money Transfer
+CREATE PROC usp_TransferMoney (@SenderId INT, @ReceiverId INT, @Amount MONEY)
+AS
+BEGIN TRANSACTION
+
+	DECLARE @Sender INT = (SELECT Id FROM Accounts WHERE Id = @SenderId)
+	DECLARE @Receiver INT = (SELECT Id FROM Accounts WHERE Id = @ReceiverId)
+	DECLARE @SenderBalance MONEY = (SELECT Balance FROM Accounts WHERE Id = @SenderId)
+
+		IF(@Sender IS NULL OR @Receiver IS NULL)
+		BEGIN
+			ROLLBACK
+			RAISERROR('Invalid account ID!', 16, 1)
+			RETURN
+		END
+
+		IF(@Amount < 0)
+		BEGIN 
+			ROLLBACK
+			RAISERROR('Money amount cannot be negative!', 16 , 1)
+			RETURN
+		END
+
+		IF(@SenderBalance - @Amount < 0)
+		BEGIN
+			ROLLBACK
+			RAISERROR('Insufficient funds!', 16 , 1)
+			RETURN
+		END
+
+UPDATE Accounts SET Balance += @Amount WHERE Id = @Receiver
+UPDATE Accounts SET Balance -= @Amount WHERE Id = @Sender
+COMMIT
+
+
