@@ -120,3 +120,12 @@ SELECT
 	LEFT JOIN Jobs AS j ON j.ClientId = c.ClientId
 	WHERE j.Status != 'Finished' -- OR [WHERE j.FinishDate IS NULL]
 	ORDER BY [Days going] DESC
+
+--7.Mechanic Performance
+SELECT 
+		CONCAT(m.FirstName, ' ', m.LastName) AS Mechanic,
+		AVG(DATEDIFF(DAY, j.IssueDate, j.FinishDate)) AS [Average Days]
+	FROM Mechanics AS m
+	JOIN Jobs AS j ON j.MechanicId = m.MechanicId
+	GROUP BY j.MechanicId, CONCAT(m.FirstName, ' ', m.LastName)
+	ORDER BY j.MechanicId 
