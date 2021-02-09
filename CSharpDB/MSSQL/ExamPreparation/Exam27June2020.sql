@@ -97,3 +97,7 @@ SET
 	MechanicId = 3,
 	Status = 'In Progress'
 WHERE Status = 'Pending'
+
+--4.Delete
+DELETE FROM OrderParts WHERE OrderId = 19
+DELETE FROm Orders WHERE OrderId = 19
