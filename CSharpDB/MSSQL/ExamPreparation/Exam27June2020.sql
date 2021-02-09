@@ -110,3 +110,13 @@ SELECT
 	FROM Mechanics AS m
 	LEFT JOIN Jobs AS j ON j.MechanicId = m.MechanicId
 	ORDER BY m.MechanicId, j.IssueDate, j.JobId
+
+--6.Current Clients
+SELECT 
+		CONCAT(c.FirstName, ' ', c.LastName) AS Client,
+		DATEDIFF(DAY, j.IssueDate, '2017-04-24') AS [Days going],
+		j.Status
+	FROM Clients AS c
+	LEFT JOIN Jobs AS j ON j.ClientId = c.ClientId
+	WHERE j.Status != 'Finished' -- OR [WHERE j.FinishDate IS NULL]
+	ORDER BY [Days going] DESC
