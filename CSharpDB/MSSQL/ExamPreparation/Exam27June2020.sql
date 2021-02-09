@@ -167,3 +167,88 @@ SELECT
 	LEFT JOIN Orders AS o ON o.JobId = j.JobId
 	WHERE j.Status  != 'Finished' AND p.StockQty + IIF(o.Delivered = 0, op.Quantity, 0) < pn.Quantity
 	ORDER BY p.PartId 
+
+--11.	Place Order
+ALTER PROC usp_PlaceOrder (@JobId INT, @SerialNumber VARCHAR(50), @Qty INT)
+AS
+	DECLARE @Status VARCHAR(10) = 
+		(SELECT Status FROM Jobs WHERE JobId = @JobId)
+
+	DECLARE @PartId VARCHAR(10) = 
+		(SELECT PartId FROM Parts WHERE SerialNumber = @SerialNumber)
+	
+	IF(@Qty <= 0)
+		THROW 50012, 'Part quantity must be more than zero!', 1
+	ELSE IF(@Status IS NULL)
+		THROW 50013, 'Job not found!', 1
+	ELSE IF(@Status = 'Finished')
+		THROW 50011, 'This job is not active!', 1
+	ELSE IF(@PartId IS NULL)
+		THROW 50014, 'Part not found!', 1
+
+	DECLARE @OrderId INT = 
+		(SELECT OrderId 
+			FROM Orders
+			WHERE JobId = @JobId AND IssueDate IS NULL)
+
+	IF(@OrderId IS NULL)
+		BEGIN
+			INSERT INTO Orders (JobId, IssueDate) VALUES
+			(@JobId, NULL)
+		END
+			
+	SET @OrderId = 
+		(SELECT o.OrderId 
+		FROM Orders AS o
+		WHERE o.JobId = @JobId AND o.IssueDate IS NULL)
+
+	DECLARE @OrderPartExist INT = 
+		(SELECT OrderId 
+			FROM OrderParts AS o 
+			WHERE OrderId = @OrderId AND PartId = @PartId)
+
+	IF(@OrderPartExist IS NULL)
+	BEGIN
+		INSERT INTO OrderParts (OrderId, PartId, Quantity) VALUES
+		(@OrderId, @PartId, @Qty)
+	END
+	ELSE
+		BEGIN
+			UPDATE OrderParts
+			SET Quantity += @Qty
+			WHERE OrderId = @OrderId AND PartId = @PartId
+		END	
+
+DECLARE @err_msg AS NVARCHAR(MAX);
+BEGIN TRY
+  EXEC usp_PlaceOrder 1, 'ZeroQuantity', 0
+END TRY
+
+BEGIN CATCH
+  SET @err_msg = ERROR_MESSAGE();
+  SELECT @err_msg
+END CATCH
+
+
+--12.	Cost Of Order
+CREATE FUNCTION udf_GetCost (@JobId INT)
+RETURNS DECIMAL(15,2)
+AS
+BEGIN
+	DECLARE @Result DECIMAL(15,2);
+	SET @Result = (SELECT 
+						SUM(p.Price * op.Quantity) AS TotalSum
+					FROM Jobs AS j
+					JOIN Orders AS o ON o.JobId = j.JobId
+					JOIN OrderParts AS op ON op.OrderId = o.OrderId
+					JOIN Parts AS p ON p.PartId = op.PartId
+					WHERE j.JobId = @JobId
+					GROUP BY j.JobId)
+
+	IF(@Result IS NULL)
+		SET @Result = 0
+
+	RETURN @Result
+END
+
+SELECT dbo.udf_GetCost (1)
