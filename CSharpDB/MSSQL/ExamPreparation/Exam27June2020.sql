@@ -101,3 +101,12 @@ WHERE Status = 'Pending'
 --4.Delete
 DELETE FROM OrderParts WHERE OrderId = 19
 DELETE FROm Orders WHERE OrderId = 19
+
+--5. Mechanic Assignments
+SELECT 
+	CONCAT(m.FirstName, ' ', m.LastName) AS Mechanic,
+	j.Status,
+	j.IssueDate
+	FROM Mechanics AS m
+	LEFT JOIN Jobs AS j ON j.MechanicId = m.MechanicId
+	ORDER BY m.MechanicId, j.IssueDate, j.JobId
