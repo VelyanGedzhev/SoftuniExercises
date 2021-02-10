@@ -83,3 +83,94 @@ UPDATE Rooms
 --4.Delete
 DELETE FROM AccountsTrips
 	WHERE AccountId = 47
+
+--Section 3. Querying
+--5.EEE-mails
+SELECT 
+		a.FirstName,
+		a.LastName,
+		FORMAT(a.BirthDate, 'MM-dd-yyyy') AS BirthDate,
+		c.Name AS Hometown,
+		a.Email
+	FROM Accounts AS a
+	JOIN Cities AS c ON c.Id = a.CityId
+	WHERE Email LIKE ('e%')
+	ORDER BY c.Name
+
+--6.City statistics
+SELECT 
+		c.Name AS City,
+		COUNT(h.CityId) AS Hotels
+	FROM Hotels AS h
+	JOIN Cities AS c ON c.Id = h.CityId
+	GROUP BY c.Name
+	ORDER BY Hotels DESC, City
+
+--Another solution
+--SELECT 
+--		[Name] AS City,
+--		(SELECT COUNT(*) FROM Hotels AS h WHERE h.CityId = c.Id) AS Hotels
+--	FROM Cities AS c
+--	WHERE (SELECT COUNT(*) FROM Hotels AS h WHERE h.CityId = c.Id) > 0
+--	ORDER BY Hotels DESC, City
+
+--7.Longest and Shortest Trips
+SELECT 
+		[at].AccountId,
+		CONCAT(a.FirstName, ' ', a.LastName) AS FullName,
+		MAX(DATEDIFF(DAY, t.ArrivalDate, t.ReturnDate)) AS LongestTrip,
+		MIN(DATEDIFF(DAY, t.ArrivalDate, t.ReturnDate)) AS ShortestTrip
+	FROM AccountsTrips AS [at]
+	LEFT JOIN Accounts AS a ON a.Id = [at].AccountId
+	LEFT JOIN Trips AS t ON t.Id = [at].TripId
+	WHERE a.MiddleName IS NULL AND t.CancelDate IS NULL
+	GROUP BY [at].AccountId, FirstName, LastName
+	ORDER BY LongestTrip DESC, ShortestTrip
+
+--8.Metropolis
+SELECT TOP(10)
+		c.Id,
+		c.Name,
+		c.CountryCode,
+		COUNT(*) AS Accounts
+	FROM Cities AS c
+	JOIN Accounts AS a ON a.CityId = c.Id
+	GROUP BY c.Id, c.Name, c.CountryCode
+	ORDER BY Accounts DESC
+
+--9.Romantic Getaways
+SELECT 
+		at.AccountId, 
+		a.Email, 
+		c.Name,
+		COUNT(*) AS Trips
+	FROM AccountsTrips AS at
+	JOIN Accounts AS a ON at.AccountId = a.Id
+	JOIN Cities AS c ON c.Id = a.CityId
+	JOIN Trips AS t ON t.Id = at.TripId
+	JOIN Rooms AS r ON r.Id = t.RoomId
+	JOIN Hotels AS h ON h.Id = r.HotelId
+	JOIN Cities c2 ON c2.Id = h.CityId
+	WHERE c2.Id = c.Id
+	GROUP BY at.AccountId, a.Email, c.Name
+	ORDER BY Trips DESC, at.AccountId
+
+--10.GDPR Violation
+SELECT 
+		t.Id,
+		a.FirstName + ' ' + ISNULL(a.MiddleName + ' ', '' ) + a.LastName AS FullName,
+		ac.Name AS [From],
+		hc.Name AS [To],
+		CASE 
+			WHEN t.CancelDate IS NULL THEN CONVERT(NVARCHAR,DATEDIFF(DAY, t.ArrivalDate, t.ReturnDate)) + ' days'
+			ELSE 'Canceled'
+			END AS Duration
+	FROM AccountsTrips AS at
+	JOIN Accounts AS a ON a.Id = at.AccountId
+	JOIN Cities AS ac ON ac.Id = a.CityId
+	JOIN Trips AS t ON t.Id = at.TripId
+	JOIN Rooms AS r ON r.Id = t.RoomId
+	JOIN Hotels AS h ON h.Id = r.HotelId
+	JOIN Cities AS hc ON hc.Id = h.CityId
+	ORDER BY FullName, TripId
+	
