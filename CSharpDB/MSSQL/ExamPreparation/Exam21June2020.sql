@@ -81,8 +81,5 @@ UPDATE Rooms
 	WHERE HotelId IN (5, 7, 9)
 
 --4.Delete
-DELETE FROM Trips
-	WHERE Id = 47
-
 DELETE FROM AccountsTrips
 	WHERE AccountId = 47
