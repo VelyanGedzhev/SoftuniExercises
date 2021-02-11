@@ -78,7 +78,65 @@ DELETE FROM TravelCards
 DELETE FROM Journeys
 	WHERE Id <= 3
 
+--Section 3. Querying
+--5. Select all military journeys
+SELECT 
+		Id,
+		FORMAT(JourneyStart, 'dd/MM/yyyy') AS JourneyStart,
+		FORMAT(JourneyEnd, 'dd/MM/yyyy') AS JourneyEnd
+	FROM Journeys
+	WHERE Purpose = 'Military'
+	ORDER BY JourneyStart
 
+--6. Select all pilots
+SELECT	
+		c.Id,
+		CONCAT(FirstName, ' ', LastName) AS full_name
+	FROM Colonists AS c
+	JOIN TravelCards AS tc ON  c.Id = tc.ColonistId
+	WHERE JobDuringJourney = 'Pilot'
+	ORDER BY c.Id
+
+--7. Count colonists
+SELECT COUNT(*) AS Count
+	FROM Colonists AS c
+	JOIN TravelCards AS tc ON c.Id = tc.ColonistId
+	JOIN Journeys AS j ON tc.JourneyId = j.Id
+	WHERE j.Purpose = 'Technical' 
+
+--8. Select spaceships with pilots younger than 30 years
+SELECT 
+		s.Name,
+		s.Manufacturer
+	FROM Spaceships AS s
+	JOIN Journeys AS j ON s.Id = j.SpaceshipId
+	JOIN TravelCards AS tc ON j.Id = tc.JourneyId
+	JOIN Colonists AS c ON tc.ColonistId = c.Id
+	WHERE tc.JobDuringJourney = 'Pilot' AND DATEDIFF(YEAR, c.BirthDate, '2019-01-01') <= 30
+	ORDER BY s.Name
+
+--9. Select all planets and their journey count
+SELECT 
+		p.Name,
+		COUNT(*) AS JourneysCount
+	FROM Planets AS p
+	JOIN Spaceports AS s ON p.Id = s.PlanetId
+	JOIN Journeys AS j ON j.DestinationSpaceportId = s.Id
+	GROUP BY p.Name
+	ORDER BY JourneysCount DESC, p.Name
+
+--10. Select Second Oldest Important Colonist
+SELECT 
+		JobDuringJourney,
+		FullName,
+		rq.Rank
+	FROM(SELECT  
+		tc.JobDuringJourney,
+		CONCAT(FirstName, ' ', LastName) AS FullName,
+		DENSE_RANK() OVER(PARTITION BY tc.JobDuringJourney ORDER BY c.BirthDate) AS [Rank]
+			FROM Colonists AS c
+			JOIN TravelCards AS tc ON c.Id = tc.ColonistId) AS rq
+	WHERE Rank = 2
 
 	
 
