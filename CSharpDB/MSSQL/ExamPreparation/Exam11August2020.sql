@@ -159,3 +159,40 @@ SELECT k.CountryName, k.DistributorName
 	GROUP BY d.Name, co.Name) AS k
 	WHERE k.Rank = 1
 	ORDER BY k.CountryName, k.DistributorName
+GO
+--Section 4. Programmability 
+--11. Customers with Countries
+CREATE VIEW v_UserWithCountries 
+AS
+	SELECT 
+			CONCAT(cu.FirstName, ' ', cu.LastName) AS CustomerName,
+			cu.Age,
+			cu.Gender,
+			co.Name
+		FROM Customers AS cu
+		JOIN Countries AS co ON cu.CountryId = co.Id
+GO
+
+SELECT TOP(5) * 
+	FROM v_UserWithCountries
+	ORDER BY Age
+
+GO
+
+--12. Delete Products
+CREATE TRIGGER tr_RelationDelete ON Products
+INSTEAD OF DELETE
+AS
+	BEGIN
+		DECLARE @TargetProductId INT = 
+			(SELECT p.Id
+					FROM Products AS p
+					JOIN deleted AS d ON p.Id = d.Id)
+
+		DELETE FROM ProductsIngredients WHERE ProductId = @TargetProductId
+		DELETE FROM Feedbacks WHERE ProductId = @TargetProductId
+		DELETE FROM Products WHERE Id = @TargetProductId
+	END
+GO
+
+DELETE FROM Products WHERE Id = 7
