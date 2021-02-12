@@ -98,3 +98,64 @@ DELETE FROM Feedbacks
 
 --Section 3. Querying 
 --5.Products by Price
+SELECT Name, Price, Description 
+	FROM Products
+	ORDER BY Price DESC, Name
+
+--6. Negative Feedback
+SELECT 
+		f.ProductId,
+		f.Rate,
+		f.Description,
+		f.CustomerId,
+		c.Age,
+		c.Gender
+	FROM Feedbacks AS f
+	JOIN Customers AS c ON f.CustomerId = c.Id
+	WHERE f.Rate < 5
+	ORDER BY f.ProductId DESC, f.Rate
+
+--7. Customers without Feedback
+SELECT 
+		CONCAT(FirstName, ' ', LastName) AS CustomerName,
+		c.PhoneNumber,
+		c.Gender
+	FROM Customers AS c
+	LEFT JOIN Feedbacks AS f ON c.Id = f.CustomerId
+	WHERE f.Id IS NULL
+	ORDER BY c.Id
+
+--8. Customers by Criteria
+SELECT cu.FirstName, cu.Age, cu.PhoneNumber
+	FROM Customers AS cu
+	JOIN Countries AS co ON cu.CountryId = co.Id
+	WHERE
+		cu.Age >= 21 AND cu.FirstName LIKE ('%an%') OR
+		cu.PhoneNumber LIKE ('%38') AND co.Name != 'Greece'
+	ORDER BY cu.FirstName, cu.Age
+
+--9. Middle Range Distributors
+SELECT 
+		d.Name,
+		i.Name,
+		p.Name,
+		AVG(f.Rate)
+	FROM Distributors AS d
+	JOIN Ingredients AS i ON d.Id = i.DistributorId
+	JOIN ProductsIngredients AS [pi] ON [pi].IngredientId = i.Id
+	JOIN Products AS p ON [pi].ProductId = p.Id
+	JOIN Feedbacks AS f ON f.ProductId = p.Id
+	GROUP BY d.Name, d.Name, i.Name, p.Name
+	HAVING AVG(f.Rate) BETWEEN 5 AND 8
+	ORDER BY d.Name, i.Name, p.Name
+
+--10. Country Representative
+SELECT k.CountryName, k.DistributorName
+	FROM (SELECT co.Name AS CountryName, d.Name AS DistributorName,
+		DENSE_RANK() OVER (PARTITION BY co.Name ORDER BY COUNT(i.Id) DESC) AS [Rank]
+	FROM Countries AS co
+	JOIN Distributors AS d ON co.Id = d.CountryId
+	LEFT JOIN Ingredients AS i ON d.Id = i.DistributorId
+	GROUP BY d.Name, co.Name) AS k
+	WHERE k.Rank = 1
+	ORDER BY k.CountryName, k.DistributorName
