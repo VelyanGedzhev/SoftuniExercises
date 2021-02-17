@@ -15,6 +15,31 @@ namespace ado.netExercise
                 //create DB
                 //GetInitialSetup(connection);
 
+                GetVillainNamesAndMinionsCount(connection);
+            }
+        }
+
+        private static void GetVillainNamesAndMinionsCount(SqlConnection connection)
+        {
+            string query = @"SELECT v.Name AS [Name], COUNT(mv.MinionId) AS [Count]
+	                                FROM Villains AS v
+	                                JOIN MinionsVillains AS mv ON mv.VillainId = v.Id
+	                                GROUP BY v.Id, v.Name
+	                                HAVING COUNT(mv.MinionId) >= 3
+	                                ORDER BY [Count] DESC";
+
+            using (var command = new SqlCommand(query, connection))
+            {
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        var currentName = reader[0];
+                        var currentCount = reader[1];
+
+                        Console.WriteLine($"{currentName} - {currentCount}");
+                    }
+                }
             }
         }
 
