@@ -77,11 +77,11 @@ namespace ado.netExercise
 
         private static void InsertMinionVillain(SqlConnection connection, int? villainId, int? minionId)
         {
-            var insertIntoMinionVillain = "INSERT INTO MinionsVillains (MinionId, VillainId) VALUES (@villainId, @minionId)";
+            var insertIntoMinionVillain = "INSERT INTO MinionsVillains (MinionId, VillainId) VALUES (@minionId, @villainId)";
 
             var sqlCommand = new SqlCommand(insertIntoMinionVillain, connection);
-            sqlCommand.Parameters.AddWithValue("@villainId", villainId);
             sqlCommand.Parameters.AddWithValue("@minionId", minionId);
+            sqlCommand.Parameters.AddWithValue("@villainId", villainId);
             sqlCommand.ExecuteNonQuery();
         }
 
