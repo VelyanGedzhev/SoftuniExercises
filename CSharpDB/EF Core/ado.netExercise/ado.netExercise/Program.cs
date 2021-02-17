@@ -5,30 +5,33 @@ namespace ado.netExercise
 {
     public class Program
     {
-        const string connectionString = "Server=.;Integrated Security=true;Database=master";
+        const string connectionString = "Server=.;Integrated Security=true;Database=MinionsDB";
         public static void Main(string[] args)
         {
             using (var connection = new SqlConnection(connectionString))
             {
                 connection.Open();
 
+                //create DB
+                //string query = "CREATE DATABASE MinionsDB";
+               // ExecuteNonQuery(connection, query);
+
                 var createTableArgs = GetCreateTableStatements();
 
-                //create DB
-                string createDB = "CREATE DATABASE MinionsDB";
-
-                using (var command = new SqlCommand(createDB, connection))
+                foreach (var query in createTableArgs)
                 {
-                    command.ExecuteNonQuery();
+                    ExecuteNonQuery(connection, query);
                 }
-
-                //create tables
-
-                //insert into tables
             }
         }
 
-        private static object GetCreateTableStatements()
+        private static void ExecuteNonQuery(SqlConnection connection, string createDB)
+        {
+            using var command = new SqlCommand(createDB, connection);
+            var result = command.ExecuteNonQuery();
+        }
+
+        private static string[] GetCreateTableStatements()
         {
             var result = new string[]
             {
@@ -42,5 +45,7 @@ namespace ado.netExercise
 
             return result;
         }
+
+       
     }
 }
