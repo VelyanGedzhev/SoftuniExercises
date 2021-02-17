@@ -13,15 +13,7 @@ namespace ado.netExercise
                 connection.Open();
 
                 //create DB
-                //string query = "CREATE DATABASE MinionsDB";
-               // ExecuteNonQuery(connection, query);
-
-                //var createTableArgs = GetCreateTableStatements();
-
-                //foreach (var query in createTableArgs)
-                //{
-                //    ExecuteNonQuery(connection, query);
-                //}
+                GetInitialSetup(connection);
 
                 var insertArgs = GetInsertDataStatements();
 
@@ -29,6 +21,19 @@ namespace ado.netExercise
                 {
                     ExecuteNonQuery(connection, query);
                 }
+            }
+        }
+
+        private static void GetInitialSetup(SqlConnection connection)
+        {
+            string createDB = "CREATE DATABASE MinionsDB";
+            ExecuteNonQuery(connection, createDB);
+
+            var createTableArgs = GetCreateTableStatements();
+
+            foreach (var query in createTableArgs)
+            {
+                ExecuteNonQuery(connection, query);
             }
         }
 
