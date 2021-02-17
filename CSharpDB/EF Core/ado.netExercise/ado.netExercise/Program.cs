@@ -13,14 +13,8 @@ namespace ado.netExercise
                 connection.Open();
 
                 //create DB
-                GetInitialSetup(connection);
+                //GetInitialSetup(connection);
 
-                var insertArgs = GetInsertDataStatements();
-
-                foreach (var query in insertArgs)
-                {
-                    ExecuteNonQuery(connection, query);
-                }
             }
         }
 
@@ -32,6 +26,13 @@ namespace ado.netExercise
             var createTableArgs = GetCreateTableStatements();
 
             foreach (var query in createTableArgs)
+            {
+                ExecuteNonQuery(connection, query);
+            }
+
+            var insertArgs = GetInsertDataStatements();
+
+            foreach (var query in insertArgs)
             {
                 ExecuteNonQuery(connection, query);
             }
