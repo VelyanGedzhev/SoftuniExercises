@@ -5,7 +5,9 @@ VisualStudioVersion = 16.0.30907.101
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ado.netExercise", "ado.netExercise\ado.netExercise.csproj", "{3F994BFB-12C3-4C86-8909-95FEB42CEE9D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChangeTownNamesCasing", "ChangeTownNamesCasing\ChangeTownNamesCasing.csproj", "{09C10F2B-867C-4153-B682-F4432EC3E078}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChangeTownNamesCasing", "ChangeTownNamesCasing\ChangeTownNamesCasing.csproj", "{09C10F2B-867C-4153-B682-F4432EC3E078}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RemoveVillain", "RemoveVillain\RemoveVillain.csproj", "{8E88BCC7-0C5D-47CB-A5A6-1D2602DE1CB4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{09C10F2B-867C-4153-B682-F4432EC3E078}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{09C10F2B-867C-4153-B682-F4432EC3E078}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{09C10F2B-867C-4153-B682-F4432EC3E078}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8E88BCC7-0C5D-47CB-A5A6-1D2602DE1CB4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8E88BCC7-0C5D-47CB-A5A6-1D2602DE1CB4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8E88BCC7-0C5D-47CB-A5A6-1D2602DE1CB4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8E88BCC7-0C5D-47CB-A5A6-1D2602DE1CB4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
