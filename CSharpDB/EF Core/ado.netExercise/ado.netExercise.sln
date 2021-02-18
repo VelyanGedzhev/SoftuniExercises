@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrintAllMinionNames", "Prin
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IncreaseMinionAge", "IncreaseMinionAge\IncreaseMinionAge.csproj", "{A8303F2C-5118-4CBC-AC21-C72AF6DF05D5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IncreaseAgeStoredProcedure", "IncreaseAgeStoredProcedure\IncreaseAgeStoredProcedure.csproj", "{8108CC42-5C0A-4C8C-933F-5D1B3ED2B247}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{A8303F2C-5118-4CBC-AC21-C72AF6DF05D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A8303F2C-5118-4CBC-AC21-C72AF6DF05D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A8303F2C-5118-4CBC-AC21-C72AF6DF05D5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8108CC42-5C0A-4C8C-933F-5D1B3ED2B247}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8108CC42-5C0A-4C8C-933F-5D1B3ED2B247}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8108CC42-5C0A-4C8C-933F-5D1B3ED2B247}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8108CC42-5C0A-4C8C-933F-5D1B3ED2B247}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
