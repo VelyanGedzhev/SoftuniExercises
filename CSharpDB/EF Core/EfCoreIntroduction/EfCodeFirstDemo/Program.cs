@@ -1,4 +1,5 @@
 ﻿using EfCodeFirstDemo.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 
 namespace EfCodeFirstDemo
@@ -9,8 +10,9 @@ namespace EfCodeFirstDemo
         {
             var db = new DemoDBContext();
 
+            //db.Database.EnsureCreated();
             //Better way is to use Migrations
-            db.Database.EnsureCreated();
+            db.Database.Migrate();
         }
     }
 }

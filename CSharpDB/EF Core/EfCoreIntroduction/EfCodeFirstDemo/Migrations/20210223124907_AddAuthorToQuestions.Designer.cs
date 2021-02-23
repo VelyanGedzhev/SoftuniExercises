@@ -4,14 +4,16 @@ using EfCodeFirstDemo.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EfCodeFirstDemo.Migrations
 {
     [DbContext(typeof(DemoDBContext))]
-    partial class DemoDBContextModelSnapshot : ModelSnapshot
+    [Migration("20210223124907_AddAuthorToQuestions")]
+    partial class AddAuthorToQuestions
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
