@@ -8,6 +8,8 @@ namespace EfCodeFirstDemo
         public static void Main(string[] args)
         {
             var db = new DemoDBContext();
+
+            //Better way is to use Migrations
             db.Database.EnsureCreated();
         }
     }
