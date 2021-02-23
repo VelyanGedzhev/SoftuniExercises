@@ -9,11 +9,17 @@ namespace EfCoreIntroduction
         static void Main(string[] args)
         {
             var db = new SoftUniContext();
+            //GetTopPaidEmployees(db);  
+            
 
+        }
+
+        private static void GetTopPaidEmployees(SoftUniContext db)
+        {
             var topPaidEmployees = db.Employees
-                .OrderByDescending(x => x.Salary)
-                .Take(10)
-                .ToList();
+                            .OrderByDescending(x => x.Salary)
+                            .Take(10)
+                            .ToList();
 
             foreach (var employee in topPaidEmployees)
             {
