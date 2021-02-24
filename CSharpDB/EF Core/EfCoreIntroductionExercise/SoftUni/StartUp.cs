@@ -26,11 +26,37 @@ namespace SoftUni
             //var addresses = AddNewAddressToEmployee(db);
             //Console.WriteLine(addresses);
 
-            var employees = GetEmployeesInPeriod(db);
-            Console.WriteLine(employees);
+            //var employees = GetEmployeesInPeriod(db);
+            //Console.WriteLine(employees);
 
+            var addresses = GetAddressesByTown(db);
+            Console.WriteLine(addresses);
         }
 
+        public static string GetAddressesByTown(SoftUniContext context)
+        {
+            var addresses = context.Addresses
+                .OrderByDescending(x => x.Employees.Count)
+                .ThenBy(x => x.Town.Name)
+                .ThenBy(x => x.AddressText)
+                .Select(x => new
+                {   
+                   AddressName =  x.AddressText,
+                   TownName = x.Town.Name,
+                    EmployeesCount = x.Employees.Count,
+                })
+                .Take(10)
+                .ToList();
+
+            StringBuilder sb = new StringBuilder();
+
+            foreach (var address in addresses)
+            {
+                sb.AppendLine($"{address.AddressName}, {address.TownName} - {address.EmployeesCount} employees");
+            }
+
+            return sb.ToString().TrimEnd();
+        }
         public static string GetEmployeesInPeriod(SoftUniContext context)
         {
             var employees = context.Employees
