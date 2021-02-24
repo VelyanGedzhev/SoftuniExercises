@@ -29,8 +29,40 @@ namespace SoftUni
             //var employees = GetEmployeesInPeriod(db);
             //Console.WriteLine(employees);
 
-            var addresses = GetAddressesByTown(db);
-            Console.WriteLine(addresses);
+            //var addresses = GetAddressesByTown(db);
+            //Console.WriteLine(addresses);
+
+            var employeeProjects = GetEmployee147(db);
+            Console.WriteLine(employeeProjects);
+        }
+
+        public static string GetEmployee147(SoftUniContext context)
+        {
+            var employee = context.Employees
+                .Select(x => new
+                {
+                    x.EmployeeId,
+                    x.FirstName,
+                    x.LastName,
+                    x.JobTitle,
+                    Projects = x.EmployeesProjects
+                        .Select(p => new
+                            {
+                                p.Project.Name
+                            })
+                })
+                .FirstOrDefault(x => x.EmployeeId == 147);
+
+            StringBuilder sb = new StringBuilder();
+
+            sb.AppendLine($"{employee.FirstName} {employee.LastName} - {employee.JobTitle}");
+
+            foreach (var item in employee.Projects.OrderBy(x => x.Name))
+            {
+                sb.AppendLine(item.Name);
+            }
+
+            return sb.ToString().TrimEnd();
         }
 
         public static string GetAddressesByTown(SoftUniContext context)
@@ -57,6 +89,7 @@ namespace SoftUni
 
             return sb.ToString().TrimEnd();
         }
+
         public static string GetEmployeesInPeriod(SoftUniContext context)
         {
             var employees = context.Employees
