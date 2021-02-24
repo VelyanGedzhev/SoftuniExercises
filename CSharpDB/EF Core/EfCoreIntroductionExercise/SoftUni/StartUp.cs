@@ -41,8 +41,37 @@ namespace SoftUni
             //var projects = GetLatestProjects(db);
             //Console.WriteLine(projects);
 
-            var employees = IncreaseSalaries(db);
+            //var employees = IncreaseSalaries(db);
+            //Console.WriteLine(employees);
+
+            var employees = GetEmployeesByFirstNameStartingWithSa(db);
             Console.WriteLine(employees);
+        }
+
+        public static string GetEmployeesByFirstNameStartingWithSa(SoftUniContext context)
+        {
+            var employees = context.Employees
+                //.Where(x => x.FirstName.StartsWith("Sa")) One option
+                .Where(x => EF.Functions.Like(x.FirstName, "Sa%")) //Second option
+                .Select(x => new
+                {
+                    x.FirstName,
+                    x.LastName,
+                    x.JobTitle,
+                    x.Salary
+                })
+                .OrderBy(x => x.FirstName)
+                .ThenBy(x => x.LastName)
+                .ToList();
+
+            StringBuilder sb = new StringBuilder();
+
+            foreach (var empl in employees)
+            {
+                sb.AppendLine($"{empl.FirstName} {empl.LastName} - {empl.JobTitle} - (${empl.Salary:f2})");
+            }
+
+            return sb.ToString().TrimEnd();
         }
 
         public static string IncreaseSalaries(SoftUniContext context)
