@@ -38,8 +38,39 @@ namespace SoftUni
             //var departments = GetDepartmentsWithMoreThan5Employees(db);
             //Console.WriteLine(departments);
 
-            var projects = GetLatestProjects(db);
-            Console.WriteLine(projects);
+            //var projects = GetLatestProjects(db);
+            //Console.WriteLine(projects);
+
+            var employees = IncreaseSalaries(db);
+            Console.WriteLine(employees);
+        }
+
+        public static string IncreaseSalaries(SoftUniContext context)
+        {
+            var departments = new string[]
+            {
+                "Engineering",
+                "Tool Design",
+                "Marketing",
+                "Information Services"
+            };
+            var employees = context.Employees
+                .Where(x => departments.Contains(x.Department.Name))
+                .OrderBy(x => x.FirstName)
+                .ThenBy(x => x.LastName)
+                .ToList();
+
+            StringBuilder sb = new StringBuilder();
+
+            foreach (var empl in employees)
+            {
+                empl.Salary *= 1.12M;
+
+                sb.AppendLine($"{empl.FirstName} {empl.LastName} (${empl.Salary:f2})");
+            }
+
+            context.SaveChanges();
+            return sb.ToString().TrimEnd();
         }
 
         public static string GetLatestProjects(SoftUniContext context)
