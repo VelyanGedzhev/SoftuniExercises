@@ -35,8 +35,37 @@ namespace SoftUni
             //var employeeProjects = GetEmployee147(db);
             //Console.WriteLine(employeeProjects);
 
-            var departments = GetDepartmentsWithMoreThan5Employees(db);
-            Console.WriteLine(departments);
+            //var departments = GetDepartmentsWithMoreThan5Employees(db);
+            //Console.WriteLine(departments);
+
+            var projects = GetLatestProjects(db);
+            Console.WriteLine(projects);
+        }
+
+        public static string GetLatestProjects(SoftUniContext context)
+        {
+            var projects = context.Projects
+                .OrderByDescending(x => x.StartDate)
+                .Select(x => new
+                {
+                    x.Name,
+                    x.Description,
+                    x.StartDate,
+                })
+                .Take(10)
+                .OrderBy(x => x.Name)
+                .ToList();
+
+            StringBuilder sb = new StringBuilder();
+
+            foreach (var proj in projects)
+            {
+                sb.AppendLine(proj.Name)
+                    .AppendLine(proj.Description)
+                    .AppendLine(proj.StartDate.ToString("M/d/yyyy h:mm:ss tt", CultureInfo.InvariantCulture));
+            }
+
+            return sb.ToString().TrimEnd();
         }
 
         public static string GetDepartmentsWithMoreThan5Employees(SoftUniContext context)
