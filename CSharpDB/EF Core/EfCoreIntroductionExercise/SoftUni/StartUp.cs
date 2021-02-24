@@ -32,8 +32,49 @@ namespace SoftUni
             //var addresses = GetAddressesByTown(db);
             //Console.WriteLine(addresses);
 
-            var employeeProjects = GetEmployee147(db);
-            Console.WriteLine(employeeProjects);
+            //var employeeProjects = GetEmployee147(db);
+            //Console.WriteLine(employeeProjects);
+
+            var departments = GetDepartmentsWithMoreThan5Employees(db);
+            Console.WriteLine(departments);
+        }
+
+        public static string GetDepartmentsWithMoreThan5Employees(SoftUniContext context)
+        {
+            var departments = context.Departments
+                .Where(x => x.Employees.Count > 5)
+                .OrderBy(x => x.Employees.Count)
+                .ThenBy(x => x.Name)
+                .Select(x => new
+                {
+                    x.Name,
+                    x.Manager.FirstName,
+                    x.Manager.LastName,
+                    Employees = x.Employees.Select(e => new
+                    {
+                        e.FirstName,
+                        e.LastName,
+                        e.JobTitle
+                    })
+                    .OrderBy(x => x.FirstName)
+                    .ThenBy(x => x.LastName)
+                    .ToList()
+                })
+                .ToList();
+
+            StringBuilder sb = new StringBuilder();
+
+            foreach (var department in departments)
+            {
+                sb.AppendLine($"{department.Name} - {department.FirstName} {department.LastName}");
+
+                foreach (var employee in department.Employees)
+                {
+                    sb.AppendLine($"{employee.FirstName} {employee.LastName} - {employee.JobTitle}");
+                }
+            }
+
+            return sb.ToString().TrimEnd();
         }
 
         public static string GetEmployee147(SoftUniContext context)
