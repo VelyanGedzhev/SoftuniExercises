@@ -48,6 +48,20 @@ namespace SoftUni
             Console.WriteLine(employees);
         }
 
+        public static string DeleteProjectById(SoftUniContext context)
+        {
+
+
+            StringBuilder sb = new StringBuilder();
+
+            foreach (var empl in employees)
+            {
+                sb.AppendLine($"{empl.FirstName} {empl.LastName} - {empl.JobTitle} - (${empl.Salary:f2})");
+            }
+
+            return sb.ToString().TrimEnd();
+        }
+
         public static string GetEmployeesByFirstNameStartingWithSa(SoftUniContext context)
         {
             var employees = context.Employees
