@@ -5,6 +5,8 @@ VisualStudioVersion = 16.0.30907.101
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentApiDemo", "EntityRelationsDemo\FluentApiDemo.csproj", "{8D27F5D7-C2DD-49FB-9601-2FA585CBACB1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AttributesDemo", "AttributesDemo\AttributesDemo.csproj", "{A60EC3CC-5C5E-4413-BD31-261F0F8A2E37}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{8D27F5D7-C2DD-49FB-9601-2FA585CBACB1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8D27F5D7-C2DD-49FB-9601-2FA585CBACB1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8D27F5D7-C2DD-49FB-9601-2FA585CBACB1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A60EC3CC-5C5E-4413-BD31-261F0F8A2E37}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A60EC3CC-5C5E-4413-BD31-261F0F8A2E37}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A60EC3CC-5C5E-4413-BD31-261F0F8A2E37}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A60EC3CC-5C5E-4413-BD31-261F0F8A2E37}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
