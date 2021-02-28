@@ -44,20 +44,35 @@ namespace SoftUni
             //var employees = IncreaseSalaries(db);
             //Console.WriteLine(employees);
 
-            var employees = GetEmployeesByFirstNameStartingWithSa(db);
-            Console.WriteLine(employees);
+            //var employees = GetEmployeesByFirstNameStartingWithSa(db);
+            //Console.WriteLine(employees);
         }
 
         public static string DeleteProjectById(SoftUniContext context)
         {
-
-
             StringBuilder sb = new StringBuilder();
 
-            foreach (var empl in employees)
+            var employeesProjectsToDelete = context.EmployeesProjects
+                .Where(ep => ep.ProjectId == 2);
+
+            var project = context.Projects
+                .Where(p => p.ProjectId == 2)
+                .Single();
+
+            foreach (var ep in employeesProjectsToDelete)
             {
-                sb.AppendLine($"{empl.FirstName} {empl.LastName} - {empl.JobTitle} - (${empl.Salary:f2})");
+                context.EmployeesProjects.Remove(ep);
             }
+
+            context.Projects.Remove(project);
+
+            context.SaveChanges();
+
+            context.Projects
+                .Take(10)
+                .Select(p => p.Name)
+                .ToList()
+                .ForEach(p => sb.AppendLine(p));
 
             return sb.ToString().TrimEnd();
         }
