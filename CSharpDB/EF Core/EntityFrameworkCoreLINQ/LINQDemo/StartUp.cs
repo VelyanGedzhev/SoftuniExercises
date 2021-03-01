@@ -9,8 +9,28 @@ namespace LINQDemo
         public static void Main(string[] args)
         {
             var db = new MusicXContext();
-            GetSongsWithArtists(db);
-            GetAllSongsWithSource(db);
+            //GetSongsWithArtists(db);
+            //GetAllSongsWithSource(db);
+            GetArtistsGroupsByFirstLetter(db);
+
+        }
+
+        private static void GetArtistsGroupsByFirstLetter(MusicXContext db)
+        {
+            var groups = db.Artists
+                .GroupBy(x => x.Name.Substring(0, 1))
+                .Select(x => new
+                {
+                    FirstLetter = x.Key,
+                    Count = x.Count(),
+                    Min = x.Min(a => a.Name),
+                    Max = x.Max(a => a.Name),
+                }).ToList();
+
+            foreach (var group in groups)
+            {
+                Console.WriteLine(group);
+            }
         }
 
         private static void GetAllSongsWithSource(MusicXContext db)
