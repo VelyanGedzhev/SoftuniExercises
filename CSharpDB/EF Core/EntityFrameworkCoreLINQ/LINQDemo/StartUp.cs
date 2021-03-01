@@ -10,6 +10,25 @@ namespace LINQDemo
         {
             var db = new MusicXContext();
             GetSongsWithArtists(db);
+            GetAllSongsWithSource(db);
+        }
+
+        private static void GetAllSongsWithSource(MusicXContext db)
+        {
+            var songs = db.Songs.Join(
+                            db.Sources,
+                            x => x.SourceId,
+                            x => x.Id,
+                            (song, source) => new
+                            {
+                                SongName = song.Name,
+                                SourceName = source.Name,
+                            }).ToList();
+
+            foreach (var song in songs)
+            {
+                Console.WriteLine(song);
+            }
         }
 
         private static void GetSongsWithArtists(MusicXContext db)
