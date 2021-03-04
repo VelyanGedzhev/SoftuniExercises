@@ -14,7 +14,7 @@ namespace P03_FootballBetting.Data
         }
 
         public FootballBettingContext(DbContextOptions options)
-            :base()
+            :base(options)
         {
 
         }
