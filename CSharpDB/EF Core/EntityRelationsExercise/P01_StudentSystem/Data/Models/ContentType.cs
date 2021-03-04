@@ -2,8 +2,8 @@
 {
     public enum ContentType
     {
-        Application = 1,
-        Pdf = 2,
-        Zip = 3
+        Application = 10,
+        Pdf = 20,
+        Zip = 30
     }
 }

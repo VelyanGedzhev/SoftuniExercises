@@ -46,6 +46,11 @@ namespace SoftUni
 
             //var employees = GetEmployeesByFirstNameStartingWithSa(db);
             //Console.WriteLine(employees);
+
+            //var projects = DeleteProjectById(db);
+            //Console.WriteLine(projects);
+
+            Console.WriteLine(RemoveTown(db));
         }
 
         public static string RemoveTown(SoftUniContext context)

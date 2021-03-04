@@ -11,7 +11,7 @@ namespace LINQDemo
             var db = new MusicXContext();
             //GetSongsWithArtists(db);
             //GetAllSongsWithSource(db);
-            GetArtistsGroupsByFirstLetter(db);
+            //GetArtistsGroupsByFirstLetter(db);
 
         }
 
