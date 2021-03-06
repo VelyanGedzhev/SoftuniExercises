@@ -30,9 +30,44 @@
             //Console.WriteLine(GetBooksByAuthor(db, inputString));
             //Console.WriteLine(CountBooks(db, inputInt));
             //Console.WriteLine(CountCopiesByAuthor(db));
-            Console.WriteLine(GetTotalProfitByCategory(db));
+            //Console.WriteLine(GetTotalProfitByCategory(db));
+            Console.WriteLine(GetMostRecentBooks(db));
 
         }
+        public static string GetMostRecentBooks(BookShopContext context)
+        {
+            var categories = context.Categories
+                .Select(x => new
+                {
+                    Name = x.Name,
+                    Books = x.CategoryBooks
+                    .Select(b => new
+                    {
+                        b.Book.Title,
+                        b.Book.ReleaseDate.Value,
+                    })
+                    .OrderByDescending(y => y.Value)
+                    .Take(3)
+                    .ToList(),
+                })
+                .OrderBy(x => x.Name)
+                .ToList();
+
+            StringBuilder sb = new StringBuilder();
+
+            foreach (var category in categories)
+            {
+                sb.AppendLine($"--{category.Name}");
+
+                foreach (var book in category.Books)
+                {
+                    sb.AppendLine($"{book.Title} ({book.Value.Year})");
+                }
+            }
+
+            return sb.ToString().TrimEnd();
+        }
+
         public static string GetTotalProfitByCategory(BookShopContext context)
         {
             var categories = context.Categories
