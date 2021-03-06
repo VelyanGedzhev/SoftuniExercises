@@ -32,9 +32,32 @@
             //Console.WriteLine(CountCopiesByAuthor(db));
             //Console.WriteLine(GetTotalProfitByCategory(db));
             //Console.WriteLine(GetMostRecentBooks(db));
-            IncreasePrices(db);
+            //IncreasePrices(db);
+            Console.WriteLine(RemoveBooks(db));
 
         }
+        public static int RemoveBooks(BookShopContext context)
+        {
+            var books = context.Books
+                .Where(x => x.Copies < 4200)
+                .ToList();
+            
+            //Longer option
+            //foreach (var book in books)
+            //{
+            //    context.Books.Remove(book);
+            //}
+
+            //context.SaveChanges();
+
+            //return books.Count();
+
+            //Shorter option
+            context.Books.RemoveRange(books);
+            var result = context.SaveChanges();
+            return result; //In order to work in Judge return books.Count();
+        }
+
         public static void IncreasePrices(BookShopContext context)
         {
             var books = context.Books
