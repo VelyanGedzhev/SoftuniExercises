@@ -29,9 +29,24 @@
             //Console.WriteLine(GetBookTitlesContaining(db, inputString));
             //Console.WriteLine(GetBooksByAuthor(db, inputString));
             //Console.WriteLine(CountBooks(db, inputInt));
-            Console.WriteLine(CountCopiesByAuthor(db));
+            //Console.WriteLine(CountCopiesByAuthor(db));
+            Console.WriteLine(GetTotalProfitByCategory(db));
 
+        }
+        public static string GetTotalProfitByCategory(BookShopContext context)
+        {
+            var categories = context.Categories
+                .Select(x => new
+                {
+                    Name = x.Name,
+                    Profit = x.CategoryBooks.Sum(b => b.Book.Price * b.Book.Copies)
+                })
+                .OrderByDescending(x => x.Profit)
+                .ThenBy(x => x.Name)
+                .ToList();
 
+            return string.Join(Environment.NewLine, categories.Select(x =>
+                $"{x.Name} ${x.Profit}"));
         }
         public static string CountCopiesByAuthor(BookShopContext context)
         {
