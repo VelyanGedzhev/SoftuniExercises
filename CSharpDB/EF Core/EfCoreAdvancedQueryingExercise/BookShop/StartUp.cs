@@ -16,20 +16,31 @@
             using var db = new BookShopContext();
             DbInitializer.ResetDatabase(db);
 
-            var command = Console.ReadLine();
-            //Console.WriteLine(GetBooksByAgeRestriction(db, command));
+            //var inputString = Console.ReadLine();
+            //Console.WriteLine(GetBooksByAgeRestriction(db, inputString));
             //Console.WriteLine(GetGoldenBooks(db));
             //Console.WriteLine(GetBooksByPrice(db));
 
-            //int year = int.Parse(Console.ReadLine());
-            //Console.WriteLine(GetBooksNotReleasedIn(db, year));
-            //Console.WriteLine(GetBooksByCategory(db, command));
-            //Console.WriteLine(GetBooksReleasedBefore(db, command));
-            //Console.WriteLine(GetAuthorNamesEndingIn(db, command));
-            //Console.WriteLine(GetBookTitlesContaining(db, command));
-            Console.WriteLine(GetBooksByAuthor(db, command));
+            int inputInt = int.Parse(Console.ReadLine());
+            //Console.WriteLine(GetBooksNotReleasedIn(db, inputInt));
+            //Console.WriteLine(GetBooksByCategory(db, inputString));
+            //Console.WriteLine(GetBooksReleasedBefore(db, inputString));
+            //Console.WriteLine(GetAuthorNamesEndingIn(db, inputString));
+            //Console.WriteLine(GetBookTitlesContaining(db, inputString));
+            //Console.WriteLine(GetBooksByAuthor(db, inputString));
+            Console.WriteLine(CountBooks(db, inputInt));
 
         }
+        public static int CountBooks(BookShopContext context, int lengthCheck)
+        {
+            var books = context.Books
+                .Where(x => x.Title.Length > lengthCheck)
+                .Select(x => x.BookId)
+                .ToList();
+
+            return books.Count();
+        }
+
         public static string GetBooksByAuthor(BookShopContext context, string input)
         {
             var books = context.Books
