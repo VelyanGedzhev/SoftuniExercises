@@ -25,9 +25,20 @@
             //Console.WriteLine(GetBooksNotReleasedIn(db, year));
             //Console.WriteLine(GetBooksByCategory(db, command));
             //Console.WriteLine(GetBooksReleasedBefore(db, command));
-            Console.WriteLine(GetAuthorNamesEndingIn(db, command));
-
+            //Console.WriteLine(GetAuthorNamesEndingIn(db, command));
+            Console.WriteLine(GetBookTitlesContaining(db, command));
         }
+        public static string GetBookTitlesContaining(BookShopContext context, string input)
+        {
+            var books = context.Books
+                .Where(x => x.Title.ToLower().Contains(input.ToLower()))
+                .Select(x => x.Title)
+                .OrderBy(x => x)
+                .ToList();
+
+            return string.Join(Environment.NewLine, books);
+        }
+
         public static string GetAuthorNamesEndingIn(BookShopContext context, string input)
         {
             var authors = context.Authors
