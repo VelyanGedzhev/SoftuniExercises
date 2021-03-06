@@ -21,16 +21,33 @@
             //Console.WriteLine(GetGoldenBooks(db));
             //Console.WriteLine(GetBooksByPrice(db));
 
-            int inputInt = int.Parse(Console.ReadLine());
+            //int inputInt = int.Parse(Console.ReadLine());
             //Console.WriteLine(GetBooksNotReleasedIn(db, inputInt));
             //Console.WriteLine(GetBooksByCategory(db, inputString));
             //Console.WriteLine(GetBooksReleasedBefore(db, inputString));
             //Console.WriteLine(GetAuthorNamesEndingIn(db, inputString));
             //Console.WriteLine(GetBookTitlesContaining(db, inputString));
             //Console.WriteLine(GetBooksByAuthor(db, inputString));
-            Console.WriteLine(CountBooks(db, inputInt));
+            //Console.WriteLine(CountBooks(db, inputInt));
+            Console.WriteLine(CountCopiesByAuthor(db));
+
 
         }
+        public static string CountCopiesByAuthor(BookShopContext context)
+        {
+            var authors = context.Authors
+                .Select(x => new
+                {
+                    Name = x.FirstName + " " + x.LastName,
+                    Books = x.Books.Sum(y => y.Copies),
+                })
+                .OrderByDescending(x => x.Books)
+                .ToList();
+
+            return string.Join(Environment.NewLine, authors.Select(x =>
+                $"{x.Name} - {x.Books}"));
+        }
+
         public static int CountBooks(BookShopContext context, int lengthCheck)
         {
             var books = context.Books
