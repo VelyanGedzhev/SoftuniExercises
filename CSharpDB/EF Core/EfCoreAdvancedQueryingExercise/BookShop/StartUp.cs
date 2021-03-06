@@ -3,6 +3,7 @@
     using BookShop.Models.Enums;
     using Data;
     using Initializer;
+    using Microsoft.EntityFrameworkCore;
     using System;
     using System.Linq;
     using System.Text;
@@ -14,14 +15,36 @@
             using var db = new BookShopContext();
             DbInitializer.ResetDatabase(db);
 
-            //var command = Console.ReadLine();
+            var command = Console.ReadLine();
             //Console.WriteLine(GetBooksByAgeRestriction(db, command));
             //Console.WriteLine(GetGoldenBooks(db));
             //Console.WriteLine(GetBooksByPrice(db));
 
-            int year = int.Parse(Console.ReadLine());
-            Console.WriteLine(GetBooksNotReleasedIn(db, year));
+            //int year = int.Parse(Console.ReadLine());
+            //Console.WriteLine(GetBooksNotReleasedIn(db, year));
 
+            Console.WriteLine(GetBooksByCategory(db, command));
+
+        }
+        public static string GetBooksByCategory(BookShopContext context, string input)
+        {
+            var categories = input
+                .Split(" ", StringSplitOptions.RemoveEmptyEntries)
+                .Select(x => x.ToLower())
+                .ToArray();
+
+
+            var books = context.Books
+                .Include(x => x.BookCategories)
+                .ThenInclude(x => x.Category)
+                .ToList()
+                .Where(book => book.BookCategories
+                    .Any(category => categories.Contains(category.Category.Name.ToLower())))
+                .Select(x => x.Title)
+                .OrderBy(x => x)
+                .ToList();
+
+            return string.Join(Environment.NewLine, books);
         }
 
         public static string GetBooksByAgeRestriction(BookShopContext context, string command)
