@@ -24,9 +24,22 @@
             //int year = int.Parse(Console.ReadLine());
             //Console.WriteLine(GetBooksNotReleasedIn(db, year));
             //Console.WriteLine(GetBooksByCategory(db, command));
+            //Console.WriteLine(GetBooksReleasedBefore(db, command));
+            Console.WriteLine(GetAuthorNamesEndingIn(db, command));
 
-            Console.WriteLine(GetBooksReleasedBefore(db, command));
+        }
+        public static string GetAuthorNamesEndingIn(BookShopContext context, string input)
+        {
+            var authors = context.Authors
+                .Where(x => x.FirstName.EndsWith(input))
+                .Select(x => new
+                {
+                    FullName = x.FirstName + " " + x.LastName,
+                })
+                .OrderBy(x => x.FullName)
+                .ToList();
 
+            return string.Join(Environment.NewLine, authors.Select(x => x.FullName));
         }
 
         public static string GetBooksReleasedBefore(BookShopContext context, string date)
