@@ -5,6 +5,7 @@
     using Initializer;
     using Microsoft.EntityFrameworkCore;
     using System;
+    using System.Globalization;
     using System.Linq;
     using System.Text;
 
@@ -22,10 +23,37 @@
 
             //int year = int.Parse(Console.ReadLine());
             //Console.WriteLine(GetBooksNotReleasedIn(db, year));
+            //Console.WriteLine(GetBooksByCategory(db, command));
 
-            Console.WriteLine(GetBooksByCategory(db, command));
+            Console.WriteLine(GetBooksReleasedBefore(db, command));
 
         }
+
+        public static string GetBooksReleasedBefore(BookShopContext context, string date)
+        {
+            var targetDate = DateTime.ParseExact(date, "dd-MM-yyyy", CultureInfo.InvariantCulture);
+            var books = context.Books
+                .Where(x => x.ReleaseDate < targetDate)
+                .Select(x => new
+                {
+                    x.Title,
+                    x.EditionType,
+                    x.Price,
+                    x.ReleaseDate,
+                })
+                .OrderByDescending(x => x.ReleaseDate)
+                .ToList();
+
+            StringBuilder sb = new StringBuilder();
+
+            foreach (var book in books)
+            {
+                sb.AppendLine($"{book.Title} - {book.EditionType} - ${book.Price:f2}");
+            }
+
+            return sb.ToString().TrimEnd();
+        }
+
         public static string GetBooksByCategory(BookShopContext context, string input)
         {
             var categories = input
