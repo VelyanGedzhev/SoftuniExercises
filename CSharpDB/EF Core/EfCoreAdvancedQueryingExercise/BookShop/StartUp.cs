@@ -26,8 +26,28 @@
             //Console.WriteLine(GetBooksByCategory(db, command));
             //Console.WriteLine(GetBooksReleasedBefore(db, command));
             //Console.WriteLine(GetAuthorNamesEndingIn(db, command));
-            Console.WriteLine(GetBookTitlesContaining(db, command));
+            //Console.WriteLine(GetBookTitlesContaining(db, command));
+            Console.WriteLine(GetBooksByAuthor(db, command));
+
         }
+        public static string GetBooksByAuthor(BookShopContext context, string input)
+        {
+            var books = context.Books
+                .Where(x => x.Author.LastName.ToLower().StartsWith(input.ToLower()))
+                .Select(x => new
+                {
+                    Id = x.BookId,
+                    Title = x.Title,
+                    Author = x.Author.FirstName + " " + x.Author.LastName,
+                })
+                .OrderBy(x => x.Id)
+                .ToList();
+                
+
+            return string.Join(Environment.NewLine, books.Select(x => 
+                $"{x.Title} ({x.Author})"));
+        }
+
         public static string GetBookTitlesContaining(BookShopContext context, string input)
         {
             var books = context.Books
