@@ -2,6 +2,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using AutoMapper;
+using Newtonsoft.Json;
+using AutoMapper.QueryableExtensions;
+using Microsoft.EntityFrameworkCore;
+using AutoMappingDemo.MapProfiles;
 
 namespace AutoMappingDemo
 {
@@ -9,21 +14,45 @@ namespace AutoMappingDemo
     {
         public static void Main(string[] args)
         {
-            var songs = GetSongs("Ni");
 
-            Console.WriteLine(string.Join(Environment.NewLine, songs.Select(x => x.Name)));
+            //var songs = GetSongsManualMapping();
+            //Console.WriteLine(JsonConvert.SerializeObject(songs, Formatting.Indented));
+
+
+            //GetSongByIdAutoMapping();
+
+            var db = new MusicXContext();
+            var config = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile(new SongInfoDtoProfile());
+            });
+
+            GetSongsAutoMapping(db, config);
         }
 
-        public static IEnumerable<SongInfoDto> GetSongs(string startsWith)
+        private static void GetSongsAutoMapping(MusicXContext db, MapperConfiguration config)
+        {
+            var songs = db.Songs
+                            .Where(x => x.Name.StartsWith("Nik"))
+                            .ProjectTo<SongInfoDto>(config)
+                            .ToList();
+
+            Console.WriteLine(JsonConvert.SerializeObject(songs, Formatting.Indented));
+        }
+
+        public static IEnumerable<SongInfoDto> GetSongsManualMapping()
         {
             var db = new MusicXContext();
 
             var songs = db.Songs
-                .Where(x => x.Name.StartsWith(startsWith))
+                .Where(x => x.Name.StartsWith("Nik"))
                 .Select(x => new SongInfoDto
                 {
                     Name = x.Name,
+                    CreatedOn = x.CreatedOn,
+                    Artists = string.Join(", ", x.SongArtists.Select(a => a.Artist.Name)),
                     SourceName = x.Source.Name,
+                    SearchTerms = x.SearchTerms,
                 }).ToList();
 
             return songs;
@@ -34,6 +63,14 @@ namespace AutoMappingDemo
     {
         public string Name { get; set; }
 
+        public DateTime CreatedOn { get; set; }
+
+        public string Artists { get; set; }
+
         public string SourceName { get; set; }
+
+        public string SearchTerms { get; set; }
+
+        public int SongArtistsCount { get; set; }
     }
 }
