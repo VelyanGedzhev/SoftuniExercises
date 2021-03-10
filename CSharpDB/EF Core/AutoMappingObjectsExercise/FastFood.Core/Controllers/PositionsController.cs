@@ -44,7 +44,7 @@
         public IActionResult All()
         {
             var categories = this.context.Positions
-                .ProjectTo<PositionsAllViewModel>(mapper.ConfigurationProvider)
+                .ProjectTo<PositionsAllViewModel>(this.mapper.ConfigurationProvider)
                 .ToList();
 
             return this.View(categories);
