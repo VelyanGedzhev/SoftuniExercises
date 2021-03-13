@@ -20,7 +20,33 @@ namespace ProductShop
             //db.Database.EnsureCreated();
             //ImportData(db);
 
-            Console.WriteLine(GetProductsInRange(db));
+            Console.WriteLine(GetSoldProducts(db));
+        }
+
+        public static string GetSoldProducts(ProductShopContext context)
+        {
+            var users = context.Users
+                .Where(x => x.ProductsSold.Any(y => y.BuyerId != null))
+                .Select(x => new
+                {
+                    firstName = x.FirstName,
+                    lastName = x.LastName,
+                    soldProducts = x.ProductsSold
+                        .Where(p => p.BuyerId != null)
+                        .Select(b => new
+                        {
+                            name = b.Name,
+                            price = b.Price,
+                            buyerFirstName = b.Buyer.FirstName,
+                            buyerLastName = b.Buyer.LastName,
+                        })
+                        .ToList()
+                })
+                .OrderBy(x => x.lastName)
+                .ThenBy(x => x.firstName)
+                .ToList();
+
+            return JsonConvert.SerializeObject(users, Formatting.Indented);
         }
 
         public static string GetProductsInRange(ProductShopContext context)
