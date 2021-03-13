@@ -16,25 +16,29 @@ namespace ProductShop
         public static void Main(string[] args)
         {
             var db = new ProductShopContext();
-            db.Database.EnsureDeleted();
-            db.Database.EnsureCreated();
+            //db.Database.EnsureDeleted();
+            //db.Database.EnsureCreated();
+            //ImportData(db);
 
-            var inputJson = File.ReadAllText("../../../Datasets/users.json");
-            var result = ImportUsers(db, inputJson);
-            Console.WriteLine(result);
-
-            inputJson = File.ReadAllText("../../../Datasets/products.json");
-            result = ImportProducts(db, inputJson);
-            Console.WriteLine(result);
-
-            inputJson = File.ReadAllText("../../../Datasets/categories.json");
-            result = ImportCategories(db, inputJson);
-            Console.WriteLine(result);
-
-            inputJson = File.ReadAllText("../../../Datasets/categories-products.json");
-            result = ImportCategoryProducts(db, inputJson);
-            Console.WriteLine(result);
+            Console.WriteLine(GetProductsInRange(db));
         }
+
+        public static string GetProductsInRange(ProductShopContext context)
+        {
+            var products = context.Products
+                .Where(x => x.Price >= 500 && x.Price <= 1000)
+                .OrderBy(x => x.Price)
+                .Select(x => new
+                {
+                    name = x.Name,
+                    price = x.Price,
+                    seller = x.Seller.FirstName + " " + x.Seller.LastName,
+                })
+                .ToList();
+
+            return JsonConvert.SerializeObject(products, Formatting.Indented);
+        }
+
         public static string ImportCategoryProducts(ProductShopContext context, string inputJson)
         {
             InitializeAutomapper();
@@ -100,6 +104,25 @@ namespace ProductShop
             });
 
             mapper = config.CreateMapper();
+        }
+
+        private static void ImportData(ProductShopContext db)
+        {
+            var inputJson = File.ReadAllText("../../../Datasets/users.json");
+            var result = ImportUsers(db, inputJson);
+            Console.WriteLine(result);
+
+            inputJson = File.ReadAllText("../../../Datasets/products.json");
+            result = ImportProducts(db, inputJson);
+            Console.WriteLine(result);
+
+            inputJson = File.ReadAllText("../../../Datasets/categories.json");
+            result = ImportCategories(db, inputJson);
+            Console.WriteLine(result);
+
+            inputJson = File.ReadAllText("../../../Datasets/categories-products.json");
+            result = ImportCategoryProducts(db, inputJson);
+            Console.WriteLine(result);
         }
     }
 }
