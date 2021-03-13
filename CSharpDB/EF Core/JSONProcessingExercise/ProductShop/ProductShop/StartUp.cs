@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using ProductShop.Data;
 using ProductShop.DataTransferObjects;
@@ -20,7 +21,24 @@ namespace ProductShop
             //db.Database.EnsureCreated();
             //ImportData(db);
 
-            Console.WriteLine(GetSoldProducts(db));
+            Console.WriteLine(GetCategoriesByProductsCount(db));
+        }
+
+        public static string GetCategoriesByProductsCount(ProductShopContext context)
+        {
+            var categories = context.Categories
+                .Select(x => new
+                {
+                    category = x.Name,
+                    productsCount = x.CategoryProducts.Count(),
+                    averagePrice = x.CategoryProducts.Average(p => p.Product.Price).ToString("f2"),
+                    totalRevenue = x.CategoryProducts.Sum(p => p.Product.Price).ToString("f2"),
+                })
+                .OrderByDescending(x => x.productsCount)
+                .ToList();
+                
+
+            return JsonConvert.SerializeObject(categories, Formatting.Indented);
         }
 
         public static string GetSoldProducts(ProductShopContext context)
