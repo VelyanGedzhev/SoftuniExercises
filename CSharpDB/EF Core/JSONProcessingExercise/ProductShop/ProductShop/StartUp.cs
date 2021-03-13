@@ -26,9 +26,27 @@ namespace ProductShop
             inputJson = File.ReadAllText("../../../Datasets/products.json");
             result = ImportProducts(db, inputJson);
             Console.WriteLine(result);
+
+            inputJson = File.ReadAllText("../../../Datasets/categories.json");
+            result = ImportCategories(db, inputJson);
+            Console.WriteLine(result);
         }
 
-        
+        public static string ImportCategories(ProductShopContext context, string inputJson)
+        {
+            InitializeAutomapper();
+
+            var dtoCategories = JsonConvert
+                .DeserializeObject<IEnumerable<Category>>(inputJson)
+                .Where(x => x.Name != null)
+                .ToList();
+
+            var categories = mapper.Map<IEnumerable<Category>>(dtoCategories);
+            context.AddRange(categories);
+            context.SaveChanges();
+
+            return $"Successfully imported {categories.Count()}";
+        }
 
         public static string ImportProducts(ProductShopContext context, string inputJson)
         {
