@@ -18,13 +18,30 @@ namespace ProductShop
             var db = new ProductShopContext();
             db.Database.EnsureDeleted();
             db.Database.EnsureCreated();
-            
 
             var inputJson = File.ReadAllText("../../../Datasets/users.json");
             var result = ImportUsers(db, inputJson);
             Console.WriteLine(result);
+
+            inputJson = File.ReadAllText("../../../Datasets/products.json");
+            result = ImportProducts(db, inputJson);
+            Console.WriteLine(result);
         }
 
+        
+
+        public static string ImportProducts(ProductShopContext context, string inputJson)
+        {
+            InitializeAutomapper();
+
+            var dtoProducts = JsonConvert.DeserializeObject<IEnumerable<ProductInputModel>>(inputJson);
+
+            var products = mapper.Map<IEnumerable<Product>>(dtoProducts);
+            context.AddRange(products);
+            context.SaveChanges();
+
+            return $"Successfully imported {products.Count()}";
+        }
 
         public static string ImportUsers(ProductShopContext context, string inputJson)
         {
