@@ -21,7 +21,48 @@ namespace ProductShop
             //db.Database.EnsureCreated();
             //ImportData(db);
 
-            Console.WriteLine(GetCategoriesByProductsCount(db));
+            Console.WriteLine(GetUsersWithProducts(db));
+        }
+
+        public static string GetUsersWithProducts(ProductShopContext context)
+        {
+            var users = context.Users
+                .Include(x => x.ProductsSold)
+                .ToList()
+                .Where(x => x.ProductsSold.Any(y => y.BuyerId != null))
+                .Select(x => new
+                {
+                    firstName = x.FirstName,
+                    lastName = x.LastName,
+                    age = x.Age,
+                    soldProducts = new
+                    {
+                        count = x.ProductsSold.Where(b => b.BuyerId != null).Count(),
+                        products = x.ProductsSold.Where(b => b.BuyerId != null).Select(p => new
+                        {
+                            name = p.Name,
+                            price = p.Price,
+                        })
+                    }
+
+                })
+                .OrderByDescending(x => x.soldProducts.products.Count())
+                .ToList();
+
+            var resultObject = new
+            {
+                usersCount = context.Users
+                .Where(x => x.ProductsSold.Any(y => y.BuyerId != null))
+                .Count(),
+                users = users,
+            };
+
+            var jsonSerializerSettings = new JsonSerializerSettings
+            {
+                NullValueHandling = NullValueHandling.Ignore,
+                Formatting = Formatting.Indented,
+            };
+            return JsonConvert.SerializeObject(resultObject, jsonSerializerSettings);
         }
 
         public static string GetCategoriesByProductsCount(ProductShopContext context)
