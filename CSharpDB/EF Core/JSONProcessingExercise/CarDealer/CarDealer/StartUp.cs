@@ -31,6 +31,23 @@ namespace CarDealer
 
             json = File.ReadAllText("../../../Datasets/customers.json");
             Console.WriteLine(ImportCustomers(db, json));
+
+            json = File.ReadAllText("../../../Datasets/sales.json");
+            Console.WriteLine(ImportSales(db, json));
+        }
+
+        public static string ImportSales(CarDealerContext context, string inputJson)
+        {
+            InitializeAutomapper();
+
+            var salesDto = JsonConvert.DeserializeObject<IEnumerable<SaleInputModel>>(inputJson);
+
+            var sales = mapper.Map<IEnumerable<Sale>>(salesDto);
+
+            context.AddRange(sales);
+            context.SaveChanges();
+
+            return $"Successfully imported {sales.Count()}.";
         }
 
         public static string ImportCustomers(CarDealerContext context, string inputJson)
