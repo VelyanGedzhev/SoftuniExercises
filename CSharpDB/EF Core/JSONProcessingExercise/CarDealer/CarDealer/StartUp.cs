@@ -20,13 +20,46 @@ namespace CarDealer
             db.Database.EnsureDeleted();
             db.Database.EnsureCreated();
 
-           var json = File.ReadAllText("../../../Datasets/suppliers.json");
-           Console.WriteLine(ImportSuppliers(db, json));
+            var json = File.ReadAllText("../../../Datasets/suppliers.json");
+            Console.WriteLine(ImportSuppliers(db, json));
 
             json = File.ReadAllText("../../../Datasets/parts.json");
             Console.WriteLine(ImportParts(db, json));
 
+            json = File.ReadAllText("../../../Datasets/cars.json");
+            Console.WriteLine(ImportCars(db, json));
+        }
 
+        public static string ImportCars(CarDealerContext context, string inputJson)
+        {
+            var carsDto = JsonConvert.DeserializeObject<IEnumerable<CartInputModel>>(inputJson);
+
+            var cars = new List<Car>();
+
+            foreach (var car in carsDto)
+            {
+                var currentCar = new Car()
+                {
+                    Make = car.Make,
+                    Model = car.Model,
+                    TravelledDistance = car.TravelledDistance,
+                };
+
+                foreach (var partId in car?.PartsId.Distinct())
+                {
+                    currentCar.PartCars.Add(new PartCar
+                    {
+                        PartId = partId,
+                    });
+                }
+
+                cars.Add(currentCar);
+            }
+
+            context.AddRange(cars);
+            context.SaveChanges();
+
+            return $"Successfully imported {cars.Count()}.";
         }
 
         public static string ImportParts(CarDealerContext context, string inputJson)
@@ -49,7 +82,7 @@ namespace CarDealer
 
         public static string ImportSuppliers(CarDealerContext context, string inputJson)
         {
-            var suppliersDto = JsonConvert.DeserializeObject<IEnumerable<ImportSupplierInputModel>>(inputJson);
+            var suppliersDto = JsonConvert.DeserializeObject<IEnumerable<SupplierInputModel>>(inputJson);
 
             var suppliers = suppliersDto.Select(x => new Supplier
             {
