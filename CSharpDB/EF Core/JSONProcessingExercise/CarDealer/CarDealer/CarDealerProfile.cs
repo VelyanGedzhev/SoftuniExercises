@@ -12,6 +12,7 @@ namespace CarDealer
         public CarDealerProfile()
         {
             this.CreateMap<PartInputModel, Part>();
+            this.CreateMap<CustomerInputModel, Customer>();
         }
     }
 }
