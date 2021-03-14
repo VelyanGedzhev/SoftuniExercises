@@ -19,21 +19,7 @@ namespace CarDealer
             var db = new CarDealerContext();
             db.Database.EnsureDeleted();
             db.Database.EnsureCreated();
-
-            var json = File.ReadAllText("../../../Datasets/suppliers.json");
-            Console.WriteLine(ImportSuppliers(db, json));
-
-            json = File.ReadAllText("../../../Datasets/parts.json");
-            Console.WriteLine(ImportParts(db, json));
-
-            json = File.ReadAllText("../../../Datasets/cars.json");
-            Console.WriteLine(ImportCars(db, json));
-
-            json = File.ReadAllText("../../../Datasets/customers.json");
-            Console.WriteLine(ImportCustomers(db, json));
-
-            json = File.ReadAllText("../../../Datasets/sales.json");
-            Console.WriteLine(ImportSales(db, json));
+            ImportData(db);
         }
 
         public static string ImportSales(CarDealerContext context, string inputJson)
@@ -138,6 +124,24 @@ namespace CarDealer
             });
 
             mapper = config.CreateMapper();
+        }
+
+        private static void ImportData(CarDealerContext db)
+        {
+            var json = File.ReadAllText("../../../Datasets/suppliers.json");
+            Console.WriteLine(ImportSuppliers(db, json));
+
+            json = File.ReadAllText("../../../Datasets/parts.json");
+            Console.WriteLine(ImportParts(db, json));
+
+            json = File.ReadAllText("../../../Datasets/cars.json");
+            Console.WriteLine(ImportCars(db, json));
+
+            json = File.ReadAllText("../../../Datasets/customers.json");
+            Console.WriteLine(ImportCustomers(db, json));
+
+            json = File.ReadAllText("../../../Datasets/sales.json");
+            Console.WriteLine(ImportSales(db, json));
         }
 
     }
