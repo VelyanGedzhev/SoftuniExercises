@@ -17,9 +17,27 @@ namespace CarDealer
         public static void Main(string[] args)
         {
             var db = new CarDealerContext();
-            db.Database.EnsureDeleted();
-            db.Database.EnsureCreated();
-            ImportData(db);
+            //db.Database.EnsureDeleted();
+            //db.Database.EnsureCreated();
+            //ImportData(db);
+
+            Console.WriteLine(GetOrderedCustomers(db));
+        }
+
+        public static string GetOrderedCustomers(CarDealerContext context)
+        {
+            var customers = context.Customers
+                .OrderBy(x => x.BirthDate)
+                .ThenBy(x => x.IsYoungDriver)
+                .Select(x => new
+                {
+                    Name = x.Name,
+                    BirthDate = x.BirthDate.ToString("dd/MM/yyyy"),
+                    IsYoungDriver = x.IsYoungDriver,
+                })
+                .ToList();
+
+            return JsonConvert.SerializeObject(customers, Formatting.Indented);
         }
 
         public static string ImportSales(CarDealerContext context, string inputJson)
