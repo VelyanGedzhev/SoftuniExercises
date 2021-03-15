@@ -21,7 +21,21 @@ namespace CarDealer
             //db.Database.EnsureCreated();
             //ImportData(db);
 
-            Console.WriteLine(GetCarsFromMakeToyota(db));
+            Console.WriteLine(GetLocalSuppliers(db));
+        }
+
+        public static string GetLocalSuppliers(CarDealerContext context)
+        {
+            var suppliers = context.Suppliers
+                .Where(x => x.IsImporter == false)
+                .Select(x => new
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    PartsCount = x.Parts.Count(),
+                }).ToList();
+
+            return JsonConvert.SerializeObject(suppliers, Formatting.Indented);
         }
 
         public static string GetCarsFromMakeToyota(CarDealerContext context)
