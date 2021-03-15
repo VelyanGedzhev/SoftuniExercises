@@ -40,9 +40,9 @@ namespace CarDealer
                         TravelledDistance = x.Car.TravelledDistance,
                     },
                     customerName = x.Customer.Name,
-                    Discount = x.Discount,
-                    price = x.Car.PartCars.Sum(y => y.Part.Price),
-                    priceWithDiscount = x.Car.PartCars.Sum(y => y.Part.Price) - x.Car.PartCars.Sum(y => y.Part.Price) * x.Discount / 100.0M,
+                    Discount = x.Discount.ToString("f2"),
+                    price = (x.Car.PartCars.Sum(y => y.Part.Price)).ToString("f2"),
+                    priceWithDiscount = (x.Car.PartCars.Sum(y => y.Part.Price) - x.Car.PartCars.Sum(y => y.Part.Price) * x.Discount / 100.0M).ToString("f2"),
                 }).ToList();
 
             return JsonConvert.SerializeObject(sales, Formatting.Indented);
