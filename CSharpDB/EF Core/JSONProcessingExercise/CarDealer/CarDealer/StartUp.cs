@@ -23,7 +23,29 @@ namespace CarDealer
             //db.Database.EnsureCreated();
             //ImportData(db);
 
-            Console.WriteLine(GetTotalSalesByCustomer(db));
+            Console.WriteLine(GetSalesWithAppliedDiscount(db));
+        }
+
+        public static string GetSalesWithAppliedDiscount(CarDealerContext context)
+        {
+            var sales = context.Sales
+                .Include(x => x.Car.PartCars)
+                .Take(10)
+                .Select(x => new
+                {
+                    car = new
+                    {
+                        Make = x.Car.Make,
+                        Model = x.Car.Model,
+                        TravelledDistance = x.Car.TravelledDistance,
+                    },
+                    customerName = x.Customer.Name,
+                    Discount = x.Discount,
+                    price = x.Car.PartCars.Sum(y => y.Part.Price),
+                    priceWithDiscount = x.Car.PartCars.Sum(y => y.Part.Price) - x.Car.PartCars.Sum(y => y.Part.Price) * x.Discount / 100.0M,
+                }).ToList();
+
+            return JsonConvert.SerializeObject(sales, Formatting.Indented);
         }
 
         public static string GetTotalSalesByCustomer(CarDealerContext context)
