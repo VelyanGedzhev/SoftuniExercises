@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using CarDealer.Data;
 using CarDealer.DTO;
 using CarDealer.Models;
@@ -22,7 +23,21 @@ namespace CarDealer
             //db.Database.EnsureCreated();
             //ImportData(db);
 
-            Console.WriteLine(GetCarsWithTheirListOfParts(db));
+            Console.WriteLine(GetTotalSalesByCustomer(db));
+        }
+
+        public static string GetTotalSalesByCustomer(CarDealerContext context)
+        {
+            InitializeAutomapper();
+
+            var customers = context.Customers
+                 .ProjectTo<CustomerSalesDto>()
+                .Where(x => x.CarsBought >= 1)
+                .OrderByDescending(x => x.SpentMoney)
+                .ThenByDescending(x => x.CarsBought)
+                .ToList();
+
+            return JsonConvert.SerializeObject(customers, Formatting.Indented);
         }
 
         public static string GetCarsWithTheirListOfParts(CarDealerContext context)
