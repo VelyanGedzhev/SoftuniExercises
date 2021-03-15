@@ -6,6 +6,7 @@ using AutoMapper;
 using CarDealer.Data;
 using CarDealer.DTO;
 using CarDealer.Models;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
 namespace CarDealer
@@ -21,7 +22,30 @@ namespace CarDealer
             //db.Database.EnsureCreated();
             //ImportData(db);
 
-            Console.WriteLine(GetLocalSuppliers(db));
+            Console.WriteLine(GetCarsWithTheirListOfParts(db));
+        }
+
+        public static string GetCarsWithTheirListOfParts(CarDealerContext context)
+        {
+            var cars = context.Cars
+                .Include(x => x.PartCars)
+                .Select(x => new
+                {
+                    car = new
+                    {
+                        Make = x.Make,
+                        Model = x.Model,
+                        TravelledDistance = x.TravelledDistance,
+                    },
+                    parts = x.PartCars
+                    .Select(p => new
+                    {
+                        Name = p.Part.Name,
+                        Price = p.Part.Price.ToString("f2"),
+                    }).ToList()
+                }).ToList();
+
+            return JsonConvert.SerializeObject(cars, Formatting.Indented);
         }
 
         public static string GetLocalSuppliers(CarDealerContext context)
