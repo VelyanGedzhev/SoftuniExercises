@@ -19,6 +19,35 @@ namespace CarDealer
             var supplierXml = File.ReadAllText("./Datasets/suppliers.xml");
             var result = ImportSuppliers(db, supplierXml);
             Console.WriteLine(result);
+
+            var partsXml = File.ReadAllText("./Datasets/parts.xml");
+            result = ImportParts(db, partsXml);
+            Console.WriteLine(result);
+        }
+        public static string ImportParts(CarDealerContext context, string inputXml)
+        {
+            var xmlSerializer = new XmlSerializer(typeof(PartInputModel[]), new XmlRootAttribute("Parts"));
+
+            var textReader = new StringReader(inputXml);
+            var partsDto = xmlSerializer.Deserialize(textReader) as PartInputModel[];
+
+            var suppliersIds = context.Suppliers
+                .Select(x => x.Id).ToList();
+
+            var parts = partsDto
+                .Where(x => suppliersIds.Contains(x.SupplierId))
+                .Select(x => new Part
+                {
+                    Name = x.Name,
+                    Price = x.Price,
+                    Quantity = x.Quantity,
+                    SupplierId = x.SupplierId,
+                }).ToList();
+
+            context.Parts.AddRange(parts);
+            context.SaveChanges();
+
+            return $"Successfully imported {parts.Count}";
         }
 
         public static string ImportSuppliers(CarDealerContext context, string inputXml)
