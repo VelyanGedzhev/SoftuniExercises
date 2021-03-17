@@ -32,7 +32,6 @@ namespace CarDealer
 
         public static string ImportCars(CarDealerContext context, string inputXml)
         {
-            var cars = new List<Car>();
             var xmlSerializer = new XmlSerializer(typeof(CarInputModel[]), new XmlRootAttribute("Cars"));
 
             var textReader = new StringReader(inputXml);
@@ -40,33 +39,20 @@ namespace CarDealer
 
             var allParts = context.Parts.Select(x => x.Id).Distinct();
 
-            foreach (var carDto in carsDto)
-            {
-                var distinctedParts = carDto.CarPartsInputModel
-                    .Select(x => x.Id)
-                    .Distinct();
-
-                var parts = distinctedParts.Intersect(allParts);
-
-                var car = new Car
+            var cars = carsDto
+                .Select(x => new Car
                 {
-                    Make = carDto.Make,
-                    Model = carDto.Model,
-                    TravelledDistance = carDto.TravelledDistance,
-                };
-
-                foreach (var part in parts)
-                {
-                    var partCar = new PartCar
-                    {
-                        PartId = part
-                    };
-
-                    car.PartCars.Add(partCar);
-                }
-
-                cars.Add(car);
-            }
+                    Make = x.Make,
+                    Model = x.Model,
+                    TravelledDistance = x.TravelledDistance,
+                    PartCars = x.CarPartsInputModel.Select(x => x.Id)
+                        .Distinct()
+                        .Intersect(allParts)
+                        .Select(pc => new PartCar
+                        {
+                            PartId = pc,
+                        }).ToList()
+                }).ToList();
 
             context.Cars.AddRange(cars);
             context.SaveChanges();
