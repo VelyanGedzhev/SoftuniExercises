@@ -2,6 +2,7 @@
 using CarDealer.DataTransferObjects.Input;
 using CarDealer.Models;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Serialization;
@@ -23,7 +24,56 @@ namespace CarDealer
             var partsXml = File.ReadAllText("./Datasets/parts.xml");
             result = ImportParts(db, partsXml);
             Console.WriteLine(result);
+
+            var carsXml = File.ReadAllText("./Datasets/cars.xml");
+            result = ImportCars(db, carsXml);
+            Console.WriteLine(result);
         }
+
+        public static string ImportCars(CarDealerContext context, string inputXml)
+        {
+            var cars = new List<Car>();
+            var xmlSerializer = new XmlSerializer(typeof(CarInputModel[]), new XmlRootAttribute("Cars"));
+
+            var textReader = new StringReader(inputXml);
+            var carsDto = xmlSerializer.Deserialize(textReader) as CarInputModel[];
+
+            var allParts = context.Parts.Select(x => x.Id).Distinct();
+
+            foreach (var carDto in carsDto)
+            {
+                var distinctedParts = carDto.CarPartsInputModel
+                    .Select(x => x.Id)
+                    .Distinct();
+
+                var parts = distinctedParts.Intersect(allParts);
+
+                var car = new Car
+                {
+                    Make = carDto.Make,
+                    Model = carDto.Model,
+                    TravelledDistance = carDto.TravelledDistance,
+                };
+
+                foreach (var part in parts)
+                {
+                    var partCar = new PartCar
+                    {
+                        PartId = part
+                    };
+
+                    car.PartCars.Add(partCar);
+                }
+
+                cars.Add(car);
+            }
+
+            context.Cars.AddRange(cars);
+            context.SaveChanges();
+
+            return $"Successfully imported {cars.Count()}";
+        }
+
         public static string ImportParts(CarDealerContext context, string inputXml)
         {
             var xmlSerializer = new XmlSerializer(typeof(PartInputModel[]), new XmlRootAttribute("Parts"));
