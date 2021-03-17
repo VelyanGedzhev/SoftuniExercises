@@ -1,4 +1,5 @@
-﻿using CarDealer.Data;
+﻿using AutoMapper;
+using CarDealer.Data;
 using CarDealer.DataTransferObjects.Input;
 using CarDealer.Models;
 using System;
@@ -11,6 +12,8 @@ namespace CarDealer
 {
     public class StartUp
     {
+        static IMapper mapper;
+
         public static void Main(string[] args)
         {
             var db = new CarDealerContext();
@@ -28,6 +31,26 @@ namespace CarDealer
             var carsXml = File.ReadAllText("./Datasets/cars.xml");
             result = ImportCars(db, carsXml);
             Console.WriteLine(result);
+
+            var customersXml = File.ReadAllText("./Datasets/customers.xml");
+            result = ImportCustomers(db, customersXml);
+            Console.WriteLine(result);
+        }
+
+        public static string ImportCustomers(CarDealerContext context, string inputXml)
+        {
+            InitializeAutoMapper();
+            var xmlSerializer = new XmlSerializer(typeof(CustomerInputModel[]), new XmlRootAttribute("Customers"));
+
+            var textReader = new StringReader(inputXml);
+            var customersDto = xmlSerializer.Deserialize(textReader) as CustomerInputModel[];
+
+            var customers = mapper.Map<Customer[]>(customersDto);
+
+            context.AddRange(customers);
+            context.SaveChanges();
+
+            return $"Successfully imported {customers.Count()}";
         }
 
         public static string ImportCars(CarDealerContext context, string inputXml)
@@ -103,6 +126,16 @@ namespace CarDealer
             context.SaveChanges();
 
             return $"Successfully imported {suppliers.Count}";
+        }
+
+        private static void InitializeAutoMapper()
+        {
+            var config = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile<CarDealerProfile>();
+            });
+
+            mapper = config.CreateMapper();
         }
     }
 }
