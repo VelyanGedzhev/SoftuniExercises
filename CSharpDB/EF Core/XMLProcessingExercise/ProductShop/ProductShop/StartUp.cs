@@ -1,4 +1,5 @@
 ﻿using ProductShop.Data;
+using ProductShop.Dtos.Export;
 using ProductShop.Dtos.Import;
 using ProductShop.Models;
 using System;
@@ -14,9 +15,38 @@ namespace ProductShop
         public static void Main(string[] args)
         {
             var db = new ProductShopContext();
-            db.Database.EnsureDeleted();
-            db.Database.EnsureCreated();
+            //db.Database.EnsureDeleted();
+            //db.Database.EnsureCreated();
+            //ImportData(db);
 
+            Console.WriteLine(GetProductsInRange(db));
+        }
+
+        public static string GetProductsInRange(ProductShopContext context)
+        {
+            var products = context.Products
+                .Where(x => x.Price >= 500 && x.Price <= 1000)
+                .Select(x => new ProductOutputModel
+                {
+                    Name = x.Name,
+                    Price = x.Price,
+                    Byuer = x.Buyer.FirstName + " " + x.Buyer.LastName,
+                })
+                .OrderBy(x => x.Price)
+                .Take(10)
+                .ToArray();
+
+            XmlSerializer xmlSerializer = new XmlSerializer(typeof(ProductOutputModel[]), new XmlRootAttribute("Products"));
+
+            var textWriter = new StringWriter();
+
+            xmlSerializer.Serialize(textWriter, products, GetXmlNamesspaces());
+
+            return textWriter.ToString();
+        }
+
+        private static void ImportData(ProductShopContext db)
+        {
             var usersXml = File.ReadAllText("./Datasets/users.xml");
             var result = ImportUsers(db, usersXml);
             Console.WriteLine(result);
@@ -134,6 +164,14 @@ namespace ProductShop
             context.SaveChanges();
 
             return $"Successfully imported {users.Count}";
+        }
+
+        private static XmlSerializerNamespaces GetXmlNamesspaces()
+        {
+            XmlSerializerNamespaces xmlSerializerNamespaces = new XmlSerializerNamespaces();
+            xmlSerializerNamespaces.Add(string.Empty, string.Empty);
+
+            return xmlSerializerNamespaces;
         }
     }
 }
