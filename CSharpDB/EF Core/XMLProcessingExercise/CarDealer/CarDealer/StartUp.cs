@@ -26,7 +26,32 @@ namespace CarDealer
             //Console.WriteLine(GetCarsWithDistance(db));
             //Console.WriteLine(GetCarsFromMakeBmw(db));
             //Console.WriteLine(GetLocalSuppliers(db));
-            Console.WriteLine(GetCarsWithTheirListOfParts(db));
+            //Console.WriteLine(GetCarsWithTheirListOfParts(db));
+            Console.WriteLine(GetTotalSalesByCustomer(db));
+        }
+
+        public static string GetTotalSalesByCustomer(CarDealerContext context)
+        {
+            var customers = context.Customers
+                .Where(x => x.Sales.Any())
+                .Select(x => new CustomerOutputModel
+                {
+                    FullName = x.Name,
+                    BoughtCars = x.Sales.Count,
+                    SpentMoney = x.Sales
+                        .Select(s => s.Car)
+                        .SelectMany(pc => pc.PartCars).Sum(p => p.Part.Price)
+                })
+                .OrderByDescending(x => x.SpentMoney)
+                .ToArray();
+
+            XmlSerializer xmlSerializer = new XmlSerializer(typeof(CustomerOutputModel[]), new XmlRootAttribute("customers"));
+
+            var textWriter = new StringWriter();
+
+            xmlSerializer.Serialize(textWriter, customers, GetXmlNamesspaces());
+
+            return textWriter.ToString();
         }
 
         public static string GetCarsWithTheirListOfParts(CarDealerContext context)
