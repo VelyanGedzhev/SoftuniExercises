@@ -25,9 +25,39 @@ namespace CarDealer
 
             //Console.WriteLine(GetCarsWithDistance(db));
             //Console.WriteLine(GetCarsFromMakeBmw(db));
-            Console.WriteLine(GetLocalSuppliers(db));
+            //Console.WriteLine(GetLocalSuppliers(db));
+            Console.WriteLine(GetCarsWithTheirListOfParts(db));
         }
 
+        public static string GetCarsWithTheirListOfParts(CarDealerContext context)
+        {
+            var cars = context.Cars
+                .Select(x => new CarPartOutputModel
+                {
+                    Make = x.Make,
+                    Model = x.Model,
+                    TravelledDistance = x.TravelledDistance,
+                    Parts = x.PartCars.Select(p => new CarPartInfoOutputModel
+                    {
+                        Name = p.Part.Name,
+                        Price = p.Part.Price,
+                    })
+                    .OrderByDescending(p => p.Price)
+                    .ToArray()
+                })
+                .OrderByDescending(x => x.TravelledDistance)
+                .ThenBy(x => x.Model)
+                .Take(5)
+                .ToArray();
+
+            XmlSerializer xmlSerializer = new XmlSerializer(typeof(CarPartOutputModel[]), new XmlRootAttribute("cars"));
+
+            var textWriter = new StringWriter();
+
+            xmlSerializer.Serialize(textWriter, cars, GetXmlNamesspaces());
+
+            return textWriter.ToString();
+        }
         public static string GetLocalSuppliers(CarDealerContext context)
         {
             var suppliers = context.Suppliers
