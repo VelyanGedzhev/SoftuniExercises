@@ -24,8 +24,34 @@ namespace ProductShop
             var productsXml = File.ReadAllText("./Datasets/products.xml");
             result = ImportProducts(db, productsXml);
             Console.WriteLine(result);
+            var categoriesXml = File.ReadAllText("./Datasets/categories.xml");
+            result = ImportCategories(db, categoriesXml);
+            Console.WriteLine(result);
+
 
         }
+
+        public static string ImportCategories(ProductShopContext context, string inputXml)
+        {
+            var xmlSerializer = new XmlSerializer(typeof(CategoryInputModel[]), new XmlRootAttribute("Categories"));
+
+            var textReader = new StringReader(inputXml);
+
+            var categoriesDto = (CategoryInputModel[])xmlSerializer.Deserialize(textReader);
+
+            var categories = categoriesDto
+                .Where(x => x.Name != null)
+                .Select(x => new Category
+                {
+                    Name = x.Name,
+                }).ToList();
+
+            context.Categories.AddRange(categories);
+            context.SaveChanges();
+
+            return $"Successfully imported {categories.Count}";
+        }
+
         public static string ImportProducts(ProductShopContext context, string inputXml)
         {
             var xmlSerializer = new XmlSerializer(typeof(ProductInputModel[]), new XmlRootAttribute("Products"));
