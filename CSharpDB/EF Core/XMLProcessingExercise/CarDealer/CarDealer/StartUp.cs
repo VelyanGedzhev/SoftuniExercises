@@ -23,7 +23,34 @@ namespace CarDealer
             //db.Database.EnsureCreated();
             //ImportData(db);
 
-            Console.WriteLine(GetCarsWithDistance(db));
+            //Console.WriteLine(GetCarsWithDistance(db));
+            Console.WriteLine(GetCarsFromMakeBmw(db));
+        }
+
+        public static string GetCarsFromMakeBmw(CarDealerContext context)
+        {
+            var cars = context.Cars
+                .Where(x => x.Make == "BMW")
+                .Select(x => new BmwCarOutputModel
+                {
+                    Id = x.Id,
+                    Model = x.Model,
+                    TravelledDistance = x.TravelledDistance,
+                })
+                .OrderBy(x => x.Model)
+                .ThenByDescending(x => x.TravelledDistance)
+                .ToArray();
+
+            XmlSerializer xmlSerializer = new XmlSerializer(typeof(BmwCarOutputModel[]), new XmlRootAttribute("cars"));
+
+            var textWriter = new StringWriter();
+
+            var ns = new XmlSerializerNamespaces();
+            ns.Add("", "");
+
+            xmlSerializer.Serialize(textWriter, cars, ns);
+
+            return textWriter.ToString();
         }
         public static string GetCarsWithDistance(CarDealerContext context)
         {
