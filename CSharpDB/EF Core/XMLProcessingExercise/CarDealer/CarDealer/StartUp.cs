@@ -121,7 +121,8 @@ namespace CarDealer
                     Id = x.Id,
                     Name = x.Name,
                     PartsCount = x.Parts.Count,
-                }).ToArray();
+                })
+                .ToArray();
 
             XmlSerializer xmlSerializer = new XmlSerializer(typeof(SupplierOutputModel[]), new XmlRootAttribute("suppliers"));
 
