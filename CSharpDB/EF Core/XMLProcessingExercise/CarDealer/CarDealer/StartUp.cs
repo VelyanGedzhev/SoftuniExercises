@@ -24,7 +24,28 @@ namespace CarDealer
             //ImportData(db);
 
             //Console.WriteLine(GetCarsWithDistance(db));
-            Console.WriteLine(GetCarsFromMakeBmw(db));
+            //Console.WriteLine(GetCarsFromMakeBmw(db));
+            Console.WriteLine(GetLocalSuppliers(db));
+        }
+
+        public static string GetLocalSuppliers(CarDealerContext context)
+        {
+            var suppliers = context.Suppliers
+                .Where(x => !x.IsImporter)
+                .Select(x => new SupplierOutputModel
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    PartsCount = x.Parts.Count,
+                }).ToArray();
+
+            XmlSerializer xmlSerializer = new XmlSerializer(typeof(SupplierOutputModel[]), new XmlRootAttribute("suppliers"));
+
+            var textWriter = new StringWriter();
+
+            xmlSerializer.Serialize(textWriter, suppliers, GetXmlNamesspaces());
+
+            return textWriter.ToString().Trim();
         }
 
         public static string GetCarsFromMakeBmw(CarDealerContext context)
@@ -45,10 +66,8 @@ namespace CarDealer
 
             var textWriter = new StringWriter();
 
-            var ns = new XmlSerializerNamespaces();
-            ns.Add("", "");
 
-            xmlSerializer.Serialize(textWriter, cars, ns);
+            xmlSerializer.Serialize(textWriter, cars, GetXmlNamesspaces());
 
             return textWriter.ToString();
         }
@@ -69,12 +88,9 @@ namespace CarDealer
 
             XmlSerializer xmlSerializer = new XmlSerializer(typeof(CarOutputModel[]), new XmlRootAttribute("cars"));
 
-            var textWriter = new StringWriter();
+            var textWriter = new StringWriter();  
 
-            var ns = new XmlSerializerNamespaces();
-            ns.Add("", "");
-
-            xmlSerializer.Serialize(textWriter, cars, ns);
+            xmlSerializer.Serialize(textWriter, cars, GetXmlNamesspaces());
 
             return textWriter.ToString();
         }
@@ -226,6 +242,14 @@ namespace CarDealer
             });
 
             mapper = config.CreateMapper();
+        }
+
+        private static XmlSerializerNamespaces GetXmlNamesspaces()
+        {
+            XmlSerializerNamespaces xmlSerializerNamespaces = new XmlSerializerNamespaces();
+            xmlSerializerNamespaces.Add(string.Empty, string.Empty);
+
+            return xmlSerializerNamespaces;
         }
     }
 }
