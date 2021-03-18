@@ -1,11 +1,13 @@
 ﻿using AutoMapper;
 using CarDealer.Data;
 using CarDealer.DataTransferObjects.Input;
+using CarDealer.DataTransferObjects.Output;
 using CarDealer.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Xml.Serialization;
 
 namespace CarDealer
@@ -17,8 +19,41 @@ namespace CarDealer
         public static void Main(string[] args)
         {
             var db = new CarDealerContext();
-            db.Database.EnsureDeleted();
-            db.Database.EnsureCreated();
+            //db.Database.EnsureDeleted();
+            //db.Database.EnsureCreated();
+            //ImportData(db);
+
+            Console.WriteLine(GetCarsWithDistance(db));
+        }
+        public static string GetCarsWithDistance(CarDealerContext context)
+        {
+            var cars = context.Cars
+                .Where(x => x.TravelledDistance > 2_000_000)
+                .Select(x => new CarOutputModel
+                {
+                    Make = x.Make,
+                    Model = x.Model,
+                    TravelledDistance = x.TravelledDistance,
+                })
+                .OrderBy(x => x.Make)
+                .ThenBy(x => x.Model)
+                .Take(10)
+                .ToArray();
+
+            XmlSerializer xmlSerializer = new XmlSerializer(typeof(CarOutputModel[]), new XmlRootAttribute("cars"));
+
+            var textWriter = new StringWriter();
+
+            var ns = new XmlSerializerNamespaces();
+            ns.Add("", "");
+
+            xmlSerializer.Serialize(textWriter, cars, ns);
+
+            return textWriter.ToString();
+        }
+
+        private static void ImportData(CarDealerContext db)
+        {
 
             var supplierXml = File.ReadAllText("./Datasets/suppliers.xml");
             var result = ImportSuppliers(db, supplierXml);
