@@ -5,7 +5,7 @@ using System.Xml.Serialization;
 
 namespace CarDealer.DataTransferObjects.Output
 {
-    [XmlType("supplier")]
+    [XmlType("suplier")]
     public class SupplierOutputModel
     {
         [XmlAttribute("id")]
