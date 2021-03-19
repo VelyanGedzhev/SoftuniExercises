@@ -14,6 +14,9 @@ namespace ProductShop.Dtos.Export
         [XmlElement("lastName")]
         public string LastName { get; set; }
 
+        [XmlElement("age")]
+        public int? Age { get; set; }
+
         [XmlArray("soldProducts")]
         public SoldProductOutputModel[] SoldProducts { get; set; }
     }
