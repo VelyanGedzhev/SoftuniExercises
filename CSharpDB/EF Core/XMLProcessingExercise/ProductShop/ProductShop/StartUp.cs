@@ -20,7 +20,32 @@ namespace ProductShop
             //ImportData(db);
 
             //Console.WriteLine(GetProductsInRange(db));
-            Console.WriteLine(GetSoldProducts(db));
+            //Console.WriteLine(GetSoldProducts(db));
+            Console.WriteLine(GetCategoriesByProductsCount(db));
+        }
+
+        public static string GetCategoriesByProductsCount(ProductShopContext context)
+        {
+            var categories = context.Categories
+                .Select(c => new CategoryOutputModel
+                {
+                    Name = c.Name,
+                    ProductsCount = c.CategoryProducts.Count,
+                    AveragePrice = c.CategoryProducts
+                                .Average(p => p.Product.Price),
+                    TotalRevenue = c.CategoryProducts.Sum(p => p.Product.Price),
+                })
+                .OrderByDescending(x => x.ProductsCount)
+                .ThenBy(x => x.TotalRevenue)
+                .ToArray();
+
+            XmlSerializer xmlSerializer = new XmlSerializer(typeof(CategoryOutputModel[]), new XmlRootAttribute("Categories"));
+
+            var textWriter = new StringWriter();
+
+            xmlSerializer.Serialize(textWriter, categories, GetXmlNamesspaces());
+
+            return textWriter.ToString();
         }
 
         public static string GetSoldProducts(ProductShopContext context)
