@@ -1,9 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RealEstates.Data
 {
@@ -20,15 +15,12 @@ namespace RealEstates.Data
 
         }
 
-
-
-
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
 
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer("Server=.;Database=RealEstate;Integrated Security=true;");
+                optionsBuilder.UseSqlServer("Server=.;Database=RealEstates;Integrated Security=true;");
             }
             base.OnConfiguring(optionsBuilder);
         }
