@@ -4,6 +4,6 @@
     {
         void Add(string name, int? importance = null);
 
-        void BulkTagToProperties();
+        void BulkTagToPropertiesRelation();
     }
 }

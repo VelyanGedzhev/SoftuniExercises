@@ -25,6 +25,7 @@ namespace RealEstates.Application
                 Console.WriteLine("Press [2] for Most expensive districts");
                 Console.WriteLine("Press [3] for Average price per square meter");
                 Console.WriteLine("Press [4] to add new Tag");
+                Console.WriteLine("Press [5] to add Tags to Properties");
                 Console.WriteLine("Press [0] for Exit");
 
                 bool parsed = int.TryParse(Console.ReadLine(), out int option);
@@ -33,7 +34,7 @@ namespace RealEstates.Application
                     break;
                 }
 
-                if (parsed && option >=1 && option <= 4)
+                if (parsed && option >=1 && option <= 5)
                 {
                     switch (option)
                     {
@@ -49,6 +50,9 @@ namespace RealEstates.Application
                         case 4:
                             AddTag(db);
                             break;
+                        case 5:
+                            BulkAddTags(db);
+                            break;
                     }
 
                     Console.WriteLine("Press any key to continue...");
@@ -57,9 +61,19 @@ namespace RealEstates.Application
             }
         }
 
+        private static void BulkAddTags(ApplicationDbContext dbContext)
+        {
+            Console.WriteLine("Bulk operation started!");
+            IPropertiesService propertiesService = new PropertiesService(dbContext);
+            ITagService tagService = new TagService(dbContext, propertiesService);
+            tagService.BulkTagToPropertiesRelation();
+            Console.WriteLine("Bulk operation finished!");
+        }
+
         private static void AddTag(ApplicationDbContext dbContext)
         {
-            ITagService tagService = new TagService(dbContext);
+            IPropertiesService propertiesService = new PropertiesService(dbContext);
+            ITagService tagService = new TagService(dbContext, propertiesService);
 
             Console.Write("Add tag name: ");
             var tagName = Console.ReadLine();
