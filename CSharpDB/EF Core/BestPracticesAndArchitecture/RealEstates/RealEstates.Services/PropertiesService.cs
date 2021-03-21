@@ -1,4 +1,5 @@
-﻿using RealEstates.Data;
+﻿using AutoMapper.QueryableExtensions;
+using RealEstates.Data;
 using RealEstates.Models;
 using RealEstates.Services.Models;
 using System;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace RealEstates.Services
 {
-    public class PropertiesService : IPropertiesService
+    public class PropertiesService : BaseService, IPropertiesService
     {
         private readonly ApplicationDbContext dbContext;
         public PropertiesService(ApplicationDbContext dbContext)
@@ -94,17 +95,10 @@ namespace RealEstates.Services
         {
             var properties = dbContext.Properties
                 .Where(x => x.Price >= minPrice 
-                && x.Price <= maxPrice 
-                && x.Size >= minSize 
-                && x.Size <= maxSize)
-                .Select(x => new PropertyInfoDto
-                {
-                    Size = x.Size,
-                    Price = x.Price ?? 0,
-                    BuildingType = x.BuildingType.Name,
-                    District = x.District.Name,
-                    PropertyType = x.PropertyType.Name
-                })
+                        && x.Price <= maxPrice 
+                        && x.Size >= minSize 
+                        && x.Size <= maxSize)
+                .ProjectTo<PropertyInfoDto>(Mapper.ConfigurationProvider)
                 .ToList();
 
             return properties;
