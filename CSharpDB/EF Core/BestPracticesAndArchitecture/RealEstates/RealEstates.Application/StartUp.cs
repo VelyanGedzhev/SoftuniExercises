@@ -20,6 +20,7 @@ namespace RealEstates.Application
                 Console.WriteLine("Choose an option: ");
                 Console.WriteLine("Press [1] for Property Search");
                 Console.WriteLine("Press [2] for Most expensive districts");
+                Console.WriteLine("Press [3] for Average price per square meter");
                 Console.WriteLine("Press [0] for Exit");
 
                 bool parsed = int.TryParse(Console.ReadLine(), out int option);
@@ -28,7 +29,7 @@ namespace RealEstates.Application
                     break;
                 }
 
-                if (parsed && option >=1 && option <= 2)
+                if (parsed && option >=1 && option <= 3)
                 {
                     switch (option)
                     {
@@ -38,12 +39,21 @@ namespace RealEstates.Application
                         case 2:
                             MostExpensiveDistricts(db);
                             break;
+                        case 3:
+                            AveragePricePerSquareMeter(db);
+                            break;
                     }
 
                     Console.WriteLine("Press any key to continue...");
                     Console.ReadKey();
                 }
             }
+        }
+        private static void AveragePricePerSquareMeter(ApplicationDbContext dbContext)
+        {
+            IPropertiesService propertiesService = new PropertiesService(dbContext);
+
+            Console.WriteLine($"Average price per square meter: {propertiesService.AveragePricePerSquareMeter():f2} €/m²");
         }
 
         private static void MostExpensiveDistricts(ApplicationDbContext dbContext)
@@ -57,19 +67,19 @@ namespace RealEstates.Application
 
             foreach (var district in districts)
             {
-                Console.WriteLine($"{district.Name} -- {district.AveragePricePerSqrMeter}€/m² -- {district.PropertiesCount}");
+                Console.WriteLine($"{district.Name} -- {district.AveragePricePerSqrMeter:f2} €/m² -- {district.PropertiesCount}");
             }
         }
 
         private static void PropertySearch(ApplicationDbContext dbContext)
         {
-            Console.WriteLine("Min price: ");
+            Console.Write("Min price: ");
             int minPrice = int.Parse(Console.ReadLine());
-            Console.WriteLine("Max price: ");
+            Console.Write("Max price: ");
             int maxPrice = int.Parse(Console.ReadLine());
-            Console.WriteLine("Min size: ");
+            Console.Write("Min size: ");
             int minSize = int.Parse(Console.ReadLine());
-            Console.WriteLine("Max size: ");
+            Console.Write("Max size: ");
             int maxSize = int.Parse(Console.ReadLine());
 
             IPropertiesService service = new PropertiesService(dbContext);
@@ -77,7 +87,7 @@ namespace RealEstates.Application
 
             foreach (var property in properties)
             {
-                Console.WriteLine($"{property.District} -- {property.BuildingType} -- {property.PropertyType} -- {property.Price}€ -- {property.Size}m²");
+                Console.WriteLine($"{property.District} -- {property.BuildingType} -- {property.PropertyType} -- {property.Price} € -- {property.Size} m²");
             }
         }
     }
