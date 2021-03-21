@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using RealEstates.Data;
+using RealEstates.Models;
 using RealEstates.Services;
 using System;
 using System.Text;
@@ -11,6 +12,8 @@ namespace RealEstates.Application
         static void Main(string[] args)
         {
             Console.OutputEncoding = Encoding.Unicode;
+            Console.InputEncoding = Encoding.Unicode;
+
             var db = new ApplicationDbContext();
             db.Database.Migrate();
 
@@ -21,6 +24,7 @@ namespace RealEstates.Application
                 Console.WriteLine("Press [1] for Property Search");
                 Console.WriteLine("Press [2] for Most expensive districts");
                 Console.WriteLine("Press [3] for Average price per square meter");
+                Console.WriteLine("Press [4] to add new Tag");
                 Console.WriteLine("Press [0] for Exit");
 
                 bool parsed = int.TryParse(Console.ReadLine(), out int option);
@@ -29,7 +33,7 @@ namespace RealEstates.Application
                     break;
                 }
 
-                if (parsed && option >=1 && option <= 3)
+                if (parsed && option >=1 && option <= 4)
                 {
                     switch (option)
                     {
@@ -42,6 +46,9 @@ namespace RealEstates.Application
                         case 3:
                             AveragePricePerSquareMeter(db);
                             break;
+                        case 4:
+                            AddTag(db);
+                            break;
                     }
 
                     Console.WriteLine("Press any key to continue...");
@@ -49,6 +56,20 @@ namespace RealEstates.Application
                 }
             }
         }
+
+        private static void AddTag(ApplicationDbContext dbContext)
+        {
+            ITagService tagService = new TagService(dbContext);
+
+            Console.Write("Add tag name: ");
+            var tagName = Console.ReadLine();
+            Console.Write("Add tag importance (optional): ");
+            var parsed = int.TryParse(Console.ReadLine(), out int tagImportance);
+            int? importance = parsed ? tagImportance : null;
+
+            tagService.Add(tagName, importance);
+        }
+
         private static void AveragePricePerSquareMeter(ApplicationDbContext dbContext)
         {
             IPropertiesService propertiesService = new PropertiesService(dbContext);
