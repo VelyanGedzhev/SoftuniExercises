@@ -17,6 +17,13 @@ namespace RealEstates.Services.Profiler
                     y => y.MapFrom(s => s.Properties
                             .Where(p => p.Price.HasValue)
                             .Average(p => p.Price / (decimal)p.Size) ?? 0));
+
+            this.CreateMap<Property, PropertyInfoFullDataDto>()
+                .ForMember(x => x.BuildingType, y => y.MapFrom(s => s.BuildingType.Name))
+                .ForMember(x => x.PropertyType, y => y.MapFrom(p => p.PropertyType.Name))
+                .ForMember(x => x.District, y => y.MapFrom(d => d.District.Name));
+
+            this.CreateMap<Tag, TagInfoDto>();
         }
     }
 }

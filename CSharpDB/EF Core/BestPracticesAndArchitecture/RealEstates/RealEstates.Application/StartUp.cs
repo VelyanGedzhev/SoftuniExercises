@@ -25,6 +25,7 @@ namespace RealEstates.Application
                 Console.WriteLine("Press [3] for Average price per square meter");
                 Console.WriteLine("Press [4] to add new Tag");
                 Console.WriteLine("Press [5] to add Tags to Properties");
+                Console.WriteLine("Press [6] for properties full info");
                 Console.WriteLine("Press [0] for Exit");
 
                 bool parsed = int.TryParse(Console.ReadLine(), out int option);
@@ -33,7 +34,7 @@ namespace RealEstates.Application
                     break;
                 }
 
-                if (parsed && option >=1 && option <= 5)
+                if (parsed && option >=1 && option <= 6)
                 {
                     switch (option)
                     {
@@ -52,6 +53,9 @@ namespace RealEstates.Application
                         case 5:
                             BulkAddTags(db);
                             break;
+                        case 6:
+                            GetPropertiesFullInfo(db);
+                            break;
                     }
 
                     Console.WriteLine("Press any key to continue...");
@@ -59,6 +63,35 @@ namespace RealEstates.Application
                 }
             }
         }
+
+        private static void GetPropertiesFullInfo(ApplicationDbContext dbContext)
+        {
+            IPropertiesService propertiesService = new PropertiesService(dbContext);
+
+            Console.Write("Add properties count: ");
+            var count = int.Parse(Console.ReadLine());
+
+            var properties = propertiesService.GetFullData(count);
+
+            foreach (var prop in properties)
+            {
+                Console.WriteLine("District: " + prop.District);
+                Console.WriteLine("Property Id: " + prop.Id);
+                Console.WriteLine("Property type:  " + prop.PropertyType);
+                Console.WriteLine("Property price: " + prop.Price);
+                Console.WriteLine("Property size: " + prop.Size);
+                Console.WriteLine("Building type: " + prop.BuildingType);
+                Console.WriteLine("Property year: " + prop.Year);
+                Console.WriteLine("Property tags: ");
+
+                foreach (var tag in prop.Tags)
+                {
+                    Console.WriteLine($"--{tag.Name}");
+                }
+                Console.WriteLine();
+            }
+        }
+
 
         private static void BulkAddTags(ApplicationDbContext dbContext)
         {

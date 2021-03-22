@@ -15,5 +15,7 @@ namespace RealEstates.Services
         public double AverageSize(int districtId);
 
         IEnumerable<PropertyInfoDto> Search(int minPrice, int maxPrice, int minSize, int maxSize);
+
+        IEnumerable<PropertyInfoFullDataDto> GetFullData(int count);
     }
 }

@@ -2,11 +2,8 @@
 using RealEstates.Data;
 using RealEstates.Models;
 using RealEstates.Services.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RealEstates.Services
 {
@@ -99,6 +96,22 @@ namespace RealEstates.Services
                         && x.Size >= minSize 
                         && x.Size <= maxSize)
                 .ProjectTo<PropertyInfoDto>(Mapper.ConfigurationProvider)
+                .ToList();
+
+            return properties;
+        }
+
+        public IEnumerable<PropertyInfoFullDataDto> GetFullData(int count)
+        {
+            var properties = dbContext.Properties
+                .Where(x => x.Floor.HasValue
+                && x.Floor.Value > 1 && x.Floor.Value <= 8
+                && x.Year.HasValue )
+                .ProjectTo<PropertyInfoFullDataDto>(Mapper.ConfigurationProvider)
+                .OrderByDescending(x => x.Price)
+                .ThenByDescending(x => x.Size)
+                .ThenByDescending(x => x.Year)
+                .Take(count)
                 .ToList();
 
             return properties;
