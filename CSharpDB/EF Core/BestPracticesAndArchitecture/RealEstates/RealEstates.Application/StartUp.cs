@@ -1,8 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using RealEstates.Data;
 using RealEstates.Services;
+using RealEstates.Services.Models;
 using System;
+using System.IO;
+using System.Linq;
 using System.Text;
+using System.Xml.Serialization;
 
 namespace RealEstates.Application
 {
@@ -71,25 +75,32 @@ namespace RealEstates.Application
             Console.Write("Add properties count: ");
             var count = int.Parse(Console.ReadLine());
 
-            var properties = propertiesService.GetFullData(count);
+            var properties = propertiesService.GetFullData(count).ToArray();
 
-            foreach (var prop in properties)
-            {
-                Console.WriteLine("District: " + prop.District);
-                Console.WriteLine("Property Id: " + prop.Id);
-                Console.WriteLine("Property type:  " + prop.PropertyType);
-                Console.WriteLine("Property price: " + prop.Price);
-                Console.WriteLine("Property size: " + prop.Size);
-                Console.WriteLine("Building type: " + prop.BuildingType);
-                Console.WriteLine("Property year: " + prop.Year);
-                Console.WriteLine("Property tags: ");
+            var xmlSerializer = new XmlSerializer(typeof(PropertyInfoFullDataDto[]));
+            var stringWriter = new StringWriter();
 
-                foreach (var tag in prop.Tags)
-                {
-                    Console.WriteLine($"--{tag.Name}");
-                }
-                Console.WriteLine();
-            }
+            xmlSerializer.Serialize(stringWriter, properties);
+
+            Console.WriteLine(stringWriter.ToString().TrimEnd());
+
+            //foreach (var prop in properties)
+            //{
+            //    Console.WriteLine("District: " + prop.District);
+            //    Console.WriteLine("Property Id: " + prop.Id);
+            //    Console.WriteLine("Property type:  " + prop.PropertyType);
+            //    Console.WriteLine("Property price: " + prop.Price);
+            //    Console.WriteLine("Property size: " + prop.Size);
+            //    Console.WriteLine("Building type: " + prop.BuildingType);
+            //    Console.WriteLine("Property year: " + prop.Year);
+            //    Console.WriteLine("Property tags: ");
+
+            //    foreach (var tag in prop.Tags)
+            //    {
+            //        Console.WriteLine($"--{tag.Name}");
+            //    }
+            //    Console.WriteLine();
+            //}
         }
 
 
