@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Quiz.Data;
 
 namespace Quiz.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210323121641_FixModelsRestrictCascade")]
+    partial class FixModelsRestrictCascade
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -278,28 +280,24 @@ namespace Quiz.Data.Migrations
 
             modelBuilder.Entity("Quiz.Models.UserAnswer", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<string>("IdentityUserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("QiuzId")
+                        .HasColumnType("int");
 
                     b.Property<int>("AnswerId")
                         .HasColumnType("int");
 
-                    b.Property<string>("IdentityUserId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<int>("QuestionId")
                         .HasColumnType("int");
 
-                    b.Property<int>("QuizId")
+                    b.Property<int?>("QuizId")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.HasKey("IdentityUserId", "QiuzId");
 
                     b.HasIndex("AnswerId");
-
-                    b.HasIndex("IdentityUserId");
 
                     b.HasIndex("QuestionId");
 
@@ -375,7 +373,7 @@ namespace Quiz.Data.Migrations
                     b.HasOne("Quiz.Models.Quiz", "Quiz")
                         .WithMany("Questions")
                         .HasForeignKey("QuizId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Quiz");
@@ -391,7 +389,9 @@ namespace Quiz.Data.Migrations
 
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "IdentityUser")
                         .WithMany()
-                        .HasForeignKey("IdentityUserId");
+                        .HasForeignKey("IdentityUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Quiz.Models.Question", "Question")
                         .WithMany("UserAnswers")
@@ -401,9 +401,7 @@ namespace Quiz.Data.Migrations
 
                     b.HasOne("Quiz.Models.Quiz", "Quiz")
                         .WithMany("UserAnswers")
-                        .HasForeignKey("QuizId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("QuizId");
 
                     b.Navigation("Answer");
 

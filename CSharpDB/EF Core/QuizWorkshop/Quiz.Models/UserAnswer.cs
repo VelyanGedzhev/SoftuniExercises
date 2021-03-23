@@ -9,11 +9,12 @@ namespace Quiz.Models
 {
     public class UserAnswer
     {
+        public int Id { get; set; }
         public string IdentityUserId { get; set; }
 
         public IdentityUser IdentityUser { get; set; }
 
-        public int QiuzId { get; set; }
+        public int QuizId { get; set; }
 
         public Quiz Quiz { get; set; }
 

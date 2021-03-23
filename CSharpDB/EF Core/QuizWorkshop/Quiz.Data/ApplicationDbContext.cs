@@ -23,8 +23,17 @@ namespace Quiz.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
 
-            builder.Entity<UserAnswer>()
-                .HasKey(x => new { x.IdentityUserId, x.QiuzId });
+            builder.Entity<Answer>()
+                .HasOne(x => x.Question)
+                .WithMany(x => x.Answers)
+                .HasForeignKey(x => x.QuestionId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<Question>()
+                .HasOne(x => x.Quiz)
+                .WithMany(x => x.Questions)
+                .HasForeignKey(x => x.QuizId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             base.OnModelCreating(builder);
         }
