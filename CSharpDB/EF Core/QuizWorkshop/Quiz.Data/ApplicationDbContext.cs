@@ -24,7 +24,7 @@ namespace Quiz.Data
         {
 
             builder.Entity<UserAnswer>()
-                .HasKey(x => new { x.UserId, x.QiuzId });
+                .HasKey(x => new { x.IdentityUserId, x.QiuzId });
 
             base.OnModelCreating(builder);
         }
