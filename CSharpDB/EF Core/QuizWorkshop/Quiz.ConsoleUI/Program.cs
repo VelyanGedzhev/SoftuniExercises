@@ -2,9 +2,10 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
 using Quiz.Data;
 using Quiz.Services;
-using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace Quiz.ConsoleUI
@@ -17,34 +18,24 @@ namespace Quiz.ConsoleUI
             ConfigureServices(serviceCollection);
             var serviceProvider = serviceCollection.BuildServiceProvider();
 
-            var quizService = serviceProvider.GetService<IUserAnswerService>();
-            //quizService.Add("C# DB");
+            var json = File.ReadAllText("EF-Core-Quiz.json");
+            var questions = JsonConvert.DeserializeObject<IEnumerable<JsonQuestion>>(json);
 
-            //var questionService = serviceProvider.GetService<IQuestionService>();
-            //questionService.Add("1+1", 1);
+            var quizService = serviceProvider.GetService<IQuizService>();
+            var questionService = serviceProvider.GetService<IQuestionService>();
+            var answerService = serviceProvider.GetService<IAnswerService>();
 
-            //var answerService = serviceProvider.GetService<IAnswerService>();
-            //answerService.Add("2", 5, true, 2);
+            var quizId = quizService.Add("Ef Core Test");
 
-            //var userAnswerService = serviceProvider.GetService<IUserAnswerService>();
-            var userId = "79443e63-7837-4968-abf4-29650fae9c37";
-            //userAnswerService.AddUserAnswer(userId, 1, 2, 1);
+            foreach (var question in questions)
+            {
+                var questionId = questionService.Add(question.Question, quizId);
 
-            //var quiz = quizService.GetQuizById(1);
-
-            //Console.WriteLine(quiz.Title);
-            //foreach (var question in quiz.Questions)
-            //{
-            //    Console.WriteLine(question.Title);
-
-            //    foreach (var answer in question.Answers)
-            //    {
-            //        Console.WriteLine($"--{answer.Title}");
-            //    }
-            //}
-
-            var quiz = quizService.GetUserResult(userId, 1);
-            Console.WriteLine(quiz);
+                foreach (var answer in question.Answers)
+                {
+                    answerService.Add(answer.Answer, answer.Correct ? 1 : 0, answer.Correct, questionId);
+                }
+            }
         }
 
         private static void ConfigureServices(IServiceCollection services)

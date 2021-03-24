@@ -15,7 +15,7 @@ namespace Quiz.Services
             this.dbContext = dbContext;
         }
 
-        public void Add(string title)
+        public int Add(string title)
         {
             var quiz = new Quiz.Models.Quiz
             {
@@ -24,6 +24,8 @@ namespace Quiz.Services
 
             this.dbContext.Quizzes.Add(quiz);
             this.dbContext.SaveChanges();
+
+            return quiz.Id;
         }
 
         public QuizViewModel GetQuizById(int quizId)
