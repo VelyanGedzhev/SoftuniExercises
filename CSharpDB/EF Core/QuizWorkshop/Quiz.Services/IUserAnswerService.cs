@@ -4,9 +4,9 @@ namespace Quiz.Services
 {
     public interface IUserAnswerService
     {
-        void AddUserAnswer(string userId, int answerId);
+        void AddUserAnswer(string username, int questionId, int answerId);
 
-        int GetUserResult(string userId, int quizId);
+        int GetUserResult(string username, int quizId);
 
         void BulkAddUserAnswer(QuizInputModel quizInput);
     }

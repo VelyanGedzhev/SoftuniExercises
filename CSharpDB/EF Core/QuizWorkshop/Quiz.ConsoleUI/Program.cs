@@ -7,6 +7,7 @@ using Quiz.Data;
 using Quiz.Services;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace Quiz.ConsoleUI
 {
@@ -24,6 +25,7 @@ namespace Quiz.ConsoleUI
             var quizService = serviceProvider.GetService<IQuizService>();
             var questionService = serviceProvider.GetService<IQuestionService>();
             var answerService = serviceProvider.GetService<IAnswerService>();
+
 
             var quizId = quizService.Add("Ef Core Test");
 
