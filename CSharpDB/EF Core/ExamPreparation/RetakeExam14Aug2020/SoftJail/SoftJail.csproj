@@ -30,7 +30,18 @@
   <ItemGroup>
     <Folder Include="DataProcessor\ExportDto\" />
     <Folder Include="DataProcessor\ImportDto\" />
-    <Folder Include="Data\Models\Enums\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Datasets\ImportDepartmentsCells.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Datasets\ImportOfficersPrisoners.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Datasets\ImportPrisonersMails.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>
