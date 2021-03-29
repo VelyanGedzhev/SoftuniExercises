@@ -28,10 +28,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="DataProcessor\ExportDto\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Update="Datasets\ImportDepartmentsCells.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
