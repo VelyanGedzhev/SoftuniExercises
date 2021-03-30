@@ -2,7 +2,7 @@
 {
     public enum PurchaseType
     {
-        Reatil,
+        Retail,
         Digital
     }
 }
