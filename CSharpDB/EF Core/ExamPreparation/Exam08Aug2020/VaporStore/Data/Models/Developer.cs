@@ -5,7 +5,6 @@ namespace VaporStore.Data.Models
 {
     public class Developer
     {
-
         public Developer()
         {
             Games = new HashSet<Game>();

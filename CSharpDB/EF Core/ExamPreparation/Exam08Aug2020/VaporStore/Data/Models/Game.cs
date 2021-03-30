@@ -22,7 +22,6 @@ namespace VaporStore.Data.Models
         public DateTime ReleaseDate { get; set; }
 
         public int DeveloperId { get; set; }
-
         public Developer Developer { get; set; }
 
         public int GenreId { get; set; }

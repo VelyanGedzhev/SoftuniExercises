@@ -34,6 +34,8 @@
 
 		protected override void OnModelCreating(ModelBuilder model)
 		{
+			model.Entity<GameTag>()
+				.HasKey(x => new {x.GameId, x.TagId });
 		}
 	}
 }
