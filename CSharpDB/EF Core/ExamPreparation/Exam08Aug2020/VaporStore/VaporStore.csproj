@@ -32,9 +32,20 @@
   <ItemGroup>
     <Folder Include="DataProcessor\Dto\Import\" />
     <Folder Include="DataProcessor\Dto\Export\" />
-    <Folder Include="Data\Models\Enums\" />
     <Folder Include="ExportResults\" />
     <Folder Include="ImportResults\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Datasets\games.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Datasets\purchases.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Datasets\users.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>
