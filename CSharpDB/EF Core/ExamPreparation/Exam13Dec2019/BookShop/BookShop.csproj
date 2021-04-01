@@ -14,8 +14,16 @@
   
     <ItemGroup>
       <Folder Include="DataProcessor\ExportDto\" />
-      <Folder Include="DataProcessor\ImportDto\" />
       <Folder Include="Data\Models\Enums\" />
+    </ItemGroup>
+  
+    <ItemGroup>
+      <None Update="Datasets\authors.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Datasets\books.xml">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
   
     <ProjectExtensions><VisualStudio><UserProperties /></VisualStudio></ProjectExtensions>
