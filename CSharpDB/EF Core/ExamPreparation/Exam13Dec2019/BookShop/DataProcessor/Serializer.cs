@@ -17,7 +17,7 @@
     {
         public static string ExportMostCraziestAuthors(BookShopContext context)
         {
-            var authors = context.Authors.ToList()
+            var authors = context.Authors
                 .Select(a => new
                 {
                     AuthorName = a.FirstName + " " + a.LastName,
@@ -43,7 +43,6 @@
         {
             var books = context.Books
                 .Where(x => x.PublishedOn < date && x.Genre == Genre.Science)
-                .ToArray()
                 .OrderByDescending(x => x.Pages)
                 .ThenByDescending(x => x.PublishedOn)
                 .Take(10)
