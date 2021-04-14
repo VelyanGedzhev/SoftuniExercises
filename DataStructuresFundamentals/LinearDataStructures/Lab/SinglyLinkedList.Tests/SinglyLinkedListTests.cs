@@ -38,7 +38,7 @@ namespace SinglyLinkedList.Tests
         [Test]
         public void AddLastShouldWorkAsExpected()
         {
-            var count = this._random.Next(10, 30);
+            var count = this._random.Next(4, 6);
             var array = new int[count];
 
             for (var i = 0; i < count; i++)
