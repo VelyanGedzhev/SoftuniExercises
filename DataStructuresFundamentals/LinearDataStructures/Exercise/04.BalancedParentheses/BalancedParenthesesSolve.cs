@@ -7,7 +7,41 @@
     {
         public bool AreBalanced(string parentheses)
         {
-            throw new NotImplementedException();
+            if (parentheses.Length % 2 != 0 ||
+                string.IsNullOrEmpty(parentheses))
+            {
+                return false;
+            }
+
+            Stack<char> stack = new Stack<char>(parentheses.Length / 2);
+
+            foreach (var bracket in parentheses)
+            {
+                char expectedBracket = default;
+
+                switch (bracket)
+                {
+                    case ')':
+                        expectedBracket = '(';
+                        break;
+                    case ']':
+                        expectedBracket = '[';
+                        break;
+                    case '}':
+                        expectedBracket = '{';
+                        break;
+                    default:
+                        stack.Push(bracket);
+                        break;
+                }
+
+                if (expectedBracket != default && stack.Pop() != expectedBracket)
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
     }
 }
