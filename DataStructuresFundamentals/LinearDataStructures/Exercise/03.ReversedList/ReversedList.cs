@@ -50,11 +50,11 @@
 
         public int IndexOf(T item)
         {
-            for (int i = 1; i <= Count; i++)
+            for (int i = Count - 1; i >= 0; i--)
             {
-                if (this._items[Count - i].Equals(item))
+                if (this._items[i].Equals(item))
                 {
-                    return i - 1;
+                    return Count - i - 1;
                 }
             }
 
@@ -128,12 +128,6 @@
             var newArr = new T[this._items.Length * 2];
             Array.Copy(this._items, newArr, this._items.Length);
             this._items = newArr;
-        }
-
-        private void EnsureNotEmpty()
-        {
-            if (this.Count == 0)
-                throw new InvalidOperationException();
         }
 
         private void ValidateIndex(int index)
