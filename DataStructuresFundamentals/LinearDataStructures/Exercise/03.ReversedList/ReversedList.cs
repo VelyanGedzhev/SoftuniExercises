@@ -25,11 +25,13 @@
         {
             get
             {
-                throw new NotImplementedException();
+                ValidateIndex(index);
+                return this._items[Count - 1 - index];
             }
             set
             {
-                throw new NotImplementedException();
+                ValidateIndex(index);
+                this._items[index] = value;
             }
         }
 
@@ -37,42 +39,109 @@
 
         public void Add(T item)
         {
-            throw new NotImplementedException();
+            GrowIfNecessary();
+            this._items[Count++] = item;
         }
 
         public bool Contains(T item)
         {
-            throw new NotImplementedException();
+            return IndexOf(item) != -1;
         }
 
         public int IndexOf(T item)
         {
-            throw new NotImplementedException();
+            for (int i = 1; i <= Count; i++)
+            {
+                if (this._items[Count - i].Equals(item))
+                {
+                    return i - 1;
+                }
+            }
+
+            return -1;
+            
         }
 
         public void Insert(int index, T item)
         {
-            throw new NotImplementedException();
+            GrowIfNecessary();
+            ValidateIndex(index);
+
+            int indexToInsert = Count - index;
+
+            for (int i = Count; i >= indexToInsert; i--)
+            {
+                this._items[i] = this._items[i - 1];
+            }
+
+            this._items[indexToInsert] = item;
+            Count++;
         }
 
         public bool Remove(T item)
         {
-            throw new NotImplementedException();
+            int elementIndex = IndexOf(item);
+
+            if (elementIndex == -1)
+            {
+                return false;
+            }
+
+            RemoveAt(elementIndex);
+            return true;
         }
 
         public void RemoveAt(int index)
         {
-            throw new NotImplementedException();
+            ValidateIndex(index);
+            int elementIndex = Count - 1 - index;
+
+            for (int i = elementIndex; i < Count - 1; i++)
+            {
+                this._items[i] = this._items[i + 1];
+            }
+
+            this._items[Count - 1] = default;
+            Count--;
         }
 
         public IEnumerator<T> GetEnumerator()
         {
-            throw new NotImplementedException();
+            for (int i = Count - 1; i >= 0; i--)
+            {
+                yield return this._items[i];
+            }
         }
 
-        IEnumerator IEnumerable.GetEnumerator()
+        IEnumerator IEnumerable.GetEnumerator() => this.GetEnumerator();
+
+        private void GrowIfNecessary()
         {
-            throw new NotImplementedException();
+            if (Count == this._items.Length)
+            {
+                Grow();
+            }
+        }
+
+        private void Grow()
+        {
+            var newArr = new T[this._items.Length * 2];
+            Array.Copy(this._items, newArr, this._items.Length);
+            this._items = newArr;
+        }
+
+        private void EnsureNotEmpty()
+        {
+            if (this.Count == 0)
+                throw new InvalidOperationException();
+        }
+
+        private void ValidateIndex(int index)
+        {
+            if (index < 0 || index >= Count)
+            {
+                throw new IndexOutOfRangeException();
+            }
         }
     }
 }
