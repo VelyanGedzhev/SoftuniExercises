@@ -1,7 +1,7 @@
-﻿using WebServer.HTTP.Enums;
-using WebServer.HTTP.Headers;
+﻿using WebServer.Server.Enums;
+using WebServer.Server.Headers;
 
-namespace WebServer.HTTP.Requests.Contracts
+namespace WebServer.Server.Requests.Contracts
 {
     interface IHttpRequest
     {

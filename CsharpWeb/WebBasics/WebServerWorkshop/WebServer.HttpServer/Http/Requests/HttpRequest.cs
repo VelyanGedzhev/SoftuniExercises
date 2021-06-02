@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http;
-using WebServer.HTTP.Enums;
-using WebServer.HTTP.Headers;
-using WebServer.HTTP.Requests.Contracts;
+using WebServer.Server.Enums;
+using WebServer.Server.Headers;
+using WebServer.Server.Requests.Contracts;
 
 namespace WebServer.Server.Http
 {
@@ -66,20 +65,17 @@ namespace WebServer.Server.Http
                     break;
                 }
 
-                var indexOfColon = headerLine.IndexOf(":");
+                var headerParts = headerLine.Split(":", 2);
 
-                if (indexOfColon < 0)
+                if (headerParts.Length != 2)
                 {
                     throw new InvalidOperationException("Request is not valid.");
                 }
 
-                var header = new HttpHeader
-                {
-                    Name = headerLine.Substring(0, indexOfColon),
-                    Value = headerLine.Substring(indexOfColon + 1).Trim()
-                };
+                var headerName = headerParts[0];
+                var headerValue = headerParts[1].Trim();
 
-                headerCollection.Add(header);
+                headerCollection.Add(headerName, headerValue);
             }
 
             return headerCollection;

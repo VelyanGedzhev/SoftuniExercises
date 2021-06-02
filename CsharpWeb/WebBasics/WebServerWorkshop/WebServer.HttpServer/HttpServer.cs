@@ -1,25 +1,37 @@
-﻿namespace WebServer.Server
-{
-    using System;
-    using System.Net;
-    using System.Net.Sockets;
-    using System.Text;
-    using System.Threading.Tasks;
-    using WebServer.Server.Http;
+﻿using System;
+using System.Net;
+using System.Net.Sockets;
+using System.Text;
+using System.Threading.Tasks;
+using WebServer.Server.Http;
+using WebServer.Server.Routing;
 
+namespace WebServer.Server
+{
     public class HttpServer
     {
-        private IPAddress ipAddress;
+        private readonly IPAddress ipAddress;
         private readonly int port;
         private readonly TcpListener listener;
 
-        public HttpServer(string ipAddress, int port)
+        public HttpServer(string ipAddress, int port, Action<IRoutingTable> routingTable)
         {
             this.ipAddress = IPAddress.Parse(ipAddress);
             this.port = port;
 
             this.listener = new TcpListener(this.ipAddress, this.port);
         }
+
+        public HttpServer(int port, Action<IRoutingTable> routingTable) 
+            : this("127.0.0.1", port, routingTable)
+        {
+        }
+
+        public HttpServer(Action<IRoutingTable> routingTable)
+            :this(5000, routingTable)
+        {
+        }
+            
 
         public async Task Start()
         {

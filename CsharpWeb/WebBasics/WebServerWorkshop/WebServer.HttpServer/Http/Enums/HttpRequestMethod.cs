@@ -1,4 +1,4 @@
-﻿namespace WebServer.HTTP.Enums
+﻿namespace WebServer.Server.Enums
 {
     public enum HttpRequestMethod
     {
