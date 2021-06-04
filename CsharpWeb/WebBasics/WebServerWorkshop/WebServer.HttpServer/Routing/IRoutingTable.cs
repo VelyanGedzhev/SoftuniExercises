@@ -1,4 +1,6 @@
-﻿using WebServer.Server.Enums;
+﻿using System;
+using WebServer.Server.Enums;
+using WebServer.Server.Http;
 using WebServer.Server.Responses;
 
 namespace WebServer.Server.Routing
@@ -7,7 +9,15 @@ namespace WebServer.Server.Routing
     {
         IRoutingTable Map(HttpRequestMethod method, string path, HttpResponse response);
 
+        IRoutingTable Map(HttpRequestMethod method, string path, Func<HttpRequest, HttpResponse> responseFunction);
+
         IRoutingTable MapGet(string path, HttpResponse response);
+
+        IRoutingTable MapGet(string path, Func<HttpRequest, HttpResponse> responseFunction);
+
+        IRoutingTable MapPost(string path, HttpResponse response);
+
+        IRoutingTable MapPost(string path, Func<HttpRequest, HttpResponse> responseFunction);
 
     }
 }
