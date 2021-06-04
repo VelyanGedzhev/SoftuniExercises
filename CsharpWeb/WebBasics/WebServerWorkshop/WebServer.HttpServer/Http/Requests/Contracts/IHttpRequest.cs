@@ -7,7 +7,7 @@ namespace WebServer.Server.Requests.Contracts
     {
         HttpRequestMethod Method { get; }
 
-        string Url { get; }
+        string Path { get; }
 
         HttpHeaderCollection Headers { get; }
 
