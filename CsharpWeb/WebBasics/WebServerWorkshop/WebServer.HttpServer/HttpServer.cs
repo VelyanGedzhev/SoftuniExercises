@@ -4,6 +4,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 using WebServer.Server.Http;
+using WebServer.Server.Responses;
 using WebServer.Server.Routing;
 
 namespace WebServer.Server
@@ -13,13 +14,17 @@ namespace WebServer.Server
         private readonly IPAddress ipAddress;
         private readonly int port;
         private readonly TcpListener listener;
+        private readonly RoutingTable routingTable;
 
-        public HttpServer(string ipAddress, int port, Action<IRoutingTable> routingTable)
+        public HttpServer(string ipAddress, int port, Action<IRoutingTable> routingTableConfiguration)
         {
             this.ipAddress = IPAddress.Parse(ipAddress);
             this.port = port;
 
             this.listener = new TcpListener(this.ipAddress, this.port);
+
+            this.routingTable = new RoutingTable();
+            routingTableConfiguration(this.routingTable);
         }
 
         public HttpServer(int port, Action<IRoutingTable> routingTable) 
@@ -47,11 +52,13 @@ namespace WebServer.Server
                 var networkStream = connection.GetStream();
 
                 var requestText = await this.ReadRequest(networkStream);
-                Console.WriteLine(requestText);
+                //Console.WriteLine(requestText);
 
-                //var request = HttpRequest.Parse(requestText);
+                var request = HttpRequest.Parse(requestText);
 
-                await WriteResponse(networkStream);
+                var response = this.routingTable.MatchRequest(request);
+
+                await WriteResponse(networkStream, response);
 
                 connection.Close();
             }
@@ -85,18 +92,8 @@ namespace WebServer.Server
             return requestBuilder.ToString();
         }
 
-        private async Task WriteResponse(NetworkStream networkStream)
+        private async Task WriteResponse(NetworkStream networkStream, HttpResponse response)
         {
-            var content = "Simple web-server with educational purpose.";
-            var contentLength = content.Length;
-
-            var response = new StringBuilder();
-            response
-                .AppendLine("HTTP/1.1 200 OK")
-                .AppendLine($"Content-Length: {contentLength}")
-                .AppendLine("Content-Typpe: text/plain; charset=UTF-8")
-                .AppendLine()
-                .AppendLine(content);
 
             var responseBytes = Encoding.UTF8.GetBytes(response.ToString().TrimEnd());
 

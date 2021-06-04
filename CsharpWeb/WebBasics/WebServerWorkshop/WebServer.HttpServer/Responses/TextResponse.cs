@@ -1,26 +1,10 @@
-﻿using System.Text;
-using WebServer.Server.Common;
-using WebServer.Server.Enums;
-
-namespace WebServer.Server.Responses
+﻿namespace WebServer.Server.Responses
 {
-    public class TextResponse : HttpResponse
+    public class TextResponse : ContentResponse
     {
-        public TextResponse(string text, string contentType)
-            : base(HttpResponseStatusCode.OK)
-        {
-            Guard.AgainstNull(text);
-
-            var contentLength = Encoding.UTF8.GetByteCount(text).ToString();
-
-            this.Headers.Add("Content-Type: ", contentType);
-            this.Headers.Add("Content-Length: ", contentLength);
-
-            this.Content = text;
-        }
 
         public TextResponse(string text)
-            : this(text, "text/plain; charset=UTF-8")
+            : base(text, "text/plain; charset=UTF-8")
         {
         }
     }
