@@ -13,6 +13,12 @@ namespace WebServer.Controllers
         }
 
         public HttpResponse Index()
-            => Text("Simple web -serverwitheducationalpurpose.");
+            => Text("Simple web -server with educational purpose.");
+
+        public HttpResponse LocalRedirect()
+            => Redirect("/Cats");
+
+        public HttpResponse ToSoftUni() 
+            => Redirect("https://softuni.bg");
     }
 }

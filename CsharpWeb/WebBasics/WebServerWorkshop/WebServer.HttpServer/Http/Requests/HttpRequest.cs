@@ -64,7 +64,7 @@ namespace WebServer.Server.Http
         {
             var urlParts = url.Split('?', 2);
 
-            var path = urlParts[0];
+            var path = urlParts[0].ToLower();
             var query = urlParts.Length > 1 
                 ? ParseQuery(urlParts[1])
                 : new Dictionary<string, string>();
