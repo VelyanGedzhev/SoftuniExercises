@@ -13,7 +13,10 @@ namespace WebServer
                 .MapGet<HomeController>("/tocats", c => c.LocalRedirect())
                 .MapGet<HomeController>("/softuni", c => c.ToSoftUni())
                 .MapGet<AnimalsController>("/Cats", c => c.Cats())
-                .MapGet<AnimalsController>("/Dogs", c => c.Dogs()))
+                .MapGet<AnimalsController>("/Dogs", c => c.Dogs())
+                .MapGet<AnimalsController>("/Turtles", c => c.Turtles())
+                .MapGet<AnimalsController>("/Rabbits", c => c.Rabbits()))
+                
             .Start();
         
     }

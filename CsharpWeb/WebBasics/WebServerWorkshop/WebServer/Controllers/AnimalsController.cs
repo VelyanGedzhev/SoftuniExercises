@@ -1,5 +1,4 @@
-﻿using WebServer.Server;
-using WebServer.Server.Controllers;
+﻿using WebServer.Server.Controllers;
 using WebServer.Server.Http;
 using WebServer.Server.Responses;
 
@@ -27,7 +26,10 @@ namespace WebServer.Controllers
             return Html(result);
         }
 
-        public HttpResponse Dogs()
-            => Html("<h1>Hello from the dogs!</h1>");
+        public HttpResponse Dogs() => View();
+        
+        public HttpResponse Rabbits() => View("Rabbits");
+
+        public HttpResponse Turtles() => View("Animals/Wild/Turtles");
     }
 }
