@@ -1,4 +1,5 @@
 ﻿using WebServer.Server.Enums;
+using WebServer.Server.Headers;
 
 namespace WebServer.Server.Responses
 {
@@ -6,7 +7,7 @@ namespace WebServer.Server.Responses
     {
         public RedirectResponse(string location)
             : base(HttpResponseStatusCode.Found) 
-            => this.Headers.Add("Location", location);
+            => this.Headers.Add(HttpHeader.Location, new HttpHeader(HttpHeader.Location, location));
 
     }
 }

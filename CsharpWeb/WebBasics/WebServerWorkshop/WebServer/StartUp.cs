@@ -15,8 +15,9 @@ namespace WebServer
                 .MapGet<AnimalsController>("/Cats", c => c.Cats())
                 .MapGet<AnimalsController>("/Dogs", c => c.Dogs())
                 .MapGet<AnimalsController>("/Turtles", c => c.Turtles())
-                .MapGet<AnimalsController>("/Rabbits", c => c.Rabbits()))
-                
+                .MapGet<AnimalsController>("/Rabbits", c => c.Rabbits())
+                .MapGet<CatsController>("/Cats/Create", c => c.Create())
+                .MapPost<CatsController>("/Cats/Save", c => c.Save()))  
             .Start();
         
     }

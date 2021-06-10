@@ -26,6 +26,8 @@ namespace WebServer.Controllers
             return Html(result);
         }
 
+        
+
         public HttpResponse Dogs() => View();
         
         public HttpResponse Rabbits() => View("Rabbits");
