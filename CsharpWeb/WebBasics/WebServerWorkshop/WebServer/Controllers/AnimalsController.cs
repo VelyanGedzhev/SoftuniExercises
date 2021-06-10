@@ -1,4 +1,5 @@
-﻿using WebServer.Server.Controllers;
+﻿using WebServer.Models.Animals;
+using WebServer.Server.Controllers;
 using WebServer.Server.Http;
 using WebServer.Server.Responses;
 
@@ -14,16 +15,25 @@ namespace WebServer.Controllers
         public HttpResponse Cats()
         {
             const string nameKey = "Name";
+            const string ageKey = "Age";
 
             var query = this.Request.Query;
 
-            var name = query.ContainsKey(nameKey)
+            var cateName = query.ContainsKey(nameKey)
                 ? query[nameKey]
                 : "the cats";
 
-            var result = $"<h1>Hello from {name}!</h1>";
+            var catAge = query.ContainsKey(ageKey)
+                ? int.Parse(query[ageKey])
+                : 0;
 
-            return Html(result);
+            var viewModel = new CatViewModel
+            {
+                Name = cateName,
+                Age = catAge
+            };
+
+            return View(viewModel);
         }
 
         
