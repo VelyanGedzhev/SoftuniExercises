@@ -4,7 +4,6 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 using WebServer.Server.Http;
-using WebServer.Server.Responses;
 using WebServer.Server.Routing;
 
 namespace WebServer.Server

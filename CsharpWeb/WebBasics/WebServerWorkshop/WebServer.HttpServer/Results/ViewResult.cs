@@ -1,17 +1,20 @@
 ﻿using System.IO;
 using System.Linq;
-using System.Text;
 using WebServer.Server.Enums;
 using WebServer.Server.Http;
 
-namespace WebServer.Server.Responses
+namespace WebServer.Server.Results
 {
-    public class ViewResponse : HttpResponse
+    public class ViewResult : ActionResult
     {
         private const char PathSeparator = '/';
 
-        public ViewResponse(string viewName, string controllerName, object model)
-            : base(HttpResponseStatusCode.OK) 
+        public ViewResult(
+            HttpResponse response, 
+            string viewName, 
+            string controllerName, 
+            object model)
+            : base(response) 
             => this.GetHtml(viewName, controllerName, model);
 
         private void GetHtml(string viewName, string controllerName, object model)

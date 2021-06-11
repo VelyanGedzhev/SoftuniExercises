@@ -1,6 +1,5 @@
 ﻿using WebServer.Server.Controllers;
 using WebServer.Server.Http;
-using WebServer.Server.Responses;
 
 namespace WebServer.Controllers
 {

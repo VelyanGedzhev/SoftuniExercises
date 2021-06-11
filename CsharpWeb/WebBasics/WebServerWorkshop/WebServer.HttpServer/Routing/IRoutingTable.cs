@@ -1,7 +1,6 @@
 ﻿using System;
 using WebServer.Server.Enums;
 using WebServer.Server.Http;
-using WebServer.Server.Responses;
 
 namespace WebServer.Server.Routing
 {

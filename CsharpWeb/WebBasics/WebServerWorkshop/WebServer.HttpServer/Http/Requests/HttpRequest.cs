@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using WebServer.Server.Enums;
 using WebServer.Server.Headers;
+using WebServer.Server.Http.Cookies;
 
 namespace WebServer.Server.Http
 {
     public class HttpRequest
     {
 
-        private const string NEW_LINE = "\r\n";
+        private const string NewLine = "\r\n";
         public HttpRequestMethod Method { get; private set; }
 
         public string Path { get; private set; }
@@ -20,23 +21,27 @@ namespace WebServer.Server.Http
 
         public IReadOnlyDictionary<string, HttpHeader> Headers { get; private set; }  
 
+        public IReadOnlyDictionary<string, HttpCookie> Cookies { get; private set; }  
+
         public string Body { get; private set; }
 
         public static HttpRequest Parse(string request)
         {
-            var lines = request.Split(NEW_LINE);
+            var lines = request.Split(NewLine);
 
             var startLine = lines.First().Split(" ");
 
-            var method = ParseHttpMethod(startLine[0]);
+            var method = ParseMethod(startLine[0]);
             var url = startLine[1];
 
             var (path, query) = ParseUrl(url);
 
-            var headers = ParseHttpHeaderCollection(lines.Skip(1));
+            var headers = ParseHeaders(lines.Skip(1));
+
+            var cookies = ParseCookies(headers);
 
             var bodyLines = lines.Skip(headers.Count + 2).ToArray();
-            var body = string.Join(NEW_LINE, bodyLines);
+            var body = string.Join(NewLine, bodyLines);
 
             var form = ParseForm(headers, body);
 
@@ -46,13 +51,13 @@ namespace WebServer.Server.Http
                 Path = path,
                 Query = query,
                 Headers = headers,
+                Cookies = cookies,
                 Body = body,
                 Form = form
             };
         }
 
-
-        private static HttpRequestMethod ParseHttpMethod(string method)
+        private static HttpRequestMethod ParseMethod(string method)
         {
             return method.ToUpper() switch
             {
@@ -60,7 +65,7 @@ namespace WebServer.Server.Http
                 "POST" => HttpRequestMethod.Post,
                 "PUT" => HttpRequestMethod.Put,
                 "DELETE" => HttpRequestMethod.Delete,
-                _ => throw new InvalidOperationException($"Method {method} is not supported.")
+                _ => HttpRequestMethod.Get //throw new InvalidOperationException($"Method {method} is not supported.")
             };
         }
 
@@ -83,7 +88,7 @@ namespace WebServer.Server.Http
                  .Where(part => part.Length == 2)
                  .ToDictionary(part => part[0], part => part[1]);
 
-        private static Dictionary<string, HttpHeader> ParseHttpHeaderCollection(IEnumerable<string> headerLines)
+        private static Dictionary<string, HttpHeader> ParseHeaders(IEnumerable<string> headerLines)
         {
             var headerCollection = new Dictionary<string, HttpHeader>();
 
@@ -108,6 +113,31 @@ namespace WebServer.Server.Http
             }
 
             return headerCollection;
+        }
+
+        private static Dictionary<string, HttpCookie> ParseCookies(Dictionary<string, HttpHeader> headers)
+        {
+            var cookieCollection = new Dictionary<string, HttpCookie>();
+
+            if (headers.ContainsKey(HttpHeader.Cookie))
+            {
+                var cookieHeader = headers[HttpHeader.Cookie];
+
+                var allCookies = cookieHeader.Value
+                    .Split(';')
+                    .Select(c => c.Split('='));
+
+                foreach (var cookieParts in allCookies)
+                {
+                    var cookieName = cookieParts[0].Trim();
+                    var cookieValue = cookieParts[1].Trim();
+                    var cookie = new HttpCookie(cookieName, cookieValue);
+
+                    cookieCollection.Add(cookieName, cookie);
+                }
+            }
+
+            return cookieCollection;
         }
 
         private static Dictionary<string, string> ParseForm(Dictionary<string, HttpHeader> headers, string body)

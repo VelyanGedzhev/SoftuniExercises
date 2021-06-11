@@ -1,9 +1,8 @@
 ﻿using WebServer.Server.Common;
-using WebServer.Server.Headers.Contracts;
 
 namespace WebServer.Server.Headers
 {
-    public class HttpHeader : IHttpHeader
+    public class HttpHeader
     {
 
         public const string ContentType = "Content-Type";
@@ -11,6 +10,9 @@ namespace WebServer.Server.Headers
         public const string Server = "Server";
         public const string Date = "Date";
         public const string Location = "Location";
+        public const string SetCookie = "Set-Cookie";
+        public const string Cookie = "Cookie";
+
         public HttpHeader(string name, string value)
         {
             Guard.AgainstNull(name, nameof(name));
