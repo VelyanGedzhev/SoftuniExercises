@@ -4,11 +4,14 @@ using System.Linq;
 using WebServer.Server.Enums;
 using WebServer.Server.Headers;
 using WebServer.Server.Http.Cookies;
+using WebServer.Server.Http.Sessions;
 
 namespace WebServer.Server.Http
 {
     public class HttpRequest
     {
+
+        private static Dictionary<string, HttpSession> Sessions = new();
 
         private const string NewLine = "\r\n";
         public HttpRequestMethod Method { get; private set; }
@@ -17,13 +20,15 @@ namespace WebServer.Server.Http
 
         public IReadOnlyDictionary<string, string> Query { get; private set; }
 
-        public IReadOnlyDictionary<string, string> Form { get; private set; }
+        public IReadOnlyDictionary<string, HttpHeader> Headers { get; private set; }
 
-        public IReadOnlyDictionary<string, HttpHeader> Headers { get; private set; }  
+        public IReadOnlyDictionary<string, HttpCookie> Cookies { get; private set; }
 
-        public IReadOnlyDictionary<string, HttpCookie> Cookies { get; private set; }  
+        public IReadOnlyDictionary<string, string> Form { get; private set; } 
 
         public string Body { get; private set; }
+
+        public HttpSession Session { get; private set; }
 
         public static HttpRequest Parse(string request)
         {
@@ -40,6 +45,8 @@ namespace WebServer.Server.Http
 
             var cookies = ParseCookies(headers);
 
+            var session = GetSession(cookies);
+
             var bodyLines = lines.Skip(headers.Count + 2).ToArray();
             var body = string.Join(NewLine, bodyLines);
 
@@ -52,6 +59,7 @@ namespace WebServer.Server.Http
                 Query = query,
                 Headers = headers,
                 Cookies = cookies,
+                Session = session,
                 Body = body,
                 Form = form
             };
@@ -65,7 +73,7 @@ namespace WebServer.Server.Http
                 "POST" => HttpRequestMethod.Post,
                 "PUT" => HttpRequestMethod.Put,
                 "DELETE" => HttpRequestMethod.Delete,
-                _ => HttpRequestMethod.Get //throw new InvalidOperationException($"Method {method} is not supported.")
+                _ => throw new InvalidOperationException($"Method {method} is not supported.")
             };
         }
 
@@ -138,6 +146,20 @@ namespace WebServer.Server.Http
             }
 
             return cookieCollection;
+        }
+
+        private static HttpSession GetSession(Dictionary<string, HttpCookie> cookies)
+        {
+            var sessionId = cookies.ContainsKey(HttpSession.SessionCookieName)
+                ? cookies[HttpSession.SessionCookieName].Value
+                : Guid.NewGuid().ToString();
+
+            if (!Sessions.ContainsKey(sessionId))
+            {
+                Sessions[sessionId] = new HttpSession(sessionId);
+            }
+
+            return Sessions[sessionId];
         }
 
         private static Dictionary<string, string> ParseForm(Dictionary<string, HttpHeader> headers, string body)

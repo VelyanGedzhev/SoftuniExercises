@@ -26,6 +26,12 @@ namespace WebServer.Server.Http
 
         public string Content { get; protected set; }
 
+        public static HttpResponse ForError(string message)
+            => new HttpResponse(HttpResponseStatusCode.InternalServerError)
+            {
+                Content = message
+            };
+
         public void AddHeader(string name, string value)
         {
             Guard.AgainstNull(name, nameof(name));

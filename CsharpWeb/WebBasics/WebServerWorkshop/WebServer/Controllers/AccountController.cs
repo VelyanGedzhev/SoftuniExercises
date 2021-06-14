@@ -1,4 +1,5 @@
-﻿using WebServer.Server.Controllers;
+﻿using System;
+using WebServer.Server.Controllers;
 using WebServer.Server.Http;
 using WebServer.Server.Results;
 
@@ -13,19 +14,35 @@ namespace WebServer.Controllers
 
         public ActionResult ActionWithCookies()
         {
-            const string CookieName = "My-Cookie";
+            const string cookieName = "My-Cookie";
 
-            if (this.Request.Cookies.ContainsKey(CookieName))
+            if (this.Request.Cookies.ContainsKey(cookieName))
             {
-                var cookie = this.Request.Cookies[CookieName];
+                var cookie = this.Request.Cookies[cookieName];
 
-                return Text($"Cookies already exist - {cookie}");
+                return Text($"Cookies already exist - {cookie}!");
             }
 
-            this.Response.AddCookie(CookieName, "My-value");
+            this.Response.AddCookie(cookieName, "My-value");
             this.Response.AddCookie("My-Second-Cookie", "My-Second-value");
 
             return Text("Cookies set!");
+        }
+
+        public ActionResult ActionWithSession()
+        {
+            const string currentDateKey = "CurrentDate";
+
+            if (this.Request.Session.ContainsKey(currentDateKey))
+            {
+                var currentDate = this.Request.Session[currentDateKey];
+
+                return Text($"Stored date: {currentDate}!");
+            }
+
+            this.Request.Session[currentDateKey] = DateTime.UtcNow.ToString();
+
+            return Text("Current date stored!");
         }
     }
 }
