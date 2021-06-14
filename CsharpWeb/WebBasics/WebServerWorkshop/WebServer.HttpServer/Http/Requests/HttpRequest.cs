@@ -24,7 +24,7 @@ namespace WebServer.Server.Http
 
         public IReadOnlyDictionary<string, HttpCookie> Cookies { get; private set; }
 
-        public IReadOnlyDictionary<string, string> Form { get; private set; } 
+        public IReadOnlyDictionary<string, string> Form { get; private set; }
 
         public string Body { get; private set; }
 
@@ -77,19 +77,22 @@ namespace WebServer.Server.Http
             };
         }
 
+        //TODO
+        public override string ToString() => null;
+
         private static (string, Dictionary<string, string>) ParseUrl(string url)
         {
             var urlParts = url.Split('?', 2);
 
             var path = urlParts[0].ToLower();
-            var query = urlParts.Length > 1 
+            var query = urlParts.Length > 1
                 ? ParseQuery(urlParts[1])
                 : new Dictionary<string, string>();
 
             return (path, query);
         }
 
-        private static Dictionary<string, string> ParseQuery(string queryString) 
+        private static Dictionary<string, string> ParseQuery(string queryString)
             => queryString
                  .Split('&')
                  .Select(part => part.Split('='))
@@ -174,5 +177,7 @@ namespace WebServer.Server.Http
 
             return result;
         }
+
+    
     }
 }
