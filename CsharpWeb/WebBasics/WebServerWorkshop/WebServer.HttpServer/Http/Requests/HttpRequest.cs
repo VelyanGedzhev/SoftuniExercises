@@ -77,9 +77,6 @@ namespace WebServer.Server.Http
             };
         }
 
-        //TODO
-        public override string ToString() => null;
-
         private static (string, Dictionary<string, string>) ParseUrl(string url)
         {
             var urlParts = url.Split('?', 2);
@@ -159,7 +156,10 @@ namespace WebServer.Server.Http
 
             if (!Sessions.ContainsKey(sessionId))
             {
-                Sessions[sessionId] = new HttpSession(sessionId);
+                Sessions[sessionId] = new HttpSession(sessionId)
+                { 
+                    IsNew = true
+                };
             }
 
             return Sessions[sessionId];
@@ -178,6 +178,5 @@ namespace WebServer.Server.Http
             return result;
         }
 
-    
     }
 }

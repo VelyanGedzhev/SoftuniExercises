@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using WebServer.Server.Common;
 using WebServer.Server.Enums;
 using WebServer.Server.Http;
-using WebServer.Server.Results;
 
 namespace WebServer.Server.Routing
 {

@@ -1,5 +1,4 @@
-﻿using WebServer.Server.Enums;
-using WebServer.Server.Http;
+﻿using WebServer.Server.Http;
 
 namespace WebServer.Server.Results
 {

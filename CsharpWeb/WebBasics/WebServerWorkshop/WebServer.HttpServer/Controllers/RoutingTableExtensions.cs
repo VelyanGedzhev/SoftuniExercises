@@ -1,6 +1,5 @@
 ﻿using System;
 using WebServer.Server.Http;
-using WebServer.Server.Results;
 using WebServer.Server.Routing;
 
 namespace WebServer.Server.Controllers
