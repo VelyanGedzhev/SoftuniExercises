@@ -9,10 +9,12 @@ namespace WebServer
     {
         public static async Task Main(string[] args)
             => await new HttpServer(routes => routes
+                .MapStaticFiles()
                 .MapGet<HomeController>("/", c => c.Index())
                 .MapGet<HomeController>("/tocats", c => c.LocalRedirect())
                 .MapGet<HomeController>("/softuni", c => c.ToSoftUni())
                 .MapGet<HomeController>("/Error", c => c.Error())
+                .MapGet<HomeController>("/StaticFiles", c => c.StaticFiles())
                 .MapGet<AnimalsController>("/Cats", c => c.Cats())
                 .MapGet<AnimalsController>("/Dogs", c => c.Dogs())
                 .MapGet<AnimalsController>("/Turtles", c => c.Turtles())

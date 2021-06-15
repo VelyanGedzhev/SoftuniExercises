@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using WebServer.Server.Common;
 using WebServer.Server.Enums;
@@ -24,13 +25,13 @@ namespace WebServer.Server.Http
 
         public IDictionary<string, HttpCookie> Cookies { get; } = new Dictionary<string, HttpCookie>();
 
-        public string Content { get; protected set; }
+        public byte[] Content { get; protected set; }
+
+        public bool HasContent => this.Content != null && this.Content.Any();
 
         public static HttpResponse ForError(string message)
             => new HttpResponse(HttpResponseStatusCode.InternalServerError)
-            {
-                Content = message
-            };
+                .SetContent(message, HttpContentType.PlainText);
 
         public void AddHeader(string name, string value)
         {
@@ -46,6 +47,34 @@ namespace WebServer.Server.Http
             Guard.AgainstNull(value, nameof(value));
 
             this.Cookies[name] = new HttpCookie(name, value);
+        }
+
+        public HttpResponse SetContent(string content, string contentType)
+        {
+            Guard.AgainstNull(content, nameof(content));
+            Guard.AgainstNull(contentType, nameof(contentType));
+
+            var contentLength = Encoding.UTF8.GetByteCount(content).ToString();
+
+            this.AddHeader(HttpHeader.ContentType, contentType);
+            this.AddHeader(HttpHeader.ContentLength, contentLength);
+
+            this.Content = Encoding.UTF8.GetBytes(content);
+
+            return this;
+        }
+
+        public HttpResponse SetContent(byte[] content, string contentType)
+        {
+            Guard.AgainstNull(content, nameof(content));
+            Guard.AgainstNull(contentType, nameof(contentType));
+
+            this.AddHeader(HttpHeader.ContentType, contentType);
+            this.AddHeader(HttpHeader.ContentLength, content.Length.ToString());
+
+            this.Content = content;
+
+            return this;
         }
 
         public override string ToString()
@@ -64,26 +93,13 @@ namespace WebServer.Server.Http
                 result.AppendLine($"{HttpHeader.SetCookie}: {cookie}");
             }
 
-            if (!string.IsNullOrEmpty(this.Content))
+            if (this.HasContent)
             {
-                result.AppendLine();
-                result.Append(this.Content);
+                result.AppendLine(); 
             }
 
             return result.ToString();
         }
 
-        protected void PrepareContent(string content, string contentType)
-        {
-            Guard.AgainstNull(content, nameof(content));
-            Guard.AgainstNull(contentType, nameof(contentType));
-
-            var contentLength = Encoding.UTF8.GetByteCount(content).ToString();
-
-            this.AddHeader(HttpHeader.ContentType,  contentType);
-            this.AddHeader(HttpHeader.ContentLength,  contentLength);
-
-            this.Content = content;
-        }
     }
 }

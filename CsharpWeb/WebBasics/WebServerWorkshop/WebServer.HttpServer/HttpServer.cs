@@ -11,6 +11,7 @@ namespace WebServer.Server
 {
     public class HttpServer
     {
+
         private readonly IPAddress ipAddress;
         private readonly int port;
         private readonly TcpListener listener;
@@ -147,10 +148,15 @@ namespace WebServer.Server
         private async Task WriteResponse(NetworkStream networkStream, HttpResponse response)
         {
 
-            var responseBytes = Encoding.UTF8.GetBytes(response.ToString().TrimEnd());
+            var responseBytes = Encoding.UTF8.GetBytes(response.ToString());
 
             await networkStream.WriteAsync(responseBytes);
-            
+
+
+            if (response.HasContent)
+            {
+                await networkStream.WriteAsync(response.Content);
+            }
         }
     }
 }
