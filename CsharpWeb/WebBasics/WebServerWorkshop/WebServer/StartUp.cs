@@ -11,8 +11,7 @@ namespace WebServer
             => await new HttpServer(routes => routes
                 .MapStaticFiles()
                 .MapControllers()
-                .MapGet<HomeController>("/tocats", c => c.LocalRedirect())
-                .MapPost<CatsController>("/Cats/Save", c => c.Save()))  
+                .MapGet<HomeController>("/tocats", c => c.LocalRedirect())) 
             .Start();
         
     }

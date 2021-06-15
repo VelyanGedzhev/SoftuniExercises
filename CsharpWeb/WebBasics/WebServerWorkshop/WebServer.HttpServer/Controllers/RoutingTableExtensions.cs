@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using WebServer.Server.Enums;
 using WebServer.Server.Http;
+using WebServer.Server.Http.Sessions;
 using WebServer.Server.Routing;
 
 namespace WebServer.Server.Controllers
@@ -42,9 +44,24 @@ namespace WebServer.Server.Controllers
 
                 var responseFunction = GetResponseFunction(controllerAction);
 
-                routingTable.MapGet(path, responseFunction);
+                var httpMethod = HttpRequestMethod.Get;
 
-                MapDefualtRoutes(routingTable, controllerName, actionName, responseFunction);
+                var httpMethodAttribute = controllerAction
+                    .GetCustomAttribute<HttpMethodAttribute>();
+
+                if (httpMethodAttribute != null)
+                {
+                    httpMethod = httpMethodAttribute.HttpMethod;
+                }
+
+                routingTable.Map(httpMethod, path, responseFunction);
+
+                MapDefualtRoutes(
+                    routingTable, 
+                    httpMethod, 
+                    controllerName, 
+                    actionName, 
+                    responseFunction);
             }
 
             return routingTable;
@@ -65,6 +82,11 @@ namespace WebServer.Server.Controllers
         private static Func<HttpRequest, HttpResponse> GetResponseFunction(MethodInfo controllerAction)
             => request =>
             {
+                if (!UserIsAuthorized(controllerAction, request.Session))
+                {
+                    return new HttpResponse(HttpResponseStatusCode.Unauthorized);
+                }
+
                 var controllerInstance = CreateController(controllerAction.DeclaringType, request);
 
                 return (HttpResponse)controllerAction.Invoke(controllerInstance, Array.Empty<object>());
@@ -72,6 +94,7 @@ namespace WebServer.Server.Controllers
 
         private static void MapDefualtRoutes(
             IRoutingTable routingTable,
+            HttpRequestMethod httpMethod,
             string controllerName,
             string actionName,
             Func<HttpRequest, HttpResponse> responseFunction)
@@ -81,11 +104,11 @@ namespace WebServer.Server.Controllers
 
             if (actionName == defaultActionName)
             {
-                routingTable.MapGet($"/{controllerName}", responseFunction);
+                routingTable.Map(httpMethod, $"/{controllerName}", responseFunction);
 
                 if (controllerName == defaultControllerName)
                 {
-                    routingTable.MapGet("/", responseFunction);
+                    routingTable.Map(httpMethod, "/", responseFunction);
                 }
             }
         }
@@ -96,5 +119,29 @@ namespace WebServer.Server.Controllers
         private static TController CreateController<TController>(HttpRequest request)
             where TController : Controller
             => (TController)CreateController(typeof(TController), request);
+
+        private static bool UserIsAuthorized(
+            MethodInfo controllerAction,
+            HttpSession session)
+        {
+            var authorizationRequired = controllerAction
+                 .DeclaringType
+                 .GetCustomAttribute<AuthorizeAttribute>()
+                  ?? controllerAction
+                  .GetCustomAttribute<AuthorizeAttribute>();
+
+            if (authorizationRequired != null)
+            {
+                var userIsAuthorized = session.ContainsKey(Controller.UserSessionKey)
+                    && session[Controller.UserSessionKey] != null;
+
+                if (!userIsAuthorized)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
     }
 }

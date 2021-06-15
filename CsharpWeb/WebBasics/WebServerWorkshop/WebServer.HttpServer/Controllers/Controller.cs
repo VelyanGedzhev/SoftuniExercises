@@ -8,7 +8,7 @@ namespace WebServer.Server.Controllers
 {
     public abstract class Controller
     {
-        private const string UserSessionKey = "AuthenticatedUserId";
+        public const string UserSessionKey = "AuthenticatedUserId";
 
         protected Controller(HttpRequest request)
         {
