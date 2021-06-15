@@ -15,15 +15,6 @@ namespace WebServer.Controllers
 
         public HttpResponse Login()
         {
-            // var user = this.db.Users.Find(username, password);
-
-            // if(user != null)
-            // {
-            //    this.SignIn(user.Id);
-            //    return Text("User is logged in!");
-            // }
-
-            // return Text("Invalid credentials!");
 
             var someUserId = "MyUserId"; //should come from the DB
             this.SignIn(someUserId);
@@ -49,7 +40,7 @@ namespace WebServer.Controllers
             }
         }
 
-        public ActionResult CookiesCheck()
+        public HttpResponse CookiesCheck()
         {
             const string cookieName = "My-Cookie";
 
@@ -66,7 +57,7 @@ namespace WebServer.Controllers
             return Text("Cookies set!");
         }
 
-        public ActionResult SessionCheck()
+        public HttpResponse SessionCheck()
         {
             const string currentDateKey = "CurrentDate";
 

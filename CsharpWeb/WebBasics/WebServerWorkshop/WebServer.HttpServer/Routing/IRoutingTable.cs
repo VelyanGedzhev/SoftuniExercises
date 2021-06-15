@@ -9,6 +9,7 @@ namespace WebServer.Server.Routing
     {
         IRoutingTable MapStaticFiles(string folder = Settings.StaticFilesRootFolder);
 
+
         IRoutingTable Map(HttpRequestMethod method, string path, HttpResponse response);
 
         IRoutingTable Map(HttpRequestMethod method, string path, Func<HttpRequest, HttpResponse> responseFunction);
