@@ -42,15 +42,15 @@ namespace WebServer.Controllers
         {
             const string cookieName = "My-Cookie";
 
-            if (this.Request.Cookies.ContainsKey(cookieName))
+            if (this.Request.Cookies.Contains(cookieName))
             {
                 var cookie = this.Request.Cookies[cookieName];
 
                 return Text($"Cookies already exist - {cookie}!");
             }
 
-            this.Response.AddCookie(cookieName, "My-value");
-            this.Response.AddCookie("My-Second-Cookie", "My-Second-value");
+            this.Response.Cookies.Add(cookieName, "My-value");
+            this.Response.Cookies.Add("My-Second-Cookie", "My-Second-value");
 
             return Text("Cookies set!");
         }

@@ -13,11 +13,11 @@ namespace WebServer.Controllers
 
             var query = this.Request.Query;
 
-            var cateName = query.ContainsKey(nameKey)
+            var cateName = query.Contains(nameKey)
                 ? query[nameKey]
                 : "the cats";
 
-            var catAge = query.ContainsKey(ageKey)
+            var catAge = query.Contains(ageKey)
                 ? int.Parse(query[ageKey])
                 : 0;
 

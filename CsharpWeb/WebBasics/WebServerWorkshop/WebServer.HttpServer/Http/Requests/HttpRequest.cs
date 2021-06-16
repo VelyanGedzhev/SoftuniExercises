@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using WebServer.Server.Enums;
 using WebServer.Server.Headers;
-using WebServer.Server.Http.Cookies;
+using WebServer.Server.Http.Collections;
 using WebServer.Server.Http.Sessions;
 
 namespace WebServer.Server.Http
@@ -19,13 +19,13 @@ namespace WebServer.Server.Http
 
         public string Path { get; private set; }
 
-        public IReadOnlyDictionary<string, string> Query { get; private set; }
+        public QueryCollection Query { get; private set; }
 
-        public IReadOnlyDictionary<string, HttpHeader> Headers { get; private set; }
+        public HeaderCollection Headers { get; private set; }
 
-        public IReadOnlyDictionary<string, HttpCookie> Cookies { get; private set; }
+        public CookieCollection Cookies { get; private set; }
 
-        public IReadOnlyDictionary<string, string> Form { get; private set; }
+        public FormCollection Form { get; private set; }
 
         public string Body { get; private set; }
 
@@ -68,41 +68,54 @@ namespace WebServer.Server.Http
 
         private static HttpRequestMethod ParseMethod(string method)
         {
-            return method.ToUpper() switch
+            try
             {
-                "GET" => HttpRequestMethod.Get,
-                "POST" => HttpRequestMethod.Post,
-                "PUT" => HttpRequestMethod.Put,
-                "DELETE" => HttpRequestMethod.Delete,
-                _ => throw new InvalidOperationException($"Method {method} is not supported.")
-            };
+                return (HttpRequestMethod)Enum.Parse(typeof(HttpRequestMethod), method, true);
+            }
+            catch (Exception)
+            {
+                throw new InvalidOperationException($"Method {method} is not supported!");
+            }
+
+            //return method.ToUpper() switch
+            //{
+            //    "GET" => HttpRequestMethod.Get,
+            //    "POST" => HttpRequestMethod.Post,
+            //    "PUT" => HttpRequestMethod.Put,
+            //    "DELETE" => HttpRequestMethod.Delete,
+            //    _ => throw new InvalidOperationException($"Method {method} is not supported.")
+            //};
         }
 
-        private static (string, Dictionary<string, string>) ParseUrl(string url)
+        private static (string, QueryCollection) ParseUrl(string url)
         {
             var urlParts = url.Split('?', 2);
 
             var path = urlParts[0].ToLower();
             var query = urlParts.Length > 1
                 ? ParseQuery(urlParts[1])
-                : new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
+                : new QueryCollection();
 
             return (path, query);
         }
 
-        private static Dictionary<string, string> ParseQuery(string queryString)
-            => HttpUtility.UrlDecode(queryString)
-                 .Split('&')
-                 .Select(part => part.Split('='))
-                 .Where(part => part.Length == 2)
-                 .ToDictionary(
-                     part => part[0], 
-                     part => part[1],
-                     StringComparer.InvariantCultureIgnoreCase);
-
-        private static Dictionary<string, HttpHeader> ParseHeaders(IEnumerable<string> headerLines)
+        private static QueryCollection ParseQuery(string queryString)
         {
-            var headerCollection = new Dictionary<string, HttpHeader>(StringComparer.InvariantCultureIgnoreCase);
+            var queryCollection = new QueryCollection();
+
+            var parsedResult = ParseQueryString(queryString);
+
+            foreach (var (name, value) in parsedResult)
+            {
+                queryCollection.Add(name, value);
+            }
+
+            return queryCollection;
+        }
+
+        private static HeaderCollection ParseHeaders(IEnumerable<string> headerLines)
+        {
+            var headerCollection = new HeaderCollection();
 
             foreach (var headerLine in headerLines)
             {
@@ -121,23 +134,21 @@ namespace WebServer.Server.Http
                 var headerName = headerParts[0];
                 var headerValue = headerParts[1].Trim();
 
-                var header = new HttpHeader(headerName, headerValue);
-
-                headerCollection[headerName] = header;
+                headerCollection.Add(headerName, headerValue);
             }
 
             return headerCollection;
         }
 
-        private static Dictionary<string, HttpCookie> ParseCookies(Dictionary<string, HttpHeader> headers)
+        private static CookieCollection ParseCookies(HeaderCollection headers)
         {
-            var cookieCollection = new Dictionary<string, HttpCookie>(StringComparer.InvariantCultureIgnoreCase);
+            var cookieCollection = new CookieCollection();
 
-            if (headers.ContainsKey(HttpHeader.Cookie))
+            if (headers.Contains(HttpHeader.Cookie))
             {
                 var cookieHeader = headers[HttpHeader.Cookie];
 
-                var allCookies = cookieHeader.Value
+                var allCookies = cookieHeader
                     .Split(';')
                     .Select(c => c.Split('='));
 
@@ -145,19 +156,36 @@ namespace WebServer.Server.Http
                 {
                     var cookieName = cookieParts[0].Trim();
                     var cookieValue = cookieParts[1].Trim();
-                    var cookie = new HttpCookie(cookieName, cookieValue);
 
-                    cookieCollection[cookieName] = cookie;
+                    cookieCollection.Add(cookieName, cookieValue);
                 }
             }
 
             return cookieCollection;
         }
 
-        private static HttpSession GetSession(Dictionary<string, HttpCookie> cookies)
+        private static FormCollection ParseForm(HeaderCollection headers, string body)
         {
-            var sessionId = cookies.ContainsKey(HttpSession.SessionCookieName)
-                ? cookies[HttpSession.SessionCookieName].Value
+            var formCollection = new FormCollection();
+
+            if (headers.Contains(HttpHeader.ContentType)
+                && headers[HttpHeader.ContentType] == HttpContentType.FormUrlEncoded)
+            {
+                var parsedResult = ParseQueryString(body);
+
+                foreach (var (name, value) in parsedResult)
+                {
+                    formCollection.Add(name, value);
+                }
+            }
+
+            return formCollection;
+        }
+
+        private static HttpSession GetSession(CookieCollection cookies)
+        {
+            var sessionId = cookies.Contains(HttpSession.SessionCookieName)
+                ? cookies[HttpSession.SessionCookieName]
                 : Guid.NewGuid().ToString();
 
             if (!Sessions.ContainsKey(sessionId))
@@ -171,18 +199,15 @@ namespace WebServer.Server.Http
             return Sessions[sessionId];
         }
 
-        private static Dictionary<string, string> ParseForm(Dictionary<string, HttpHeader> headers, string body)
-        {
-            var result = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
-
-            if (headers.ContainsKey(HttpHeader.ContentType)
-                && headers[HttpHeader.ContentType].Value == HttpContentType.FormUrlEncoded)
-            {
-                result = ParseQuery(body);
-            }
-
-            return result;
-        }
+        private static Dictionary<string, string> ParseQueryString(string queryString) 
+            => HttpUtility.UrlDecode(queryString)
+                 .Split('&')
+                 .Select(part => part.Split('='))
+                 .Where(part => part.Length == 2)
+                 .ToDictionary(
+                     part => part[0],
+                     part => part[1],
+                     StringComparer.InvariantCultureIgnoreCase);
 
     }
 }
