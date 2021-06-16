@@ -117,12 +117,22 @@ namespace WebServer.Server.Controllers
             }
         }
 
-        private static Controller CreateController(Type controller, HttpRequest request)
-            => (Controller)Activator.CreateInstance(controller, new[] { request });
-
         private static TController CreateController<TController>(HttpRequest request)
             where TController : Controller
             => (TController)CreateController(typeof(TController), request);
+
+        private static Controller CreateController(Type controllerType, HttpRequest request)
+        {
+            var controller = (Controller)Activator.CreateInstance(controllerType);
+
+            controllerType
+                .GetProperty("Request", 
+                    BindingFlags.Instance | 
+                    BindingFlags.NonPublic)
+                .SetValue(controller, request);
+
+            return controller;
+        }
 
         private static bool UserIsAuthorized(
             MethodInfo controllerAction,
@@ -185,7 +195,9 @@ namespace WebServer.Server.Controllers
                     {
                         var propertyValue = request.GetValue(prop.Name);
 
-                        prop.SetValue(parameterValue, propertyValue);
+                        prop.SetValue(
+                            parameterValue, 
+                            Convert.ChangeType(propertyValue, prop.PropertyType));
                     }
 
                     parameterValues[i] = parameterValue;
