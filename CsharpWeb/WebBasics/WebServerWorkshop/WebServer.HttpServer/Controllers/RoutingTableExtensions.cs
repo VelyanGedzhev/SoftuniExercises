@@ -12,6 +12,7 @@ namespace WebServer.Server.Controllers
     public static class RoutingTableExtensions
     {
         private static Type httpResponseType = typeof(HttpResponse);
+        private static Type stringType = typeof(string);
 
         public static IRoutingTable MapGet<TController>(
             this IRoutingTable routingTable,
@@ -89,8 +90,11 @@ namespace WebServer.Server.Controllers
 
                 var controllerInstance = CreateController(controllerAction.DeclaringType, request);
 
-                return (HttpResponse)controllerAction.Invoke(controllerInstance, Array.Empty<object>());
+                var parameterValues = GetParametersValues(controllerAction, request);
+
+                return (HttpResponse)controllerAction.Invoke(controllerInstance, parameterValues);
             };
+
 
         private static void MapDefualtRoutes(
             IRoutingTable routingTable,
@@ -143,5 +147,62 @@ namespace WebServer.Server.Controllers
 
             return true;
         }
+
+        private static object[] GetParametersValues(
+            MethodInfo controllerAction,
+            HttpRequest request)
+        {
+            var actionParameters = controllerAction
+                    .GetParameters()
+                    .Select(p => new
+                    {
+                        p.Name,
+                        Type = p.ParameterType
+                    })
+                    .ToArray();
+
+            var parameterValues = new object[actionParameters.Length];
+
+            for (int i = 0; i < actionParameters.Length; i++)
+            {
+                var parameter = actionParameters[i];
+                var parameterName = parameter.Name;
+                var parameterType = parameter.Type;
+
+                if (parameterType.IsPrimitive 
+                    || parameterType == stringType)
+                {
+                    var parameterValue = request.GetValue(parameterName);
+                    parameterValues[i] = Convert.ChangeType(parameterValue, parameterType);
+                }
+                else
+                {
+                    var parameterValue = Activator.CreateInstance(parameterType);
+
+                    var parameterProperties = parameterType.GetProperties();
+
+                    foreach (var prop in parameterProperties)
+                    {
+                        var propertyValue = request.GetValue(prop.Name);
+
+                        prop.SetValue(parameterValue, propertyValue);
+                    }
+
+                    parameterValues[i] = parameterValue;
+                } 
+
+            }
+
+            return parameterValues;
+        }
+
+        private static string GetValue(this HttpRequest request, string name)
+            => request.Query.GetValueOrDefault(name) ??
+                         request.Form.GetValueOrDefault(name);
+
+        //private static object ConvertType(Type type, object value) 
+        //    => type == stringType
+        //        ? value
+        //        : Convert.ChangeType(value, type);
     }
 }

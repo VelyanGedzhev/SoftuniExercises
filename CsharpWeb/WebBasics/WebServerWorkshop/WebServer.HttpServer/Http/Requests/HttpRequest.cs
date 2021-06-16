@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web;
 using WebServer.Server.Enums;
 using WebServer.Server.Headers;
 using WebServer.Server.Http.Cookies;
@@ -84,21 +85,24 @@ namespace WebServer.Server.Http
             var path = urlParts[0].ToLower();
             var query = urlParts.Length > 1
                 ? ParseQuery(urlParts[1])
-                : new Dictionary<string, string>();
+                : new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
 
             return (path, query);
         }
 
         private static Dictionary<string, string> ParseQuery(string queryString)
-            => queryString
+            => HttpUtility.UrlDecode(queryString)
                  .Split('&')
                  .Select(part => part.Split('='))
                  .Where(part => part.Length == 2)
-                 .ToDictionary(part => part[0], part => part[1]);
+                 .ToDictionary(
+                     part => part[0], 
+                     part => part[1],
+                     StringComparer.InvariantCultureIgnoreCase);
 
         private static Dictionary<string, HttpHeader> ParseHeaders(IEnumerable<string> headerLines)
         {
-            var headerCollection = new Dictionary<string, HttpHeader>();
+            var headerCollection = new Dictionary<string, HttpHeader>(StringComparer.InvariantCultureIgnoreCase);
 
             foreach (var headerLine in headerLines)
             {
@@ -127,7 +131,7 @@ namespace WebServer.Server.Http
 
         private static Dictionary<string, HttpCookie> ParseCookies(Dictionary<string, HttpHeader> headers)
         {
-            var cookieCollection = new Dictionary<string, HttpCookie>();
+            var cookieCollection = new Dictionary<string, HttpCookie>(StringComparer.InvariantCultureIgnoreCase);
 
             if (headers.ContainsKey(HttpHeader.Cookie))
             {
@@ -169,7 +173,7 @@ namespace WebServer.Server.Http
 
         private static Dictionary<string, string> ParseForm(Dictionary<string, HttpHeader> headers, string body)
         {
-            var result = new Dictionary<string, string>();
+            var result = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
 
             if (headers.ContainsKey(HttpHeader.ContentType)
                 && headers[HttpHeader.ContentType].Value == HttpContentType.FormUrlEncoded)
