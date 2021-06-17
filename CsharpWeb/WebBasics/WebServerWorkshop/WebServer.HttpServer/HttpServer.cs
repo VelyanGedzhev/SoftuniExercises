@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using WebServer.Server.Http;
 using WebServer.Server.Http.Sessions;
 using WebServer.Server.Routing;
+using WebServer.Server.Services;
 
 namespace WebServer.Server
 {
@@ -15,29 +16,50 @@ namespace WebServer.Server
         private readonly IPAddress ipAddress;
         private readonly int port;
         private readonly TcpListener listener;
-        private readonly RoutingTable routingTable;
 
-        public HttpServer(string ipAddress, int port, Action<IRoutingTable> routingTableConfiguration)
+        private readonly RoutingTable routingTable;
+        private readonly ServiceCollection services;
+
+        private HttpServer(
+            string ipAddress, 
+            int port,
+            IRoutingTable routingTable)
         {
             this.ipAddress = IPAddress.Parse(ipAddress);
             this.port = port;
 
             this.listener = new TcpListener(this.ipAddress, this.port);
 
-            this.routingTable = new RoutingTable();
-            routingTableConfiguration(this.routingTable);
+            this.routingTable = (RoutingTable)routingTable;
+            this.services = new ServiceCollection();
         }
 
-        public HttpServer(int port, Action<IRoutingTable> routingTable) 
+        private HttpServer(int port, IRoutingTable routingTable)
             : this("127.0.0.1", port, routingTable)
         {
         }
 
-        public HttpServer(Action<IRoutingTable> routingTable)
+        private HttpServer(IRoutingTable routingTable)
             :this(5000, routingTable)
         {
         }
             
+        public static HttpServer WithRoutes(Action<IRoutingTable> routingTableConfig)
+        {
+            var routingTable = new RoutingTable();
+
+            routingTableConfig(routingTable);
+
+            var httpServer = new HttpServer(routingTable);
+
+            return httpServer;
+        }
+
+        public  HttpServer WithServices(Action<IServiceCollection> serviceCollectionConfig)
+        {
+            serviceCollectionConfig(this.services);
+            return this;
+        }
 
         public async Task Start()
         {
@@ -61,7 +83,7 @@ namespace WebServer.Server
 
                     try
                     {
-                        var request = HttpRequest.Parse(requestText);
+                        var request = HttpRequest.Parse(requestText, this.services);
 
                         var response = this.routingTable.ExecuteRequest(request);
 

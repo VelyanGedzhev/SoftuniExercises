@@ -6,6 +6,7 @@ using WebServer.Server.Enums;
 using WebServer.Server.Headers;
 using WebServer.Server.Http.Collections;
 using WebServer.Server.Http.Sessions;
+using WebServer.Server.Services;
 
 namespace WebServer.Server.Http
 {
@@ -31,7 +32,9 @@ namespace WebServer.Server.Http
 
         public HttpSession Session { get; private set; }
 
-        public static HttpRequest Parse(string request)
+        public ServiceCollection Services { get; private set; }
+
+        public static HttpRequest Parse(string request, ServiceCollection services)
         {
             var lines = request.Split(NewLine);
 
@@ -62,7 +65,8 @@ namespace WebServer.Server.Http
                 Cookies = cookies,
                 Session = session,
                 Body = body,
-                Form = form
+                Form = form,
+                Services = services
             };
         }
 
