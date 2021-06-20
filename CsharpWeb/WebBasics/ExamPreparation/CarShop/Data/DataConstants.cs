@@ -16,7 +16,7 @@
         public const string UserTypeMechanic = "Mechanic";
         public const string UserTypeClient = "Client";
         public const string UserEmailValidator = @"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$";
-        
 
+        public const int IssueDescriptionMinLength = 5;
     }
 }

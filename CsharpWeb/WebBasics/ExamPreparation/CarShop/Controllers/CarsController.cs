@@ -63,8 +63,8 @@ namespace CarShop.Controllers
                 OwnerId = this.User.Id
             };
 
-            data.Cars.Add(car);
-            data.SaveChanges();
+            this.data.Cars.Add(car);
+            this.data.SaveChanges();
 
             return Redirect("/Cars/All");
         }

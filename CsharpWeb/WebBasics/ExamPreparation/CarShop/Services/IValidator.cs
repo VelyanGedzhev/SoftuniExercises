@@ -9,5 +9,7 @@ namespace CarShop.Services
         ICollection<string> ValidateUser(RegisterUserFormModel model); 
 
         ICollection<string> ValidateCar(AddCarFormModel model); 
+
+        string ValidateIssue(string description); 
     }
 }

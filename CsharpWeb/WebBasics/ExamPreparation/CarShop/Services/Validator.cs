@@ -1,4 +1,5 @@
 ﻿using CarShop.Models.Cars;
+using CarShop.Models.Issues;
 using CarShop.Models.Users;
 using System;
 using System.Collections.Generic;
@@ -33,6 +34,17 @@ namespace CarShop.Services
 
 
             return errors;
+        }
+
+        public string ValidateIssue(string description)
+        {
+
+            if (string.IsNullOrWhiteSpace(description))
+            {
+                return ($"The '{description}' is not valid. Must be at least 5 characters long.");
+            }
+
+            return string.Empty;
         }
 
         public ICollection<string> ValidateUser(RegisterUserFormModel model)
