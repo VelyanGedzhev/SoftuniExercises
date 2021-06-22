@@ -21,11 +21,11 @@
                             @foreach (var commit in Model)
                             {
                                 <tr class="table-light">
-                                    <th scope="row">@commit.Name</th>
+                                    <th scope="row">@commit.Repository</th>
                                     <td>@commit.Description</td>
                                     <td>@commit.CreatedOn</td>
                                     <td>
-                                        <a class="btn btn-block btn-primary text-white mb-3" href="/Commits/Delete">Delete</a>
+                                        <a class="btn btn-block btn-primary text-white mb-3" href="/Commits/Delete?id=@commit.Id">Delete</a>
                                     </td>
                                 </tr>
                             }

@@ -10,17 +10,17 @@ namespace Git.Controllers
 {
     public class UsersController : Controller
     {
-        private IUsersService usersService;
-        private IPasswordHasher passwordHasher;
-        private ApplicationDbContext data;
+        private readonly IValidator validator;
+        private readonly IPasswordHasher passwordHasher;
+        private readonly ApplicationDbContext data;
         
 
         public UsersController(
-            IUsersService usersService,
+            IValidator validator,
             IPasswordHasher passwordHasher,
             ApplicationDbContext data)
         {
-            this.usersService = usersService;
+            this.validator = validator;
             this.passwordHasher = passwordHasher;
             this.data = data;
         }
@@ -55,7 +55,7 @@ namespace Git.Controllers
         [HttpPost]
         public HttpResponse Register(RegisterUserFormModel model)
         {
-            var modelErrors = this.usersService.ValidateUser(model);
+            var modelErrors = this.validator.ValidateUser(model);
 
             if (this.data.Users.Any(u => u.Username == model.Username))
             {

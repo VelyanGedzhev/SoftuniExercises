@@ -1,7 +1,6 @@
 ﻿using Git.Data;
 using Git.Data.Models;
 using Git.Models.Commits;
-using Git.Services;
 using MyWebServer.Controllers;
 using MyWebServer.Http;
 using System;
@@ -9,19 +8,13 @@ using System.Linq;
 
 namespace Git.Controllers
 {
+    using static Data.DataConstants;
     public class CommitsController : Controller
     {
-
-        private IRepositoriesService repositoriesService;
-        private ApplicationDbContext data;
+        private readonly ApplicationDbContext data;
 
         public CommitsController(
-            IRepositoriesService repositoriesService,
-            ApplicationDbContext data)
-        {
-            this.repositoriesService = repositoriesService;
-            this.data = data;
-        }
+            ApplicationDbContext data) => this.data = data;
 
         [Authorize]
         public HttpResponse All()
@@ -32,7 +25,7 @@ namespace Git.Controllers
                 .Select(c => new CommitListingViewModel
                 {
                     Id = c.Id,
-                    Name = c.Repository.Name,
+                    Repository = c.Repository.Name,
                     Description = c.Description,
                     CreatedOn = c.CreatedOn.ToString("g")
                     
@@ -43,11 +36,22 @@ namespace Git.Controllers
         }
 
         [Authorize]
-        public HttpResponse Create(string repoId)
+        public HttpResponse Create(string id)
         {
             var repository = this.data
                 .Repositories
-                .FirstOrDefault(r => r.Id == repoId);
+                .Where(r => r.Id == id)
+                .Select(r => new CommitToRepositoryViewModel
+                {
+                    Id = r.Id,
+                    Name = r.Name
+                })
+                .FirstOrDefault();
+
+            if (repository == null)
+            {
+                return BadRequest();
+            }
 
             return View(repository);
         }
@@ -56,6 +60,16 @@ namespace Git.Controllers
         [HttpPost]
         public HttpResponse Create(CreateCommitFormModel model)
         {
+            if (!this.data.Repositories.Any(r => r.Id == model.Id))
+            {
+                return Error($"Repository with does not exists.");
+            }
+
+            if (model.Description.Length < CommitDescriptionMinLength)
+            {
+                return Error($"Description '{model.Description}' is invalid. It must be at least {CommitDescriptionMinLength} characters long.");
+            }
+
             var commit = new Commit
             {
                 Description = model.Description,
@@ -71,14 +85,24 @@ namespace Git.Controllers
         }
 
         [Authorize]
-        [HttpPost]
-        public HttpResponse Delete(string commitId)
+        public HttpResponse Delete(string id)
         {
             var commit = this.data
                 .Commits
-                .FirstOrDefault(c => c.Id == commitId);
+                .Find(id);
+
+            if (commit == null)
+            {
+                return Error("There is no such commit.");
+            }
+
+            if (commit.CreatorId != this.User.Id)
+            {
+                return Error("The commit can be deleted only by its owner.");
+            }
 
             this.data.Commits.Remove(commit);
+            this.data.SaveChanges();
 
             return Redirect("/Commits/All");
         }

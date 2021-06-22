@@ -17,8 +17,7 @@ namespace Git
                    .MapControllers())
                .WithServices(services => services
                    .Add<IViewEngine, CompilationViewEngine>()
-                   .Add<IUsersService, UsersService>()
-                   .Add<IRepositoriesService, RepositoriesService>()
+                   .Add<IValidator, Validator>()
                    .Add<IPasswordHasher, PasswordHasher>()
                    .Add<ApplicationDbContext>())
                .WithConfiguration<ApplicationDbContext>(c => c.Database.Migrate())
