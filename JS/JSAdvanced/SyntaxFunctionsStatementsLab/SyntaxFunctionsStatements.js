@@ -16,14 +16,14 @@ function printSumAndAverageLength(firstString, secondString, thirdString){
 }
 
 //Task 3. Largest Number
-function FindLargestNumber(firstNumber, secondNumber, thirdNumber){
+function findLargestNumber(firstNumber, secondNumber, thirdNumber){
     var largestNumber = Math.max(firstNumber, secondNumber, thirdNumber);
 
     console.log(`The largest number is ${largestNumber}.`);
 }
 
 //Task 4. Circle Area
-function CalculateCircleArea(radius){
+function calculateCircleArea(radius){
     let inputType = typeof(radius);
 
     if(inputType == 'number'){
@@ -36,7 +36,7 @@ function CalculateCircleArea(radius){
 }
 
 //Task 5. Math Operations
-function SolveOperation(firstnumber, secondNumber, operator){
+function solveOperation(firstnumber, secondNumber, operator){
     let result;
 
     switch(operator){
@@ -52,7 +52,7 @@ function SolveOperation(firstnumber, secondNumber, operator){
 }
 
 //Task 6. Sum of Numbers N…M
-function FindSum(startAstring, endAsString) {
+function findSum(startAstring, endAsString) {
     let start = Number(startAstring);
     let end = Number(endAsString);
     let result = 0;
@@ -65,7 +65,7 @@ function FindSum(startAstring, endAsString) {
 }
 
 //Task 7. Day of Week
-function DayAsANumber(day){
+function dayAsANumber(day){
     let result;
 
     switch(day){
@@ -83,12 +83,12 @@ function DayAsANumber(day){
 }
 
 //Task 8. Days in a month
-function GetDaysInMonth(month, year){
+function getDaysInMonth(month, year){
     return new Date(year, month, 0).getDate();
 }
 
 //Task 9. Square of Stars
-function PrintStarsRectangle(size = 5){
+function printStarsRectangle(size = 5){
 
     for (let currRow = 1; currRow <= size; currRow++) {
 
@@ -103,7 +103,7 @@ function PrintStarsRectangle(size = 5){
 }
 
 //Task 10. Aggregate Elements
-function solve(elements) {
+function aggreagate(elements) {
     let sum = elements.reduce((a, b) => a + b);
     let concatenatedValues = elements.join('');
     let inversedValuesSum = aggregate(elements, 0, (a, b) => a + 1 / b);
