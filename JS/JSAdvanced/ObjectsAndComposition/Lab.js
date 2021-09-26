@@ -31,20 +31,25 @@ function citiesRegistry(citiesArr) {
 }
 
 //Task 3. City Taxes
-function cityTaxes(name, population, treasury) {
-    return {
-        name, population, treasury,
+function createCityRecord(name, population, treasury) {
+
+    const record = {
+        name,
+        population,
+        treasury,
         taxRate: 10,
         collectTaxes() {
-            this.treasury += this.population * this.taxRate;
+            this.treasury += Math.floor(this.population * this.taxRate);
         },
-        applyGrowth(percentage){
-            this.population += Math.floor(this.population * percentage / 100);
+        applyGrowth(percentage) {
+            this.population += Math.floor(this.population * (percentage / 100));
         },
-        applyRecession(){
-            this.treasury -= Math.floor(this.treasury * percentage / 100);
-        },
+        applyRecession(percentage) {
+            this.treasury -= Math.ceil(this.treasury * (percentage / 100));
+        }
     };
+
+    return record;
 }
 
 //Task 4. Object Factory
@@ -60,4 +65,45 @@ function factory(library, orders){
 
         return result;
     }
+}
+
+//Task 5.Assembly Line
+function createAssemblyLine() {
+
+    return {
+        hasClima: (car) => {
+            car.temp = 21;
+            car.tempSettings = 21;
+            car.adjustTemp = () => {
+                if (car.temp < car.tempSettings) {
+                    car.temp++;
+                } else if (car.temp > car.tempSettings) {
+                    car.temp--;
+                }
+            };
+        },
+        hasAudio: (car) => {
+            car.currentTrack = { name: '', artist: '' };
+            car.nowPlaying = () => {
+                if (car.currentTrack !== null) {
+                    console.log(`Now playing '${car.currentTrack.name}' by ${car.currentTrack.artist}`);
+                }
+            };
+        },
+        hasParktronic: (car) => {
+            car.checkDistance = (distance) => {
+                let message = '';
+
+                if (distance < 0.1) {
+                    message = 'Beep! Beep! Beep!';
+                } else if (distance >= 0.1 && distance < 0.25) {
+                    message = 'Beep! Beep!';
+                } else if (distance >= 0.25 && distance < 0.5) {
+                    message = 'Beep!';
+                }
+
+                console.log(message);
+            };
+        }
+    };
 }
