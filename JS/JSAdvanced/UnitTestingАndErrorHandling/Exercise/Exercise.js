@@ -43,7 +43,6 @@ function isOddOrEven(string) {
     return "odd";
 }
 
-
 // Task 3. Char Lookup
 function lookupChar(string, index) {
     if (typeof(string) !== 'string' || !Number.isInteger(index)) {
@@ -55,7 +54,6 @@ function lookupChar(string, index) {
 
     return string.charAt(index);
 }
-
 
 // Task 4. Math Enforcer
 let mathEnforcer = {
@@ -79,8 +77,8 @@ let mathEnforcer = {
     }
 };
 
-
 module.exports = {
     isOddOrEven,
-    lookupChar
+    lookupChar,
+    mathEnforcer
 };
