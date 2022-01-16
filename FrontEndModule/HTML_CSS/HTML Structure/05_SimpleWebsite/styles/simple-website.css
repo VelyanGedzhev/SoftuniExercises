@@ -1,0 +1,48 @@
+body {
+    margin: 0px;
+    background-color: #CCCCCC;
+}
+
+body nav ul {
+    background-color: #444;
+    text-align: center;
+    padding: 0px;
+    margin: 0px;
+    list-style: none;
+}
+
+body nav ul li {
+    display: inline-block;
+    font-size: 24px;
+    line-height: 40px;
+    height: 40px;
+    padding: 20px;
+}
+
+body nav ul li a {
+    text-decoration: none;
+    color: #ffffff;
+}
+
+body main section article{
+    margin-left: 20px;
+}
+
+body main section article header h1 {
+    font-size: 28px;
+}
+
+body main section article header p {
+    font-style: italic;
+}
+
+body main section article p {
+    font-size: 24px;
+}
+
+body footer {
+    padding: 10px;
+    color:  #fff;
+    text-align: center;
+    background-color: #444;
+}
