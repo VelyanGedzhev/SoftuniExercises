@@ -1,0 +1,11 @@
+<ul #gamesContainer>
+    <li *ngFor="let game of games">
+        <span class="game_title">{{game.title}}</span>
+        <span class="game_price" *ngIf="game.price">, ${{game.price}}</span>
+        <span>
+            <img [attr.src]="game.image" [alt]="game.title + '\'s image'" width="250px">
+        </span>
+    </li>
+</ul>
+
+<h3>Total Games: {{gamesContainer.children.length}}</h3>
