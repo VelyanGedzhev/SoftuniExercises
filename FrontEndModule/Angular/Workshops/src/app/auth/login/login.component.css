@@ -1,4 +1,7 @@
 /*login register forms  */
+:host {
+    width: 100%;
+}
 
 form.login, form.register {
     width: 40%;
