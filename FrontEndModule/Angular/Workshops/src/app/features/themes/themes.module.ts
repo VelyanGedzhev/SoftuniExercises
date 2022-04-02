@@ -7,6 +7,8 @@ import { ThemeListComponent } from './theme-list/theme-list.component';
 import { ThemesPageComponent } from './themes-page/themes-page.component';
 import { ThemesRoutingModule } from './themes-routing.module';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { ThemeDetailsPageComponent } from './theme-details-page/theme-details-page.component';
+import { NewThemePageComponent } from './new-theme-page/new-theme-page.component';
 
 
 
@@ -17,6 +19,8 @@ import { SharedModule } from 'src/app/shared/shared.module';
     ThemeListItemComponent,
     PostListComponent,
     ThemesPageComponent,
+    ThemeDetailsPageComponent,
+    NewThemePageComponent,
   ],
   imports: [
     CommonModule,
