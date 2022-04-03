@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { ICreateUserDto, UserService } from 'src/app/core/user.service';
 import { customEmailValidator, passwordMatch } from '../login/util';
 
 @Component({
@@ -26,12 +28,26 @@ export class RegisterComponent implements OnInit {
     'telephoneRegion': new FormControl()
   });
 
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(
+    private formBuilder: FormBuilder, 
+    private userService: UserService,
+    private router: Router) { }
 
   ngOnInit(): void {
   }
 
   handleRegister(){
-    console.log('successfull registration')
+    const {username, email, passwords, telephone, telephoneRegion} = this.registerFormGroup.value;
+
+    const body: ICreateUserDto = {
+      username: username,
+      email: email,
+      password: passwords.password,
+      ...(!!telephone && { telephone: telephoneRegion + telephone })
+    }
+
+    this.userService.register(body).subscribe(() => {
+      this.router.navigate(['/home']);
+    });
   }
 }

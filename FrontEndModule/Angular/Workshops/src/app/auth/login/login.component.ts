@@ -11,6 +11,8 @@ import { customEmailValidator } from './util';
 })
 export class LoginComponent implements OnInit {
 
+  errorMessage: string;
+
   loginFormGroup: FormGroup = this.formBuilder.group({
     'email': new FormControl(null, [
         Validators.required,
@@ -32,12 +34,18 @@ export class LoginComponent implements OnInit {
   }
 
   loginHandler(): void {
-    //TODO validate user's data
-    this.userService.login();
     this.router.navigate(['/home']);
   }
 
   handleLogin(): void {
-     console.log('submit');
+    this.errorMessage = '';
+    this.userService.login$(this.loginFormGroup.value ).subscribe({
+     next: () => {
+      this.router.navigate(['/home']);
+     },
+     error: (err) => {
+       this.errorMessage = err.error.message;
+     }
+    });
   }
 }

@@ -72,7 +72,7 @@
                 passwordsGroup.controls['repeatPassword'].invalid" formControlName="repeatPassword" type="password" name="rePassword" id="rePassword"
                     placeholder="******">
             </p>
-            <ng-container>
+            <ng-container *ngIf="passwordsGroup.controls['password'].touched && passwordsGroup.controls['password'].invalid">
                 <p class="error">Repeat Password does not match password!</p>
             </ng-container>
         </div>
