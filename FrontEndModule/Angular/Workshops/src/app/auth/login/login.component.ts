@@ -38,6 +38,6 @@ export class LoginComponent implements OnInit {
   }
 
   handleLogin(): void {
-     
+     console.log('submit');
   }
 }

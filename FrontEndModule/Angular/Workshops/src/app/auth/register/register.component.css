@@ -1,4 +1,7 @@
 /*login register forms  */
+:host{
+    width: 100%;
+}
 
 form.login, form.register {
     width: 40%;
@@ -80,6 +83,6 @@ p.error {
     padding-top: 0;
 }
 
-.input-error {
+.register .input-error {
     border-left-color: red;
 }

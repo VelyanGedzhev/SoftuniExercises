@@ -34,7 +34,7 @@
             <p class="error" *ngIf="loginFormGroup.controls['password'].errors.minlength"> Password must be at least 5 characters!</p>
         </ng-container>
 
-        <button>Login</button>
+        <button class="button" [disabled]="loginFormGroup.invalid">Login</button>
 
         <p class="text-center">
             Have an account?
