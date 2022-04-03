@@ -19,4 +19,7 @@ export class ThemeService {
     return this.http.get<ITheme[]>(`${apiUrl}/themes`);
   }
 
+  addTheme$(themeData: { themeName: string, postText: string}): Observable<ITheme> {
+    return this.http.post<ITheme>(`${apiUrl}/themes`, themeData, { withCredentials: true});
+  }
 }
